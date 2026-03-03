@@ -1,0 +1,22 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Koleksi 'kindness' — hanya user yang login bisa akses data miliknya sendiri
+    match /kindness/{docId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+    }
+
+    // Koleksi 'users' — hanya user yang bersangkutan yang bisa baca/tulis profilnya
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Semua koleksi lain — tidak ada akses
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

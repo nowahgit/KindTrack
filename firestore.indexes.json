@@ -1,0 +1,22 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "kindness",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId",    "order": "ASCENDING" },
+        { "fieldPath": "timestamp", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "kindness",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId",   "order": "ASCENDING" },
+        { "fieldPath": "category", "order": "ASCENDING" },
+        { "fieldPath": "timestamp","order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

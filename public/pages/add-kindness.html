@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Kindness | KindTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body class="add-kindness-page">
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <a href="../index.html" class="sidebar-logo">
+                <div class="logo-icon"
+                    style="width:28px;height:28px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:7px;display:flex;align-items:center;justify-content:center;color:white;font-size:0.75rem;flex-shrink:0;">
+                    <i class="fas fa-heart"></i>
+                </div>
+                KindTrack
+            </a>
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-label">Main</p>
+                <a href="dashboard.html" class="sidebar-item">
+                    <i class="fas fa-house"></i> Dashboard
+                </a>
+                <a href="activity.html" class="sidebar-item">
+                    <i class="fas fa-list-check"></i> My Activities
+                </a>
+                <a href="add-kindness.html" class="sidebar-item active">
+                    <i class="fas fa-plus-circle"></i> Log Kindness
+                </a>
+                <p class="sidebar-section-label" style="margin-top:1.5rem;">Insights</p>
+                <a href="#" class="sidebar-item"><i class="fas fa-chart-line"></i> Analytics</a>
+                <a href="#" class="sidebar-item"><i class="fas fa-trophy"></i> Milestones</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar" id="sidebar-avatar">U</div>
+                    <div class="sidebar-user-info">
+                        <div class="sidebar-user-name" id="sidebar-user-name">Loading...</div>
+                        <div class="sidebar-user-role">Kind Human</div>
+                    </div>
+                </div>
+                <button class="sidebar-item" id="logout-btn" style="color:#ef4444;">
+                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <div class="app-main">
+            <header class="app-header">
+                <div class="flex items-center gap-2">
+                    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+                    <div>
+                        <h1>Log an Act of Kindness</h1>
+                        <p>Every small action matters. Share what you've done today.</p>
+                    </div>
+                </div>
+                <a href="dashboard.html" class="btn btn-outline" style="padding:0.6rem 1.25rem;font-size:0.875rem;">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </header>
+
+            <div class="app-body">
+                <div style="max-width:680px;">
+                    <div class="form-card">
+                        <form id="add-kindness-form" novalidate>
+
+                            <!-- What did you do -->
+                            <div class="form-group">
+                                <label class="form-label" for="kindness-title">What did you do? <span
+                                        style="color:#ef4444;">*</span></label>
+                                <input type="text" id="kindness-title" class="form-control"
+                                    placeholder="e.g., Helped an elderly person with groceries" maxlength="120"
+                                    required>
+                                <p class="form-hint">Be specific — it helps the AI give better insights.</p>
+                            </div>
+
+                            <!-- Category -->
+                            <div class="form-group">
+                                <label class="form-label">Category <span style="color:#ef4444;">*</span></label>
+                                <div class="category-grid">
+                                    <div>
+                                        <input type="radio" name="category" id="cat-helping" value="Helping Others"
+                                            class="category-option" checked>
+                                        <label for="cat-helping" class="category-label">
+                                            <span class="cat-emoji">🤝</span>
+                                            <span class="cat-name">Helping Others</span>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" name="category" id="cat-charity" value="Charity"
+                                            class="category-option">
+                                        <label for="cat-charity" class="category-label">
+                                            <span class="cat-emoji">🎁</span>
+                                            <span class="cat-name">Charity</span>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" name="category" id="cat-support" value="Support"
+                                            class="category-option">
+                                        <label for="cat-support" class="category-label">
+                                            <span class="cat-emoji">💬</span>
+                                            <span class="cat-name">Support</span>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" name="category" id="cat-volunteer" value="Volunteering"
+                                            class="category-option">
+                                        <label for="cat-volunteer" class="category-label">
+                                            <span class="cat-emoji">🙋</span>
+                                            <span class="cat-name">Volunteering</span>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" name="category" id="cat-encourage" value="Encouragement"
+                                            class="category-option">
+                                        <label for="cat-encourage" class="category-label">
+                                            <span class="cat-emoji">⭐</span>
+                                            <span class="cat-name">Encouragement</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="form-group">
+                                <label class="form-label" for="kindness-desc">
+                                    Description
+                                    <span id="desc-counter"
+                                        style="float:right;font-weight:400;color:var(--text-muted);">0/500</span>
+                                </label>
+                                <textarea id="kindness-desc" class="form-control" rows="4"
+                                    placeholder="Describe the impact or how it made you feel..."
+                                    maxlength="500"></textarea>
+                            </div>
+
+                            <!-- Date -->
+                            <div class="form-group">
+                                <label class="form-label" for="kindness-date">Date <span
+                                        style="color:#ef4444;">*</span></label>
+                                <input type="date" id="kindness-date" class="form-control" required>
+                            </div>
+
+                            <div style="display:flex;gap:1rem;margin-top:0.5rem;">
+                                <a href="dashboard.html" class="btn btn-outline"
+                                    style="flex:0.3;justify-content:center;">Cancel</a>
+                                <button type="submit" class="btn btn-primary" style="flex:1;justify-content:center;"
+                                    id="submit-btn">
+                                    <i class="fas fa-heart"></i> Save Act of Kindness
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Tips card -->
+                    <div
+                        style="background:var(--primary-soft);border:1px dashed var(--primary);border-radius:var(--r-xl);padding:1.5rem;margin-top:1.25rem;">
+                        <h4 style="font-size:0.9rem;color:var(--primary-dark);margin-bottom:0.75rem;">
+                            <i class="fas fa-lightbulb" style="margin-right:0.35rem;"></i> Tips for better AI insights
+                        </h4>
+                        <ul style="display:flex;flex-direction:column;gap:0.4rem;">
+                            <li
+                                style="font-size:0.82rem;color:var(--primary-dark);display:flex;align-items:flex-start;gap:0.5rem;">
+                                <i class="fas fa-check" style="margin-top:0.15rem;flex-shrink:0;"></i>
+                                Be specific about what you did and how it helped
+                            </li>
+                            <li
+                                style="font-size:0.82rem;color:var(--primary-dark);display:flex;align-items:flex-start;gap:0.5rem;">
+                                <i class="fas fa-check" style="margin-top:0.15rem;flex-shrink:0;"></i>
+                                Mention the person or group who benefited
+                            </li>
+                            <li
+                                style="font-size:0.82rem;color:var(--primary-dark);display:flex;align-items:flex-start;gap:0.5rem;">
+                                <i class="fas fa-check" style="margin-top:0.15rem;flex-shrink:0;"></i>
+                                Log daily for streak bonuses and better pattern analysis
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;"
+        onclick="closeSidebar()"></div>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        document.getElementById('hamburger')?.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+        });
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            overlay.style.display = 'none';
+        }
+    </script>
+
+    <script type="module" src="../js/kindness.js"></script>
+    <script type="module" src="../js/auth.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | KindTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <a href="../index.html" class="sidebar-logo">
+                <div class="logo-icon"
+                    style="width:28px;height:28px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:7px;display:flex;align-items:center;justify-content:center;color:white;font-size:0.75rem;flex-shrink:0;">
+                    <i class="fas fa-heart"></i>
+                </div>
+                KindTrack
+            </a>
+
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-label">Main</p>
+                <a href="dashboard.html" class="sidebar-item active">
+                    <i class="fas fa-house"></i> Dashboard
+                </a>
+                <a href="activity.html" class="sidebar-item">
+                    <i class="fas fa-list-check"></i> My Activities
+                </a>
+                <a href="add-kindness.html" class="sidebar-item">
+                    <i class="fas fa-plus-circle"></i> Log Kindness
+                </a>
+
+                <p class="sidebar-section-label" style="margin-top:1.5rem;">Insights</p>
+                <a href="#" class="sidebar-item">
+                    <i class="fas fa-chart-line"></i> Analytics
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="fas fa-trophy"></i> Milestones
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar" id="sidebar-avatar">U</div>
+                    <div class="sidebar-user-info">
+                        <div class="sidebar-user-name" id="sidebar-user-name">Loading...</div>
+                        <div class="sidebar-user-role">Kind Human</div>
+                    </div>
+                </div>
+                <button class="sidebar-item" id="logout-btn" style="color:#ef4444;">
+                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Area -->
+        <div class="app-main">
+
+            <!-- Header -->
+            <header class="app-header">
+                <div class="flex items-center gap-2">
+                    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                        <span></span><span></span><span></span>
+                    </button>
+                    <div>
+                        <h1>Hello, <span id="user-name" style="color:var(--primary);">there</span> 👋</h1>
+                        <p id="current-date"></p>
+                    </div>
+                </div>
+                <a href="add-kindness.html" class="btn btn-primary" style="padding:0.6rem 1.25rem;font-size:0.875rem;">
+                    <i class="fas fa-plus"></i> Log Kindness
+                </a>
+            </header>
+
+            <!-- Body -->
+            <div class="app-body">
+
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card animate-fade-up stagger-1">
+                        <div class="stat-icon" style="background:var(--primary-soft);color:var(--primary);">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="stat-label">Total Acts</div>
+                        <div class="stat-value" id="stat-total">—</div>
+                        <div class="stat-trend trend-up"><i class="fas fa-arrow-trend-up"></i> All time</div>
+                    </div>
+                    <div class="stat-card animate-fade-up stagger-2">
+                        <div class="stat-icon" style="background:#fef3c7;color:#d97706;">
+                            <i class="fas fa-fire-flame-curved"></i>
+                        </div>
+                        <div class="stat-label">Streak</div>
+                        <div class="stat-value" id="stat-streak">—</div>
+                        <div class="stat-trend"><i class="fas fa-calendar-check"></i> Keep it up!</div>
+                    </div>
+                    <div class="stat-card animate-fade-up stagger-3">
+                        <div class="stat-icon" style="background:#dbeafe;color:#2563eb;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-label">People Impacted</div>
+                        <div class="stat-value" id="stat-impact">—</div>
+                        <div class="stat-trend trend-up"><i class="fas fa-arrow-trend-up"></i> Estimated</div>
+                    </div>
+                    <div class="stat-card animate-fade-up stagger-4">
+                        <div class="stat-icon" style="background:#ede9fe;color:#7c3aed;">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-label">Kindness Score</div>
+                        <div class="stat-value" id="stat-score">—</div>
+                        <div class="stat-trend trend-up"><i class="fas fa-arrow-trend-up"></i> Top 5%</div>
+                    </div>
+                </div>
+
+                <!-- Main Grid -->
+                <div class="content-grid">
+
+                    <!-- Left Column -->
+                    <div style="display:flex;flex-direction:column;gap:1.5rem;">
+
+                        <!-- Chart -->
+                        <div class="content-card">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">Kindness Over Time</div>
+                                    <div class="card-subtitle">Your monthly acts of kindness</div>
+                                </div>
+                                <span class="badge badge-green"><i class="fas fa-circle" style="font-size:0.5rem;"></i>
+                                    Live data</span>
+                            </div>
+                            <canvas id="impactChart" height="180"></canvas>
+                        </div>
+
+                        <!-- Heatmap -->
+                        <div class="content-card">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">Activity Heatmap</div>
+                                    <div class="card-subtitle">Last 90 days</div>
+                                </div>
+                                <div
+                                    style="display:flex;align-items:center;gap:0.4rem;font-size:0.72rem;color:var(--text-muted);">
+                                    <span>Less</span>
+                                    <div style="width:10px;height:10px;border-radius:2px;background:#e2e8f0;"></div>
+                                    <div style="width:10px;height:10px;border-radius:2px;background:#86efac;"></div>
+                                    <div style="width:10px;height:10px;border-radius:2px;background:#22c55e;"></div>
+                                    <div style="width:10px;height:10px;border-radius:2px;background:#15803d;"></div>
+                                    <span>More</span>
+                                </div>
+                            </div>
+                            <div id="kindness-heatmap" class="heatmap"></div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Column -->
+                    <div style="display:flex;flex-direction:column;gap:1.5rem;">
+
+                        <!-- AI Card -->
+                        <div class="content-card ai-card">
+                            <div class="card-header" style="margin-bottom:0;">
+                                <div class="card-title" style="color:white;">
+                                    <i class="fas fa-wand-magic-sparkles"
+                                        style="color:var(--primary);margin-right:0.4rem;"></i>
+                                    AI Reflection
+                                </div>
+                                <div class="ai-icon"><i class="fas fa-brain"></i></div>
+                            </div>
+                            <p class="ai-text" id="ai-reflection-text">
+                                Start logging your acts of kindness to see personalized AI insights about your impact!
+                            </p>
+                            <button class="ai-refresh-btn" id="refresh-ai">
+                                <i class="fas fa-rotate-right"></i> Refresh
+                            </button>
+                        </div>
+
+                        <!-- Daily Idea -->
+                        <div class="content-card">
+                            <div class="card-header">
+                                <div class="card-title">💡 Idea of the Day</div>
+                                <span class="badge badge-yellow">Daily</span>
+                            </div>
+                            <div class="daily-idea-card">
+                                <p id="daily-idea-text">Loading your daily inspiration...</p>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity -->
+                        <div class="content-card">
+                            <div class="card-header">
+                                <div class="card-title">Recent Acts</div>
+                                <a href="activity.html"
+                                    style="font-size:0.8rem;color:var(--primary);font-weight:600;">View all →</a>
+                            </div>
+                            <div class="activity-list" id="recent-activities">
+                                <p
+                                    style="font-size:0.85rem;color:var(--text-muted);text-align:center;padding:1.5rem 0;">
+                                    No activities yet. Start spreading kindness!</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile overlay -->
+    <div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;"
+        onclick="closeSidebar()"></div>
+
+    <script>
+        // Hamburger / sidebar
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        document.getElementById('hamburger')?.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+        });
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            overlay.style.display = 'none';
+        }
+
+        // Current date
+        document.getElementById('current-date').textContent =
+            new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    </script>
+
+    <script type="module" src="../js/dashboard.js"></script>
+</body>
+
+</html>

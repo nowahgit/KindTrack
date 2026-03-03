@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Activities | KindTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <a href="../index.html" class="sidebar-logo">
+                <div class="logo-icon"
+                    style="width:28px;height:28px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:7px;display:flex;align-items:center;justify-content:center;color:white;font-size:0.75rem;flex-shrink:0;">
+                    <i class="fas fa-heart"></i>
+                </div>
+                KindTrack
+            </a>
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-label">Main</p>
+                <a href="dashboard.html" class="sidebar-item">
+                    <i class="fas fa-house"></i> Dashboard
+                </a>
+                <a href="activity.html" class="sidebar-item active">
+                    <i class="fas fa-list-check"></i> My Activities
+                </a>
+                <a href="add-kindness.html" class="sidebar-item">
+                    <i class="fas fa-plus-circle"></i> Log Kindness
+                </a>
+                <p class="sidebar-section-label" style="margin-top:1.5rem;">Insights</p>
+                <a href="#" class="sidebar-item"><i class="fas fa-chart-line"></i> Analytics</a>
+                <a href="#" class="sidebar-item"><i class="fas fa-trophy"></i> Milestones</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar" id="sidebar-avatar">U</div>
+                    <div class="sidebar-user-info">
+                        <div class="sidebar-user-name" id="sidebar-user-name">Loading...</div>
+                        <div class="sidebar-user-role">Kind Human</div>
+                    </div>
+                </div>
+                <button class="sidebar-item" id="logout-btn" style="color:#ef4444;">
+                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <div class="app-main">
+            <header class="app-header">
+                <div class="flex items-center gap-2">
+                    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+                    <div>
+                        <h1>My Activities</h1>
+                        <p>All your logged acts of kindness</p>
+                    </div>
+                </div>
+                <a href="add-kindness.html" class="btn btn-primary" style="padding:0.6rem 1.25rem;font-size:0.875rem;">
+                    <i class="fas fa-plus"></i> Log New
+                </a>
+            </header>
+
+            <div class="app-body">
+
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <span style="font-size:0.85rem;font-weight:600;color:var(--text-muted);">Filter:</span>
+                    <select id="filter-category" class="filter-select">
+                        <option value="all">All Categories</option>
+                        <option value="Helping Others">🤝 Helping Others</option>
+                        <option value="Charity">🎁 Charity</option>
+                        <option value="Support">💬 Support</option>
+                        <option value="Volunteering">🙋 Volunteering</option>
+                        <option value="Encouragement">⭐ Encouragement</option>
+                    </select>
+                    <span id="activity-count"
+                        style="margin-left:auto;font-size:0.82rem;color:var(--text-muted);"></span>
+                </div>
+
+                <!-- Activity Grid -->
+                <div class="activity-grid" id="activity-grid">
+                    <!-- Skeleton loaders -->
+                    <div class="activity-card" style="opacity:0.5;">
+                        <div class="skeleton"
+                            style="height:40px;width:40px;border-radius:var(--r-md);margin-bottom:1rem;"></div>
+                        <div class="skeleton" style="height:16px;width:70%;margin-bottom:0.5rem;"></div>
+                        <div class="skeleton" style="height:12px;width:90%;margin-bottom:0.35rem;"></div>
+                        <div class="skeleton" style="height:12px;width:60%;"></div>
+                    </div>
+                    <div class="activity-card" style="opacity:0.3;">
+                        <div class="skeleton"
+                            style="height:40px;width:40px;border-radius:var(--r-md);margin-bottom:1rem;"></div>
+                        <div class="skeleton" style="height:16px;width:80%;margin-bottom:0.5rem;"></div>
+                        <div class="skeleton" style="height:12px;width:100%;margin-bottom:0.35rem;"></div>
+                        <div class="skeleton" style="height:12px;width:50%;"></div>
+                    </div>
+                    <div class="activity-card" style="opacity:0.15;">
+                        <div class="skeleton"
+                            style="height:40px;width:40px;border-radius:var(--r-md);margin-bottom:1rem;"></div>
+                        <div class="skeleton" style="height:16px;width:60%;margin-bottom:0.5rem;"></div>
+                        <div class="skeleton" style="height:12px;width:85%;margin-bottom:0.35rem;"></div>
+                        <div class="skeleton" style="height:12px;width:40%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;"
+        onclick="closeSidebar()"></div>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        document.getElementById('hamburger')?.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+        });
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            overlay.style.display = 'none';
+        }
+    </script>
+
+    <script type="module" src="../js/activity.js"></script>
+    <script type="module" src="../js/auth.js"></script>
+</body>
+
+</html>
