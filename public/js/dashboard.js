@@ -1,30 +1,39 @@
 import { auth, db } from './firebase-init.js';
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import {
     collection,
     query,
     where,
-    getDocs,
     orderBy,
-    limit
+    getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { logout } from './auth.js';
+
+// Common Utils
+import {
+    getCategoryColor,
+    getCategoryEmoji,
+    getCategoryIcon,
+    formatDate,
+    showToast
+} from './utils.js';
 
 import { getAIReflection, getDailyIdea } from './ai.js';
+import { logout } from './auth.js';
+
+// ─── Lifecycle ────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Logout listener
     const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', logout);
-    }
+    if (logoutBtn) logoutBtn.addEventListener('click', logout);
 
+    // AI Refresh
     const refreshAiBtn = document.getElementById('refresh-ai');
     if (refreshAiBtn) {
         refreshAiBtn.addEventListener('click', async () => {
-            const user = auth.currentUser;
-            if (user) {
+            if (window.dashboardActivities) {
                 refreshAiBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Thinking...';
-                const reflection = await getAIReflection(window.dashboardActivities || []);
+                const reflection = await getAIReflection(window.dashboardActivities);
                 document.getElementById('ai-reflection-text').textContent = reflection;
                 refreshAiBtn.innerHTML = '<i class="fas fa-rotate-right"></i> Refresh';
             }
@@ -33,18 +42,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            // Header
+            // Header & Sidebar Info
             const userNameEl = document.getElementById('user-name');
-            if (userNameEl) userNameEl.textContent = user.displayName?.split(' ')[0] || 'there';
-
-            // Sidebar user info
             const sidebarName = document.getElementById('sidebar-user-name');
             const sidebarAvatar = document.getElementById('sidebar-avatar');
+
+            if (userNameEl) userNameEl.textContent = user.displayName?.split(' ')[0] || 'there';
             if (sidebarName) sidebarName.textContent = user.displayName || user.email;
             if (sidebarAvatar) sidebarAvatar.textContent = (user.displayName || user.email || 'U')[0].toUpperCase();
 
+            // Load Data
             loadDashboardData(user.uid);
 
+            // Fetch daily idea
             const dailyIdea = await getDailyIdea();
             const ideaElement = document.getElementById('daily-idea-text');
             if (ideaElement) ideaElement.textContent = dailyIdea;
@@ -55,6 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// ─── Data Loading ─────────────────────────────────────────────────────────────
 
 async function loadDashboardData(userId) {
     try {
@@ -85,53 +97,63 @@ async function loadDashboardData(userId) {
 
     } catch (error) {
         console.error('[Dashboard Error]', error.code, error.message);
-        // Show user-friendly error in the stats area
         const errorMsg = error.code === 'permission-denied'
-            ? 'Akses ditolak. Coba login ulang.'
-            : error.code === 'unavailable'
-                ? 'Koneksi ke server terputus. Periksa internet kamu.'
-                : 'Gagal memuat data. Coba refresh halaman.';
+            ? 'Access denied. Please login again.'
+            : 'Failed to load data. Please refresh the page.';
+
         const statEl = document.getElementById('stat-total');
-        if (statEl) statEl.closest('.stats-grid')?.insertAdjacentHTML(
-            'beforebegin',
-            `<div style="background:#fef2f2;color:#ef4444;padding:1rem 1.5rem;border-radius:12px;margin-bottom:1.5rem;font-size:0.9rem;">
-                <i class="fas fa-exclamation-circle"></i> ${errorMsg}
-            </div>`
-        );
+        if (statEl) {
+            const container = statEl.closest('.stats-grid');
+            if (container) {
+                container.insertAdjacentHTML('beforebegin', `
+                    <div style="background:#fef2f2;color:#ef4444;padding:1rem 1.5rem;border-radius:12px;margin-bottom:1.5rem;font-size:0.9rem;">
+                        <i class="fas fa-exclamation-circle"></i> ${errorMsg}
+                    </div>
+                `);
+            }
+        }
     }
 }
+
+// ─── UI Rendering ─────────────────────────────────────────────────────────────
 
 function updateStats(activities) {
     const total = activities.length;
     document.getElementById('stat-total').textContent = total;
 
-    // Simple impact calculation: each act impacts at least 1 person
-    document.getElementById('stat-impact').textContent = total > 0 ? total + 5 : 0;
+    // Simple impact calculation mock
+    const totalEstimatedImpact = total * 3;
+    document.getElementById('stat-impact').textContent = total > 0 ? totalEstimatedImpact : 0;
 
-    // Kindness Score (0-100)
-    const score = Math.min(100, Math.floor((total / 10) * 100)); // Just a mock formula
-    document.getElementById('stat-score').textContent = score;
+    // Kindness Score (Mock 0-100)
+    const score = Math.min(100, Math.floor((total / 10) * 100));
+    document.getElementById('stat-score').textContent = score || 0;
 
-    // Streak (Mock for now)
-    document.getElementById('stat-streak').textContent = total > 0 ? "3 days" : "0 days";
+    // Streak logic (Mock for now, or use real date logic)
+    document.getElementById('stat-streak').textContent = total > 0 ? `${total % 10 + 1} days` : '0 days';
 }
 
 function renderRecentActivities(activities) {
     const container = document.getElementById('recent-activities');
-    if (activities.length === 0) return;
+    if (!container) return;
+
+    if (activities.length === 0) {
+        container.innerHTML = '<p style="font-size:0.85rem;color:var(--text-muted);text-align:center;padding:1.5rem 0;">No activities yet. Start spreading kindness!</p>';
+        return;
+    }
 
     container.innerHTML = '';
     activities.forEach(activity => {
         const div = document.createElement('div');
         div.className = 'activity-item';
 
-        const date = activity.timestamp?.toDate ? activity.timestamp.toDate().toLocaleDateString() : 'Just now';
-        const icon = getCategoryIcon(activity.category);
+        const date = formatDate(activity.date || activity.timestamp);
         const color = getCategoryColor(activity.category);
+        const emoji = getCategoryEmoji(activity.category);
 
         div.innerHTML = `
-            <div class="activity-icon" style="background-color: ${color}20; color: ${color};">
-                <i class="fas ${icon}"></i>
+            <div class="activity-icon" style="background-color: ${color}18; color: ${color}; font-size:1.1rem;">
+                ${emoji}
             </div>
             <div class="activity-details">
                 <div class="activity-name">${activity.title}</div>
@@ -142,33 +164,11 @@ function renderRecentActivities(activities) {
     });
 }
 
-function getCategoryIcon(category) {
-    switch (category) {
-        case 'Helping Others': return 'fa-hands-helping';
-        case 'Charity': return 'fa-hand-holding-heart';
-        case 'Support': return 'fa-comment-alt';
-        case 'Volunteering': return 'fa-user-friends';
-        case 'Encouragement': return 'fa-smile';
-        default: return 'fa-heart';
-    }
-}
-
-function getCategoryColor(category) {
-    switch (category) {
-        case 'Helping Others': return '#22C55E';
-        case 'Charity': return '#3B82F6';
-        case 'Support': return '#F59E0B';
-        case 'Volunteering': return '#8B5CF6';
-        case 'Encouragement': return '#EC4899';
-        default: return '#22C55E';
-    }
-}
-
 function renderImpactChart(activities) {
     const ctx = document.getElementById('impactChart');
     if (!ctx) return;
 
-    // Group activities by month (last 6 months)
+    // Group by month
     const now = new Date();
     const monthLabels = [];
     const monthData = [];
@@ -176,6 +176,7 @@ function renderImpactChart(activities) {
     for (let i = 5; i >= 0; i--) {
         const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
         monthLabels.push(d.toLocaleString('default', { month: 'short' }));
+
         const count = activities.filter(a => {
             const ts = a.timestamp?.toDate ? a.timestamp.toDate() : new Date(a.date);
             return ts.getMonth() === d.getMonth() && ts.getFullYear() === d.getFullYear();
@@ -183,28 +184,49 @@ function renderImpactChart(activities) {
         monthData.push(count);
     }
 
-    new Chart(ctx.getContext('2d'), {
+    // Destroy existing chart if any (to prevent multiple instances on refresh)
+    if (window.myChart) window.myChart.destroy();
+
+    window.myChart = new Chart(ctx.getContext('2d'), {
         type: 'line',
         data: {
             labels: monthLabels,
             datasets: [{
-                label: 'Acts of Kindness',
+                label: 'Acts Logged',
                 data: monthData,
                 borderColor: '#22C55E',
-                backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                backgroundColor: 'rgba(34, 197, 94, 0.08)',
                 borderWidth: 3,
                 fill: true,
                 tension: 0.4,
                 pointBackgroundColor: '#22C55E',
-                pointRadius: 5
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: { legend: { display: false } },
             scales: {
-                y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { display: false } },
-                x: { grid: { display: false } }
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        color: '#94a3b8',
+                        font: { family: 'Inter', size: 10 }
+                    },
+                    grid: { color: 'rgba(0,0,0,0.03)' }
+                },
+                x: {
+                    ticks: {
+                        color: '#94a3b8',
+                        font: { family: 'Inter', size: 10 }
+                    },
+                    grid: { display: false }
+                }
             }
         }
     });
@@ -215,16 +237,12 @@ function renderHeatmap(activities) {
     if (!container) return;
     container.innerHTML = '';
 
-    // Build a map of date -> count using real data
     const dateMap = {};
     activities.forEach(a => {
         const dateStr = a.date || (a.timestamp?.toDate ? a.timestamp.toDate().toISOString().split('T')[0] : null);
-        if (dateStr) {
-            dateMap[dateStr] = (dateMap[dateStr] || 0) + 1;
-        }
+        if (dateStr) dateMap[dateStr] = (dateMap[dateStr] || 0) + 1;
     });
 
-    // Render last 90 days
     const today = new Date();
     for (let i = 89; i >= 0; i--) {
         const d = new Date(today);
@@ -244,4 +262,3 @@ function renderHeatmap(activities) {
         container.appendChild(cell);
     }
 }
-

@@ -4,11 +4,23 @@ import {
     collection,
     query,
     where,
-    getDocs,
     orderBy,
+    getDocs,
     deleteDoc,
     doc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// Common Utils
+import {
+    getCategoryColor,
+    getCategoryEmoji,
+    getCategoryIcon,
+    escapeHtml,
+    formatDate,
+    showToast
+} from './utils.js';
+
+import { logout } from './auth.js';
 
 const activityGrid = document.getElementById('activity-grid');
 const filterCategory = document.getElementById('filter-category');
@@ -16,23 +28,39 @@ const activityCount = document.getElementById('activity-count');
 
 let allActivities = [];
 
-import { logout } from './auth.js';
-const logoutBtn = document.getElementById('logout-btn');
-if (logoutBtn) logoutBtn.addEventListener('click', logout);
+// ─── Lifecycle ────────────────────────────────────────────────────────────────
 
-onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        // Sidebar user info
-        const sidebarName = document.getElementById('sidebar-user-name');
-        const sidebarAvatar = document.getElementById('sidebar-avatar');
-        if (sidebarName) sidebarName.textContent = user.displayName || user.email;
-        if (sidebarAvatar) sidebarAvatar.textContent = (user.displayName || user.email || 'U')[0].toUpperCase();
+document.addEventListener('DOMContentLoaded', () => {
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) logoutBtn.addEventListener('click', logout);
 
-        await loadActivities(user.uid);
-    } else {
-        window.location.href = 'login.html';
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            // Sidebar user info
+            const sidebarName = document.getElementById('sidebar-user-name');
+            const sidebarAvatar = document.getElementById('sidebar-avatar');
+
+            if (sidebarName) sidebarName.textContent = user.displayName || user.email;
+            if (sidebarAvatar) sidebarAvatar.textContent = (user.displayName || user.email || 'U')[0].toUpperCase();
+
+            await loadActivities(user.uid);
+        } else {
+            window.location.href = 'login.html';
+        }
+    });
+
+    if (filterCategory) {
+        filterCategory.addEventListener('change', () => {
+            const val = filterCategory.value;
+            const filtered = val === 'all'
+                ? allActivities
+                : allActivities.filter(a => a.category === val);
+            renderActivities(filtered);
+        });
     }
 });
+
+// ─── Data Loading ─────────────────────────────────────────────────────────────
 
 async function loadActivities(userId) {
     try {
@@ -42,8 +70,8 @@ async function loadActivities(userId) {
             where('userId', '==', userId),
             orderBy('timestamp', 'desc')
         );
-        const querySnapshot = await getDocs(q);
 
+        const querySnapshot = await getDocs(q);
         allActivities = [];
         querySnapshot.forEach((doc) => {
             allActivities.push({ id: doc.id, ...doc.data() });
@@ -51,12 +79,28 @@ async function loadActivities(userId) {
 
         renderActivities(allActivities);
     } catch (error) {
-        console.error("Error loading activities:", error);
-        activityGrid.innerHTML = '<p class="text-center py-8">Error loading activities. Please refresh.</p>';
+        console.error('[Load Error]', error);
+        showToast('Gagal memuat data kebaikan.', 'error');
     }
 }
 
+async function deleteActivity(id) {
+    try {
+        await deleteDoc(doc(db, 'kindness', id));
+        showToast('Act of kindness deleted.', 'success');
+        // Update local list
+        allActivities = allActivities.filter(a => a.id !== id);
+        renderActivities(allActivities);
+    } catch (error) {
+        console.error('[Delete Error]', error);
+        showToast('Gagal menghapus data.', 'error');
+    }
+}
+
+// ─── UI Rendering ─────────────────────────────────────────────────────────────
+
 function renderActivities(activities) {
+    if (!activityGrid) return;
     activityGrid.innerHTML = '';
 
     if (activityCount) {
@@ -67,9 +111,9 @@ function renderActivities(activities) {
         activityGrid.innerHTML = `
             <div class="empty-state">
                 <div class="empty-icon">🌱</div>
-                <h3>No activities here yet.</h3>
+                <h3>No activities found.</h3>
                 <p>Every journey starts with a single step. Log your first act of kindness.</p>
-                <a href="add-kindness.html" class="btn btn-primary">Log Your First Act</a>
+                <a href="add-kindness.html" class="btn btn-primary" style="margin-top:1rem;">Log Your First Act</a>
             </div>
         `;
         return;
@@ -79,9 +123,7 @@ function renderActivities(activities) {
         const card = document.createElement('div');
         card.className = 'activity-card animate-fade-up';
 
-        const date = activity.date
-            || (activity.timestamp?.toDate ? activity.timestamp.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recently');
-        const icon = getCategoryIcon(activity.category);
+        const date = formatDate(activity.date || activity.timestamp);
         const color = getCategoryColor(activity.category);
         const emoji = getCategoryEmoji(activity.category);
 
@@ -114,69 +156,5 @@ function renderActivities(activities) {
                 await deleteActivity(id);
             }
         });
-    });
-}
-
-async function deleteActivity(id) {
-    try {
-        await deleteDoc(doc(db, 'kindness', id));
-        // Refresh
-        allActivities = allActivities.filter(a => a.id !== id);
-        renderActivities(allActivities);
-    } catch (error) {
-        console.error("Error deleting activity:", error);
-    }
-}
-
-function getCategoryIcon(category) {
-    switch (category) {
-        case 'Helping Others': return 'fa-hands-helping';
-        case 'Charity': return 'fa-hand-holding-heart';
-        case 'Support': return 'fa-comment-alt';
-        case 'Volunteering': return 'fa-user-friends';
-        case 'Encouragement': return 'fa-smile';
-        default: return 'fa-heart';
-    }
-}
-
-function getCategoryColor(category) {
-    switch (category) {
-        case 'Helping Others': return '#22C55E';
-        case 'Charity': return '#3B82F6';
-        case 'Support': return '#F59E0B';
-        case 'Volunteering': return '#8B5CF6';
-        case 'Encouragement': return '#EC4899';
-        default: return '#22C55E';
-    }
-}
-
-function getCategoryEmoji(category) {
-    switch (category) {
-        case 'Helping Others': return '🤝';
-        case 'Charity': return '🎁';
-        case 'Support': return '💬';
-        case 'Volunteering': return '🙋';
-        case 'Encouragement': return '⭐';
-        default: return '💚';
-    }
-}
-
-function escapeHtml(str) {
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-}
-
-if (filterCategory) {
-    filterCategory.addEventListener('change', (e) => {
-        const value = e.target.value;
-        if (value === 'all') {
-            renderActivities(allActivities);
-        } else {
-            const filtered = allActivities.filter(a => a.category === value);
-            renderActivities(filtered);
-        }
     });
 }

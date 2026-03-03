@@ -7,167 +7,144 @@ import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-// ─── Toast Notification ───────────────────────────────────────────────────────
-function showToast(message, type = 'error') {
-    // Remove existing toast
-    const existing = document.getElementById('kt-toast');
-    if (existing) existing.remove();
-
-    const toast = document.createElement('div');
-    toast.id = 'kt-toast';
-    const bg = type === 'success' ? '#22C55E' : type === 'info' ? '#3B82F6' : '#ef4444';
-    const icon = type === 'success' ? 'fa-check-circle' : type === 'info' ? 'fa-info-circle' : 'fa-exclamation-circle';
-
-    toast.style.cssText = `
-        position: fixed; bottom: 2rem; right: 2rem; z-index: 9999;
-        background: ${bg}; color: white; padding: 1rem 1.5rem;
-        border-radius: 12px; font-family: var(--font-body, Inter, sans-serif);
-        font-size: 0.9rem; font-weight: 500; display: flex; align-items: center;
-        gap: 0.75rem; box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-        animation: slideIn 0.3s ease; max-width: 380px;
-    `;
-    toast.innerHTML = `<i class="fas ${icon}"></i><span>${message}</span>`;
-    document.body.appendChild(toast);
-
-    // Inject animation if not exists
-    if (!document.getElementById('toast-style')) {
-        const style = document.createElement('style');
-        style.id = 'toast-style';
-        style.textContent = `
-            @keyframes slideIn { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-            @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
-        `;
-        document.head.appendChild(style);
-    }
-
-    setTimeout(() => {
-        toast.style.animation = 'slideOut 0.3s ease forwards';
-        setTimeout(() => toast.remove(), 300);
-    }, 4000);
-}
+import { showToast } from './utils.js';
 
 // ─── Friendly Error Messages ──────────────────────────────────────────────────
+
 function getAuthErrorMessage(errorCode) {
     const messages = {
-        'auth/invalid-email': 'Format email tidak valid. Periksa kembali alamat email kamu.',
-        'auth/user-disabled': 'Akun ini telah dinonaktifkan. Hubungi support untuk bantuan.',
-        'auth/user-not-found': 'Email tidak terdaftar. Coba daftar akun baru.',
-        'auth/wrong-password': 'Password salah. Coba lagi atau gunakan lupa password.',
-        'auth/invalid-credential': 'Email atau password tidak cocok. Periksa kembali.',
-        'auth/email-already-in-use': 'Email ini sudah terdaftar. Coba sign in, atau gunakan email lain.',
-        'auth/weak-password': 'Password terlalu lemah. Gunakan minimal 6 karakter.',
-        'auth/too-many-requests': 'Terlalu banyak percobaan gagal. Coba lagi beberapa menit lagi.',
-        'auth/network-request-failed': 'Koneksi internet bermasalah. Periksa jaringan kamu.',
-        'auth/popup-closed-by-user': 'Login dibatalkan. Coba lagi.',
-        'auth/requires-recent-login': 'Sesi kamu sudah lama. Silakan login ulang.',
-        'auth/missing-password': 'Password tidak boleh kosong.',
-        'auth/missing-email': 'Email tidak boleh kosong.',
+        'auth/invalid-email': 'Invalid email format. Please check your address.',
+        'auth/user-disabled': 'This account has been disabled. Contact support.',
+        'auth/user-not-found': 'Email not found. Try signing up instead.',
+        'auth/wrong-password': 'Incorrect password. Please try again.',
+        'auth/invalid-credential': 'Email or password does not match. Please check again.',
+        'auth/email-already-in-use': 'Email is already registered. Try signing in.',
+        'auth/weak-password': 'Password is too weak. Use at least 6 characters.',
+        'auth/too-many-requests': 'Too many failed attempts. Try again later.',
+        'auth/network-request-failed': 'Network error. Please check your internet.',
+        'auth/popup-closed-by-user': 'Login cancelled. Try again.',
+        'auth/requires-recent-login': 'Your session has expired. Please login again.',
+        'auth/missing-password': 'Password cannot be empty.',
+        'auth/missing-email': 'Email cannot be empty.',
     };
-    return messages[errorCode] || `Terjadi kesalahan (${errorCode}). Coba lagi.`;
+    return messages[errorCode] || `An unexpected error occurred (${errorCode}).`;
 }
 
 // ─── Form Validation ──────────────────────────────────────────────────────────
+
 function validateAuthForm(email, password, name, isRegister) {
     if (isRegister && (!name || name.trim().length < 2)) {
-        return 'Nama harus diisi minimal 2 karakter.';
+        return 'Full name must be at least 2 characters.';
     }
     if (!email || !email.includes('@') || !email.includes('.')) {
-        return 'Masukkan alamat email yang valid.';
+        return 'Please enter a valid email address.';
     }
     if (!password || password.length < 6) {
-        return 'Password minimal 6 karakter.';
+        return 'Password must be at least 6 characters.';
     }
     if (isRegister && password.length < 8) {
-        return 'Untuk keamanan, gunakan password minimal 8 karakter.';
+        return 'For better security, use at least 8 characters.';
     }
     return null; // valid
 }
 
 // ─── Button Loading State ─────────────────────────────────────────────────────
+
 function setButtonLoading(btn, loading, text = 'Sign In') {
+    if (!btn) return;
     btn.disabled = loading;
     btn.innerHTML = loading
         ? `<i class="fas fa-spinner fa-spin"></i> Loading...`
         : `<span>${text}</span>`;
 }
 
-// ─── DOM Elements ─────────────────────────────────────────────────────────────
-const authForm = document.getElementById('auth-form');
-const authToggle = document.getElementById('auth-toggle');
-const authTitle = document.getElementById('auth-title');
-const authSubtitle = document.getElementById('auth-subtitle');
-const nameGroup = document.getElementById('name-group');
-const submitText = document.getElementById('submit-text');
-const toggleText = document.getElementById('toggle-text');
-const nameInput = document.getElementById('auth-name');
+// ─── Main Auth Logic ──────────────────────────────────────────────────────────
 
-let isLogin = true;
+document.addEventListener('DOMContentLoaded', () => {
+    const authForm = document.getElementById('auth-form');
+    const authToggle = document.getElementById('auth-toggle');
+    const authTitle = document.getElementById('auth-title');
+    const authSubtitle = document.getElementById('auth-subtitle');
+    const nameGroup = document.getElementById('name-group');
+    const submitText = document.getElementById('submit-text');
+    const toggleText = document.getElementById('toggle-text');
+    const nameInput = document.getElementById('auth-name');
 
-// ─── Toggle Login / Register ──────────────────────────────────────────────────
-if (authToggle) {
-    authToggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        isLogin = !isLogin;
+    let isRegisterMode = false;
 
-        if (isLogin) {
-            authTitle.innerText = 'Welcome Back';
-            authSubtitle.innerText = 'Enter your details to sign in';
-            nameGroup.style.display = 'none';
-            nameInput.removeAttribute('required');
-            submitText.innerText = 'Sign In';
-            toggleText.innerText = "Don't have an account?";
-            authToggle.innerText = 'Sign up';
-        } else {
-            authTitle.innerText = 'Create Account';
-            authSubtitle.innerText = 'Join the kindness movement';
-            nameGroup.style.display = 'block';
-            nameInput.setAttribute('required', 'true');
-            submitText.innerText = 'Create Account';
-            toggleText.innerText = 'Already have an account?';
-            authToggle.innerText = 'Sign in';
-        }
-    });
-}
+    // Toggle Handler
+    if (authToggle) {
+        authToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            isRegisterMode = !isRegisterMode;
 
-// ─── Form Submit ──────────────────────────────────────────────────────────────
-if (authForm) {
-    authForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const email = document.getElementById('auth-email').value.trim();
-        const password = document.getElementById('auth-password').value;
-        const name = nameInput ? nameInput.value.trim() : '';
-        const submitBtn = authForm.querySelector('button[type="submit"]');
-
-        // Client-side validation
-        const validationError = validateAuthForm(email, password, name, !isLogin);
-        if (validationError) {
-            showToast(validationError, 'error');
-            return;
-        }
-
-        setButtonLoading(submitBtn, true);
-
-        try {
-            if (isLogin) {
-                await signInWithEmailAndPassword(auth, email, password);
-                showToast('Login berhasil! Mengalihkan...', 'success');
-                setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+            if (isRegisterMode) {
+                authTitle.textContent = 'Create Account';
+                authSubtitle.textContent = 'Join the kindness movement today.';
+                nameGroup.style.display = 'block';
+                if (nameInput) nameInput.setAttribute('required', 'true');
+                if (submitText) submitText.textContent = 'Create Account';
+                if (toggleText) toggleText.textContent = 'Already have an account?';
+                authToggle.textContent = 'Sign in';
             } else {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                await updateProfile(userCredential.user, { displayName: name });
-                showToast('Akun berhasil dibuat! Selamat datang 🎉', 'success');
-                setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+                authTitle.textContent = 'Welcome back';
+                authSubtitle.textContent = 'Enter your details to sign in to KindTrack.';
+                nameGroup.style.display = 'none';
+                if (nameInput) nameInput.removeAttribute('required');
+                if (submitText) submitText.textContent = 'Sign In';
+                if (toggleText) toggleText.textContent = "Don't have an account?";
+                authToggle.textContent = 'Sign up';
             }
-        } catch (error) {
-            console.error('[Auth Error]', error.code, error.message);
-            showToast(getAuthErrorMessage(error.code), 'error');
-            setButtonLoading(submitBtn, false, isLogin ? 'Sign In' : 'Create Account');
-        }
-    });
-}
+        });
+    }
 
-// ─── Auth State Guard ─────────────────────────────────────────────────────────
+    // Submit Handler
+    if (authForm) {
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('auth-email').value.trim();
+            const password = document.getElementById('auth-password').value;
+            const name = nameInput ? nameInput.value.trim() : '';
+            const submitBtn = document.getElementById('submit-btn');
+
+            // Client Validation
+            const validationError = validateAuthForm(email, password, name, isRegisterMode);
+            if (validationError) {
+                showToast(validationError, 'error');
+                return;
+            }
+
+            try {
+                setButtonLoading(submitBtn, true, isRegisterMode ? 'Creating Account' : 'Signing In');
+
+                if (!isRegisterMode) {
+                    // Login
+                    await signInWithEmailAndPassword(auth, email, password);
+                    showToast('Login successful! Welcome back.', 'success');
+                } else {
+                    // Register
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    await updateProfile(userCredential.user, { displayName: name });
+                    showToast('Account created! Let\'s be kind today.', 'success');
+                }
+
+                // Small delay for toast visibility
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+
+            } catch (error) {
+                console.error('[Auth Error]', error.code, error.message);
+                showToast(getAuthErrorMessage(error.code), 'error');
+                setButtonLoading(submitBtn, false, isRegisterMode ? 'Create Account' : 'Sign In');
+            }
+        });
+    }
+});
+
+// ─── State Persistence & Guards ───────────────────────────────────────────────
+
 onAuthStateChanged(auth, (user) => {
     const path = window.location.pathname;
     const isLoginPage = path.includes('login.html');
@@ -181,11 +158,13 @@ onAuthStateChanged(auth, (user) => {
 });
 
 // ─── Logout ───────────────────────────────────────────────────────────────────
+
 export const logout = async () => {
     try {
         await signOut(auth);
         window.location.href = '../index.html';
     } catch (error) {
         console.error('[Logout Error]', error.code, error.message);
+        showToast('Logout failed. Please try again.', 'error');
     }
 };
