@@ -125,8 +125,8 @@ function updateStats(activities) {
     const totalEstimatedImpact = total * 3;
     document.getElementById('stat-impact').textContent = total > 0 ? totalEstimatedImpact : 0;
 
-    // Kindness Score (Mock 0-100)
-    const score = Math.min(100, Math.floor((total / 10) * 100));
+    // Kindness Score (Sum of points earned)
+    const score = activities.reduce((acc, a) => acc + (a.points || 0), 0);
     document.getElementById('stat-score').textContent = score || 0;
 
     // Streak logic (Mock for now, or use real date logic)
@@ -155,10 +155,11 @@ function renderRecentActivities(activities) {
             <div class="activity-icon" style="background-color: ${color}18; color: ${color}; font-size:1.1rem;">
                 ${emoji}
             </div>
-            <div class="activity-details">
+            <div class="activity-details" style="flex: 1;">
                 <div class="activity-name">${activity.title}</div>
                 <div class="activity-date">${date}</div>
             </div>
+            ${activity.photoUrl ? `<img src="${activity.photoUrl}" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border-light);" alt="photo">` : ''}
         `;
         container.appendChild(div);
     });

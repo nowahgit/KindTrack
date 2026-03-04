@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milestones | KindTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .milestone-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .milestone-card {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: var(--r-xl);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .milestone-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .milestone-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            background: var(--bg-2);
+            color: var(--text-muted);
+        }
+
+        .milestone-card.unlocked .milestone-icon {
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+
+        .milestone-card.unlocked.gold .milestone-icon {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .milestone-info {
+            flex: 1;
+        }
+
+        .milestone-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 0.2rem;
+        }
+
+        .milestone-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-2);
+            border-radius: 3px;
+            margin-top: 0.75rem;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        .progress-text {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 0.3rem;
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .locked-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(1px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .milestone-card:not(.unlocked):hover .locked-overlay {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <a href="../index.html" class="sidebar-logo">
+                <div class="logo-icon"
+                    style="width:28px;height:28px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:7px;display:flex;align-items:center;justify-content:center;color:white;font-size:0.75rem;flex-shrink:0;">
+                    <i class="fas fa-heart"></i>
+                </div>
+                KindTrack
+            </a>
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-label">Main</p>
+                <a href="dashboard.html" class="sidebar-item">
+                    <i class="fas fa-house"></i> Dashboard
+                </a>
+                <a href="activity.html" class="sidebar-item">
+                    <i class="fas fa-list-check"></i> My Activities
+                </a>
+                <a href="community.html" class="sidebar-item">
+                    <i class="fas fa-users"></i> Community Feed
+                </a>
+                <a href="add-kindness.html" class="sidebar-item">
+                    <i class="fas fa-plus-circle"></i> Log Kindness
+                </a>
+                <p class="sidebar-section-label" style="margin-top:1.5rem;">Insights</p>
+                <a href="analytics.html" class="sidebar-item">
+                    <i class="fas fa-chart-line"></i> Analytics
+                </a>
+                <a href="milestones.html" class="sidebar-item active">
+                    <i class="fas fa-trophy"></i> Milestones
+                </a>
+                <a href="leaderboard.html" class="sidebar-item">
+                    <i class="fas fa-medal"></i> Leaderboard
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="profile.html" style="text-decoration:none; color:inherit;">
+                    <div class="sidebar-user" style="display:flex; align-items:center; gap:0.75rem; cursor:pointer; padding:0.5rem; margin:-0.5rem; margin-bottom:0.5rem; border-radius:12px; transition:background 0.2s;" onmouseover="this.style.background='var(--bg-2)'" onmouseout="this.style.background='transparent'">
+                        <div class="sidebar-avatar" id="sidebar-avatar">U</div>
+                        <div class="sidebar-user-info">
+                            <div class="sidebar-user-name" id="sidebar-user-name">Loading...</div>
+                            <div class="sidebar-user-role" style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profile <i class="fas fa-angle-right"></i></div>
+                        </div>
+                    </div>
+                </a>
+                <button class="sidebar-item" id="logout-btn" style="color:#ef4444;">
+                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Area -->
+        <div class="app-main">
+            <header class="app-header">
+                <div class="flex items-center gap-2">
+                    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+                    <div>
+                        <h1>Milestones & Badges</h1>
+                        <p>Unlock achievements by spreading kindness.</p>
+                    </div>
+                </div>
+                <div class="badge badge-yellow"><i class="fas fa-star"></i> Points collector</div>
+            </header>
+
+            <div class="app-body">
+                <div class="milestone-grid" id="milestones-container">
+                    <!-- Skeletons -->
+                    <div class="milestone-card">
+                        <div class="skeleton" style="width:60px; height:60px; border-radius:50%;"></div>
+                        <div style="flex:1;">
+                            <div class="skeleton" style="width:120px; height:18px; margin-bottom:8px;"></div>
+                            <div class="skeleton" style="width:100%; height:12px; margin-bottom:4px;"></div>
+                            <div class="skeleton" style="width:80%; height:12px;"></div>
+                        </div>
+                    </div>
+                    <div class="milestone-card">
+                        <div class="skeleton" style="width:60px; height:60px; border-radius:50%;"></div>
+                        <div style="flex:1;">
+                            <div class="skeleton" style="width:120px; height:18px; margin-bottom:8px;"></div>
+                            <div class="skeleton" style="width:100%; height:12px; margin-bottom:4px;"></div>
+                            <div class="skeleton" style="width:80%; height:12px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile overlay -->
+    <div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;"
+        onclick="closeSidebar()"></div>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        document.getElementById('hamburger')?.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+        });
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            overlay.style.display = 'none';
+        }
+    </script>
+    <script type="module" src="../js/milestones.js"></script>
+    <script type="module" src="../js/auth.js"></script>
+    <script type="module" src="../js/sidebar-profile.js"></script>
+</body>
+
+</html>

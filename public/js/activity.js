@@ -137,6 +137,7 @@ function renderActivities(activities) {
             <div class="activity-card-body">
                 <h3>${escapeHtml(activity.title)}</h3>
                 <p>${activity.description ? escapeHtml(activity.description) : '<em style="opacity:0.5;">No description.</em>'}</p>
+                ${activity.photoUrl ? `<div style="margin-top: 1rem; border-radius: 12px; overflow: hidden; max-height: 200px;"><img src="${activity.photoUrl}" alt="Act of Kindness" style="width: 100%; height: 100%; object-fit: cover;"></div>` : ''}
             </div>
             <div class="activity-card-footer">
                 <span class="badge" style="background:${color}18;color:${color};">${emoji} ${activity.category}</span>

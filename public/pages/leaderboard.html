@@ -4,13 +4,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Activities | KindTrack</title>
+    <title>Leaderboard | KindTrack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: var(--bg-2);
+            border-radius: var(--r-xl);
+            gap: 1.5rem;
+            transition: transform 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .leaderboard-item:hover {
+            transform: translateY(-2px);
+            background: white;
+            box-shadow: var(--shadow-sm);
+            border-color: var(--border-light);
+        }
+
+        .leaderboard-item.highlight {
+            background: var(--primary-soft);
+            border: 1px solid var(--primary-glow);
+        }
+
+        .rank-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .rank-1 .rank-number {
+            color: #F59E0B;
+        }
+
+        .rank-2 .rank-number {
+            color: #94A3B8;
+        }
+
+        .rank-3 .rank-number {
+            color: #B45309;
+        }
+
+        .leader-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-soft));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .highlight .leader-avatar {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+
+        .leader-info {
+            flex: 1;
+        }
+
+        .leader-name {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.2rem;
+        }
+
+        .leader-score-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .leader-score {
+            font-weight: 800;
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+        }
+    </style>
 </head>
 
 <body>
@@ -30,7 +123,7 @@
                 <a href="dashboard.html" class="sidebar-item">
                     <i class="fas fa-house"></i> Dashboard
                 </a>
-                <a href="activity.html" class="sidebar-item active">
+                <a href="activity.html" class="sidebar-item">
                     <i class="fas fa-list-check"></i> My Activities
                 </a>
                 <a href="community.html" class="sidebar-item">
@@ -42,7 +135,7 @@
                 <p class="sidebar-section-label" style="margin-top:1.5rem;">Insights</p>
                 <a href="analytics.html" class="sidebar-item"><i class="fas fa-chart-line"></i> Analytics</a>
                 <a href="milestones.html" class="sidebar-item"><i class="fas fa-trophy"></i> Milestones</a>
-                <a href="leaderboard.html" class="sidebar-item"><i class="fas fa-medal"></i> Leaderboard</a>
+                <a href="leaderboard.html" class="sidebar-item active"><i class="fas fa-medal"></i> Leaderboard</a>
             </nav>
             <div class="sidebar-footer">
                 <a href="profile.html" style="text-decoration:none; color:inherit;">
@@ -60,66 +153,44 @@
             </div>
         </aside>
 
+        <!-- Main Area -->
         <div class="app-main">
             <header class="app-header">
                 <div class="flex items-center gap-2">
                     <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
                     <div>
-                        <h1>My Activities</h1>
-                        <p>All your logged acts of kindness</p>
+                        <h1>Global Leaderboard</h1>
+                        <p>See who is spreading the most kindness globally.</p>
                     </div>
                 </div>
                 <a href="add-kindness.html" class="btn btn-primary" style="padding:0.6rem 1.25rem;font-size:0.875rem;">
-                    <i class="fas fa-plus"></i> Log New
+                    <i class="fas fa-plus"></i> Increase Score
                 </a>
             </header>
 
             <div class="app-body">
-
-                <!-- Filter Bar -->
-                <div class="filter-bar">
-                    <span style="font-size:0.85rem;font-weight:600;color:var(--text-muted);">Filter:</span>
-                    <select id="filter-category" class="filter-select">
-                        <option value="all">All Categories</option>
-                        <option value="Helping Others">🤝 Helping Others</option>
-                        <option value="Charity">🎁 Charity</option>
-                        <option value="Support">💬 Support</option>
-                        <option value="Volunteering">🙋 Volunteering</option>
-                        <option value="Encouragement">⭐ Encouragement</option>
-                    </select>
-                    <span id="activity-count"
-                        style="margin-left:auto;font-size:0.82rem;color:var(--text-muted);"></span>
-                </div>
-
-                <!-- Activity Grid -->
-                <div class="activity-grid" id="activity-grid">
-                    <!-- Skeleton loaders -->
-                    <div class="activity-card" style="opacity:0.5;">
-                        <div class="skeleton"
-                            style="height:40px;width:40px;border-radius:var(--r-md);margin-bottom:1rem;"></div>
-                        <div class="skeleton" style="height:16px;width:70%;margin-bottom:0.5rem;"></div>
-                        <div class="skeleton" style="height:12px;width:90%;margin-bottom:0.35rem;"></div>
-                        <div class="skeleton" style="height:12px;width:60%;"></div>
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">Top 10 Kindest Humans</div>
+                        <span class="badge badge-yellow"><i class="fas fa-crown"></i> Top Ranked</span>
                     </div>
-                    <div class="activity-card" style="opacity:0.3;">
-                        <div class="skeleton"
-                            style="height:40px;width:40px;border-radius:var(--r-md);margin-bottom:1rem;"></div>
-                        <div class="skeleton" style="height:16px;width:80%;margin-bottom:0.5rem;"></div>
-                        <div class="skeleton" style="height:12px;width:100%;margin-bottom:0.35rem;"></div>
-                        <div class="skeleton" style="height:12px;width:50%;"></div>
-                    </div>
-                    <div class="activity-card" style="opacity:0.15;">
-                        <div class="skeleton"
-                            style="height:40px;width:40px;border-radius:var(--r-md);margin-bottom:1rem;"></div>
-                        <div class="skeleton" style="height:16px;width:60%;margin-bottom:0.5rem;"></div>
-                        <div class="skeleton" style="height:12px;width:85%;margin-bottom:0.35rem;"></div>
-                        <div class="skeleton" style="height:12px;width:40%;"></div>
+                    <div class="leaderboard-list" id="leaderboard-list">
+                        <!-- Skeleton Loading -->
+                        <div class="leaderboard-item" style="opacity:0.5;">
+                            <div class="skeleton" style="width:30px;height:30px;border-radius:4px;"></div>
+                            <div class="skeleton" style="width:48px;height:48px;border-radius:50%;"></div>
+                            <div style="flex:1;">
+                                <div class="skeleton" style="width:120px;height:18px;margin-bottom:8px;"></div>
+                                <div class="skeleton" style="width:80px;height:14px;"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Mobile overlay -->
     <div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;"
         onclick="closeSidebar()"></div>
 
@@ -135,8 +206,7 @@
             overlay.style.display = 'none';
         }
     </script>
-
-    <script type="module" src="../js/activity.js"></script>
+    <script type="module" src="../js/leaderboard.js"></script>
     <script type="module" src="../js/auth.js"></script>
     <script type="module" src="../js/sidebar-profile.js"></script>
 </body>

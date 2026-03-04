@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | KindTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .profile-container {
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: var(--r-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-avatar-wrapper {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .profile-avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            border: 4px solid white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .edit-avatar-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid white;
+            transition: transform 0.2s;
+        }
+
+        .edit-avatar-btn:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
+        }
+
+        .hidden-file-input {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            background: var(--bg-1);
+            border: 1px solid var(--border-light);
+            border-radius: var(--r-lg);
+            padding: 0.8rem 1rem;
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text);
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px var(--primary-soft);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .stats-summary {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Make sidebar user clickable */
+        .sidebar-user {
+            cursor: pointer;
+            transition: background 0.2s;
+            padding: 0.5rem;
+            border-radius: var(--r-lg);
+            margin: -0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-user:hover {
+            background: var(--bg-2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <a href="../index.html" class="sidebar-logo">
+                <div class="logo-icon"
+                    style="width:28px;height:28px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:7px;display:flex;align-items:center;justify-content:center;color:white;font-size:0.75rem;flex-shrink:0;">
+                    <i class="fas fa-heart"></i>
+                </div>
+                KindTrack
+            </a>
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-label">Main</p>
+                <a href="dashboard.html" class="sidebar-item">
+                    <i class="fas fa-house"></i> Dashboard
+                </a>
+                <a href="activity.html" class="sidebar-item">
+                    <i class="fas fa-list-check"></i> My Activities
+                </a>
+                <a href="community.html" class="sidebar-item">
+                    <i class="fas fa-users"></i> Community Feed
+                </a>
+                <a href="add-kindness.html" class="sidebar-item">
+                    <i class="fas fa-plus-circle"></i> Log Kindness
+                </a>
+
+                <p class="sidebar-section-label" style="margin-top:1.5rem;">Insights</p>
+                <a href="analytics.html" class="sidebar-item">
+                    <i class="fas fa-chart-line"></i> Analytics
+                </a>
+                <a href="milestones.html" class="sidebar-item">
+                    <i class="fas fa-trophy"></i> Milestones
+                </a>
+                <a href="leaderboard.html" class="sidebar-item">
+                    <i class="fas fa-medal"></i> Leaderboard
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="profile.html" style="text-decoration:none; color:inherit;">
+                    <div class="sidebar-user" style="display:flex; align-items:center; gap:0.75rem;">
+                        <div class="sidebar-avatar" id="sidebar-avatar">U</div>
+                        <div class="sidebar-user-info">
+                            <div class="sidebar-user-name" id="sidebar-user-name">Loading...</div>
+                            <div class="sidebar-user-role"
+                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profile <i
+                                    class="fas fa-angle-right"></i></div>
+                        </div>
+                    </div>
+                </a>
+                <button class="sidebar-item" id="logout-btn" style="color:#ef4444;">
+                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <div class="app-main">
+            <header class="app-header">
+                <div class="flex items-center gap-2">
+                    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+                    <div>
+                        <h1>My Profile</h1>
+                        <p>Customize your identity in the kindest community.</p>
+                    </div>
+                </div>
+            </header>
+
+            <div class="app-body">
+                <div class="profile-container animate-fade-up">
+                    <div class="profile-card">
+
+                        <form id="profile-form">
+                            <div class="profile-header">
+                                <div class="profile-avatar-wrapper">
+                                    <div class="profile-avatar-preview" id="avatar-preview">U</div>
+                                    <label for="avatar-input" class="edit-avatar-btn" title="Change Avatar">
+                                        <i class="fas fa-camera"></i>
+                                    </label>
+                                    <input type="file" id="avatar-input" class="hidden-file-input" accept="image/*">
+                                </div>
+                                <div style="flex:1;">
+                                    <h2 style="margin-bottom:0.25rem;" id="greeting-name">Loading...</h2>
+                                    <p style="color:var(--text-muted); font-size:0.9rem;" id="greeting-email">...</p>
+                                </div>
+                            </div>
+
+                            <h3 style="font-size: 1.1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">Basic Info</h3>
+                            
+                            <div class="form-group">
+                                <label for="profile-username"><i class="fas fa-at"></i> Username</label>
+                                <input type="text" id="profile-username" class="form-control" placeholder="steve_jobs" required>
+                                <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">Unique handle for your community profile.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="profile-name"><i class="far fa-id-card"></i> Display Name</label>
+                                <input type="text" id="profile-name" class="form-control" placeholder="Steve Jobs"
+                                    required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="profile-bio"><i class="far fa-comment-dots"></i> Short Bio
+                                    (Optional)</label>
+                                <textarea id="profile-bio" class="form-control"
+                                    placeholder="I love spreading joy and helping people around me."></textarea>
+                                <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">This bio will
+                                    be shown on your community posts in the future.</p>
+                            </div>
+
+                            <h3 style="font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">Security</h3>
+
+                            <div class="form-group">
+                                <label for="profile-password"><i class="fas fa-lock"></i> Change Password</label>
+                                <input type="password" id="profile-password" class="form-control" placeholder="Enter new password (optional)">
+                                <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">Leave blank to keep your current password.</p>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+                                <a href="dashboard.html" class="btn btn-outline"
+                                    style="padding: 0.8rem 1.5rem;">Cancel</a>
+                                <button type="submit" class="btn btn-primary" id="save-btn"
+                                    style="padding: 0.8rem 2rem;">
+                                    Save Changes
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile overlay -->
+    <div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;"
+        onclick="closeSidebar()"></div>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        document.getElementById('hamburger')?.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+        });
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            overlay.style.display = 'none';
+        }
+    </script>
+    <script type="module" src="../js/profile.js"></script>
+    <script type="module" src="../js/auth.js"></script>
+    <script type="module" src="../js/sidebar-profile.js"></script>
+</body>
+
+</html>

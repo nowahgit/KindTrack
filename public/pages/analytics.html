@@ -4,13 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Activities | KindTrack</title>
+    <title>Analytics | KindTrack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--r-xl);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+        }
+
+        @media (max-width: 768px) {
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -30,7 +53,7 @@
                 <a href="dashboard.html" class="sidebar-item">
                     <i class="fas fa-house"></i> Dashboard
                 </a>
-                <a href="activity.html" class="sidebar-item active">
+                <a href="activity.html" class="sidebar-item">
                     <i class="fas fa-list-check"></i> My Activities
                 </a>
                 <a href="community.html" class="sidebar-item">
@@ -40,9 +63,15 @@
                     <i class="fas fa-plus-circle"></i> Log Kindness
                 </a>
                 <p class="sidebar-section-label" style="margin-top:1.5rem;">Insights</p>
-                <a href="analytics.html" class="sidebar-item"><i class="fas fa-chart-line"></i> Analytics</a>
-                <a href="milestones.html" class="sidebar-item"><i class="fas fa-trophy"></i> Milestones</a>
-                <a href="leaderboard.html" class="sidebar-item"><i class="fas fa-medal"></i> Leaderboard</a>
+                <a href="analytics.html" class="sidebar-item active">
+                    <i class="fas fa-chart-line"></i> Analytics
+                </a>
+                <a href="milestones.html" class="sidebar-item">
+                    <i class="fas fa-trophy"></i> Milestones
+                </a>
+                <a href="leaderboard.html" class="sidebar-item">
+                    <i class="fas fa-medal"></i> Leaderboard
+                </a>
             </nav>
             <div class="sidebar-footer">
                 <a href="profile.html" style="text-decoration:none; color:inherit;">
@@ -60,66 +89,49 @@
             </div>
         </aside>
 
+        <!-- Main Area -->
         <div class="app-main">
             <header class="app-header">
                 <div class="flex items-center gap-2">
                     <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
                     <div>
-                        <h1>My Activities</h1>
-                        <p>All your logged acts of kindness</p>
+                        <h1>Analytics</h1>
+                        <p>Deep dive into your kindness impact.</p>
                     </div>
                 </div>
                 <a href="add-kindness.html" class="btn btn-primary" style="padding:0.6rem 1.25rem;font-size:0.875rem;">
-                    <i class="fas fa-plus"></i> Log New
+                    <i class="fas fa-plus"></i> Increase Impact
                 </a>
             </header>
 
             <div class="app-body">
-
-                <!-- Filter Bar -->
-                <div class="filter-bar">
-                    <span style="font-size:0.85rem;font-weight:600;color:var(--text-muted);">Filter:</span>
-                    <select id="filter-category" class="filter-select">
-                        <option value="all">All Categories</option>
-                        <option value="Helping Others">🤝 Helping Others</option>
-                        <option value="Charity">🎁 Charity</option>
-                        <option value="Support">💬 Support</option>
-                        <option value="Volunteering">🙋 Volunteering</option>
-                        <option value="Encouragement">⭐ Encouragement</option>
-                    </select>
-                    <span id="activity-count"
-                        style="margin-left:auto;font-size:0.82rem;color:var(--text-muted);"></span>
+                <div class="content-card mb-4"
+                    style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border: none;">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem;"><i class="fas fa-sparkles"></i> You're making
+                        a difference!</h2>
+                    <p style="opacity: 0.9;">Based on your recent activities, you are most active on Weekends!</p>
                 </div>
 
-                <!-- Activity Grid -->
-                <div class="activity-grid" id="activity-grid">
-                    <!-- Skeleton loaders -->
-                    <div class="activity-card" style="opacity:0.5;">
-                        <div class="skeleton"
-                            style="height:40px;width:40px;border-radius:var(--r-md);margin-bottom:1rem;"></div>
-                        <div class="skeleton" style="height:16px;width:70%;margin-bottom:0.5rem;"></div>
-                        <div class="skeleton" style="height:12px;width:90%;margin-bottom:0.35rem;"></div>
-                        <div class="skeleton" style="height:12px;width:60%;"></div>
+                <div class="analytics-grid">
+                    <div class="chart-container">
+                        <h3 style="font-size: 1rem; color: var(--text); margin-bottom: 1rem;">Acts by Category</h3>
+                        <div style="position: relative; height: 250px; width: 100%;">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
                     </div>
-                    <div class="activity-card" style="opacity:0.3;">
-                        <div class="skeleton"
-                            style="height:40px;width:40px;border-radius:var(--r-md);margin-bottom:1rem;"></div>
-                        <div class="skeleton" style="height:16px;width:80%;margin-bottom:0.5rem;"></div>
-                        <div class="skeleton" style="height:12px;width:100%;margin-bottom:0.35rem;"></div>
-                        <div class="skeleton" style="height:12px;width:50%;"></div>
-                    </div>
-                    <div class="activity-card" style="opacity:0.15;">
-                        <div class="skeleton"
-                            style="height:40px;width:40px;border-radius:var(--r-md);margin-bottom:1rem;"></div>
-                        <div class="skeleton" style="height:16px;width:60%;margin-bottom:0.5rem;"></div>
-                        <div class="skeleton" style="height:12px;width:85%;margin-bottom:0.35rem;"></div>
-                        <div class="skeleton" style="height:12px;width:40%;"></div>
+                    <div class="chart-container">
+                        <h3 style="font-size: 1rem; color: var(--text); margin-bottom: 1rem;">Weekly Activity Pattern
+                        </h3>
+                        <div style="position: relative; height: 250px; width: 100%;">
+                            <canvas id="weeklyChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Mobile overlay -->
     <div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;"
         onclick="closeSidebar()"></div>
 
@@ -135,8 +147,7 @@
             overlay.style.display = 'none';
         }
     </script>
-
-    <script type="module" src="../js/activity.js"></script>
+    <script type="module" src="../js/analytics.js"></script>
     <script type="module" src="../js/auth.js"></script>
     <script type="module" src="../js/sidebar-profile.js"></script>
 </body>
