@@ -1859,6 +1859,73 @@ textarea {
     display: block;
 }
 
+/* ─── Mobile Bottom Nav ──────────────────────────────────── */
+.mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border-light);
+    z-index: 1000;
+    padding-bottom: env(safe-area-inset-bottom);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.mobile-nav-list {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+}
+
+.mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.65rem;
+    font-weight: 700;
+    gap: 0.25rem;
+    transition: all 0.2s;
+    width: 20%;
+}
+
+.mobile-nav-item i {
+    font-size: 1.25rem;
+}
+
+.mobile-nav-item.active {
+    color: var(--primary);
+}
+
+.mobile-nav-item.active i {
+    transform: translateY(-2px);
+}
+
+.mobile-fab {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white !important;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-15px);
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+}
+
+.mobile-fab i {
+    font-size: 1.25rem !important;
+    transform: none !important;
+}
+
 /* ─── Responsive ─────────────────────────────────────────── */
 @media (max-width: 1024px) {
     .auth-left {
@@ -1880,20 +1947,28 @@ textarea {
 
 @media (max-width: 768px) {
     .sidebar {
-        transform: translateX(-100%);
-        box-shadow: var(--shadow-premium);
-    }
-
-    .sidebar.open {
-        transform: translateX(0);
+        display: none !important;
     }
 
     .app-main {
         margin-left: 0;
+        padding-bottom: 80px;
     }
 
     .hamburger {
-        display: flex;
+        display: none !important;
+    }
+
+    .app-header .btn-primary {
+        display: none !important;
+    }
+
+    .mobile-only-logout {
+        display: block !important;
+    }
+
+    .mobile-nav {
+        display: block;
     }
 
     .hero {

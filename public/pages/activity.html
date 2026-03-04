@@ -19,11 +19,7 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <a href="../index.html" class="sidebar-logo">
-                <div class="logo-icon"
-                    style="width:28px;height:28px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:7px;display:flex;align-items:center;justify-content:center;color:white;font-size:0.75rem;flex-shrink:0;">
-                    <i class="fas fa-heart"></i>
-                </div>
-                KindTrack
+                <img src="../assets/icons/logo-full-white.png" alt="KindTrack" style="height: 35px; width: auto; object-fit: contain;">
             </a>
             <nav class="sidebar-nav">
                 <p class="sidebar-section-label">Main</p>
@@ -139,6 +135,32 @@
     <script type="module" src="../js/activity.js"></script>
     <script type="module" src="../js/auth.js"></script>
     <script type="module" src="../js/sidebar-profile.js"></script>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-nav">
+        <ul class="mobile-nav-list">
+            <a href="dashboard.html" class="mobile-nav-item" id="mnav-dashboard">
+                <i class="fas fa-house"></i>
+                Home
+            </a>
+            <a href="activity.html" class="mobile-nav-item" id="mnav-activity">
+                <i class="fas fa-list-check"></i>
+                Acts
+            </a>
+            <a href="add-kindness.html" class="mobile-nav-item mobile-fab" id="mnav-add">
+                <i class="fas fa-plus"></i>
+            </a>
+            <a href="community.html" class="mobile-nav-item" id="mnav-community">
+                <i class="fas fa-users"></i>
+                Feed
+            </a>
+            <a href="profile.html" class="mobile-nav-item" id="mnav-profile">
+                <i class="fas fa-user-circle"></i>
+                Profile
+            </a>
+        </ul>
+    </nav>
+
 </body>
 
 </html>

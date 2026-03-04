@@ -4,8 +4,12 @@ import {
     createUserWithEmailAndPassword,
     updateProfile,
     signOut,
-    onAuthStateChanged
+    onAuthStateChanged,
+    GoogleAuthProvider,
+    signInWithPopup
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { db } from './firebase-init.js';
+import { doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 import { showToast } from './utils.js';
 
@@ -138,6 +142,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('[Auth Error]', error.code, error.message);
                 showToast(getAuthErrorMessage(error.code), 'error');
                 setButtonLoading(submitBtn, false, isRegisterMode ? 'Create Account' : 'Sign In');
+            }
+        });
+    }
+
+    // Google Sign-in Handler
+    const googleBtn = document.getElementById('google-btn');
+    if (googleBtn) {
+        googleBtn.addEventListener('click', async () => {
+            const provider = new GoogleAuthProvider();
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+
+                // Create/Update user doc in Firestore
+                const userDocRef = doc(db, 'users', user.uid);
+                const userDoc = await getDoc(userDocRef);
+
+                if (!userDoc.exists()) {
+                    await setDoc(userDocRef, {
+                        name: user.displayName,
+                        email: user.email,
+                        avatarUrl: user.photoURL,
+                        createdAt: serverTimestamp(),
+                        updatedAt: serverTimestamp()
+                    });
+                }
+
+                showToast(`Welcome, ${user.displayName}!`, 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            } catch (error) {
+                console.error('[Google Auth Error]', error.code, error.message);
+                if (error.code !== 'auth/popup-closed-by-user') {
+                    showToast(getAuthErrorMessage(error.code), 'error');
+                }
             }
         });
     }

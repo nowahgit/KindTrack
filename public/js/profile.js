@@ -16,6 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) logoutBtn.addEventListener('click', logout);
 
+    const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
+    if (mobileLogoutBtn) mobileLogoutBtn.addEventListener('click', logout);
+
+    const usernameInput = document.getElementById('profile-username');
     const nameInput = document.getElementById('profile-name');
     const bioInput = document.getElementById('profile-bio');
     const avatarInput = document.getElementById('avatar-input');
@@ -48,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (userDoc.exists()) {
                 const data = userDoc.data();
+                if (data.username) usernameInput.value = data.username;
                 if (data.bio) bioInput.value = data.bio;
                 if (data.avatarUrl) {
                     avatarPreview.innerHTML = `<img src="${data.avatarUrl}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
@@ -89,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
         try {
+            const newUsername = usernameInput.value.trim();
             const newName = nameInput.value.trim();
             const newBio = bioInput.value.trim();
 
@@ -97,9 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 await updateProfile(currentUser, { displayName: newName });
             }
 
-            // 2. Update Firestore User Document (Avatar & Bio)
+            // 2. Update Firestore User Document (Avatar, Bio, Username)
             const userDocRef = doc(db, 'users', currentUser.uid);
             const updateData = {
+                username: newUsername,
                 name: newName,
                 bio: newBio,
                 updatedAt: new Date()

@@ -35,3 +35,22 @@ onAuthStateChanged(auth, async (user) => {
         }
     }
 });
+
+// Mobile Nav Active State
+document.addEventListener('DOMContentLoaded', () => {
+    const currentPage = window.location.pathname.split('/').pop();
+    const navMapping = {
+        'dashboard.html': 'mnav-dashboard',
+        'activity.html': 'mnav-activity',
+        'add-kindness.html': 'mnav-add',
+        'community.html': 'mnav-community',
+        'profile.html': 'mnav-profile'
+    };
+
+    const activeId = navMapping[currentPage];
+    if (activeId) {
+        const activeNav = document.getElementById(activeId);
+        if (activeNav) activeNav.classList.add('active');
+    }
+});
+
