@@ -12,6 +12,24 @@ import { logout } from './auth.js';
 let currentUser = null;
 let newAvatarBase64 = null;
 
+function showFieldError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    if (!field) return;
+    field.classList.add('is-invalid');
+    const group = field.closest('.form-group');
+    const feedback = group?.querySelector('.invalid-feedback');
+    if (feedback) {
+        feedback.textContent = message;
+        feedback.style.display = 'block';
+    }
+}
+
+function clearFormErrors(form) {
+    form.classList.remove('was-validated');
+    form.querySelectorAll('.form-control').forEach(el => el.classList.remove('is-invalid'));
+    form.querySelectorAll('.invalid-feedback').forEach(el => el.style.display = 'none');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) logoutBtn.addEventListener('click', logout);
@@ -94,9 +112,36 @@ document.addEventListener('DOMContentLoaded', () => {
         saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
         try {
-            const newUsername = usernameInput.value.trim();
+            const newUsername = usernameInput.value.trim().toLowerCase();
             const newName = nameInput.value.trim();
             const newBio = bioInput.value.trim();
+            const newPassword = document.getElementById('profile-password')?.value;
+
+            // 0. Validation
+            let isValid = true;
+            clearFormErrors(profileForm);
+
+            if (!newUsername || newUsername.length < 3 || !/^[a-z0-9_]+$/.test(newUsername)) {
+                showFieldError('profile-username', 'Username must be at least 3 chars (letters, numbers, underscore).');
+                isValid = false;
+            }
+
+            if (!newName || newName.length < 2) {
+                showFieldError('profile-name', 'Display name must be at least 2 characters.');
+                isValid = false;
+            }
+
+            if (newPassword && newPassword.length < 8) {
+                showFieldError('profile-password', 'New password must be at least 8 characters.');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                profileForm.classList.add('was-validated');
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = originalText;
+                return;
+            }
 
             // 1. Update Firebase Auth Profile (Display Name)
             if (newName !== currentUser.displayName) {

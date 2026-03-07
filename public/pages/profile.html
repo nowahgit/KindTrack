@@ -165,7 +165,8 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <a href="../index.html" class="sidebar-logo">
-                <img src="../assets/icons/logo-full-white.png" alt="KindTrack" style="height: 35px; width: auto; object-fit: contain;">
+                <img src="../assets/icons/logo-full-white.png" alt="KindTrack"
+                    style="height: 35px; width: auto; object-fit: contain;">
             </a>
             <nav class="sidebar-nav">
                 <p class="sidebar-section-label">Main</p>
@@ -226,7 +227,7 @@
                 <div class="profile-container animate-fade-up">
                     <div class="profile-card">
 
-                        <form id="profile-form">
+                        <form id="profile-form" novalidate>
                             <div class="profile-header">
                                 <div class="profile-avatar-wrapper">
                                     <div class="profile-avatar-preview" id="avatar-preview">U</div>
@@ -249,6 +250,7 @@
                                 <label for="profile-username"><i class="fas fa-at"></i> Username</label>
                                 <input type="text" id="profile-username" class="form-control" placeholder="steve_jobs"
                                     required>
+                                <div class="invalid-feedback">Please enter a unique username.</div>
                                 <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">Unique handle
                                     for your community profile.</p>
                             </div>
@@ -257,6 +259,7 @@
                                 <label for="profile-name"><i class="far fa-id-card"></i> Display Name</label>
                                 <input type="text" id="profile-name" class="form-control" placeholder="Steve Jobs"
                                     required>
+                                <div class="invalid-feedback">Please enter your display name.</div>
                             </div>
 
                             <div class="form-group">
@@ -276,6 +279,7 @@
                                 <label for="profile-password"><i class="fas fa-lock"></i> Change Password</label>
                                 <input type="password" id="profile-password" class="form-control"
                                     placeholder="Enter new password (optional)">
+                                <div class="invalid-feedback">Password must be at least 8 characters.</div>
                                 <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">Leave blank to
                                     keep your current password.</p>
                             </div>
@@ -327,16 +331,16 @@
                 <i class="fas fa-house"></i>
                 Home
             </a>
-            <a href="activity.html" class="mobile-nav-item" id="mnav-activity">
-                <i class="fas fa-list-check"></i>
-                Acts
+            <a href="community.html" class="mobile-nav-item" id="mnav-community">
+                <i class="fas fa-users"></i>
+                Feed
             </a>
             <a href="add-kindness.html" class="mobile-nav-item mobile-fab" id="mnav-add">
                 <i class="fas fa-plus"></i>
             </a>
-            <a href="community.html" class="mobile-nav-item" id="mnav-community">
-                <i class="fas fa-users"></i>
-                Feed
+            <a href="support.html" class="mobile-nav-item" id="mnav-messages">
+                <i class="fas fa-comments"></i>
+                Messages
             </a>
             <a href="profile.html" class="mobile-nav-item" id="mnav-profile">
                 <i class="fas fa-user-circle"></i>

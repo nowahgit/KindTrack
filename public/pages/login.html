@@ -15,16 +15,10 @@
 
     <!-- Left Panel -->
     <div class="auth-left">
-        <div class="blob"
-            style="width:400px;height:400px;background:rgba(34,197,94,1);top:-200px;left:-150px;border-radius:50%;filter:blur(80px);opacity:0.15;">
-        </div>
-        <div class="blob"
-            style="width:300px;height:300px;background:rgba(59,130,246,1);bottom:-100px;right:-100px;border-radius:50%;filter:blur(60px);opacity:0.1;">
-        </div>
 
         <a href="../index.html" class="logo" style="position:relative;z-index:1;">
-            <div class="logo-icon"><i class="fas fa-heart"></i></div>
-            KindTrack
+            <img src="../assets/icons/logo-full-white.png" alt="KindTrack"
+                style="height: 35px; width: auto; object-fit: contain;">
         </a>
 
         <div class="auth-left-content">
@@ -72,11 +66,13 @@
                 <div class="form-group" id="name-group" style="display:none;">
                     <label class="form-label" for="auth-name">Full Name</label>
                     <input type="text" id="auth-name" class="form-control" placeholder="John Doe" autocomplete="name">
+                    <div class="invalid-feedback">Please enter your full name.</div>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="auth-email">Email Address</label>
                     <input type="email" id="auth-email" class="form-control" placeholder="name@example.com" required
                         autocomplete="email">
+                    <div class="invalid-feedback">Please enter a valid email address.</div>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="auth-password">
@@ -93,6 +89,7 @@
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
+                    <div class="invalid-feedback">Password must meet requirements.</div>
                 </div>
 
                 <button type="submit" class="btn btn-primary"

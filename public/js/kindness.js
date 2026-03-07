@@ -10,8 +10,26 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Common Utils
-import { showToast } from './utils.js';
+import { showToast, showAlert } from './utils.js';
 import { logout } from './auth.js';
+
+function showFieldError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    if (!field) return;
+    field.classList.add('is-invalid');
+    const group = field.closest('.form-group');
+    const feedback = group?.querySelector('.invalid-feedback');
+    if (feedback) {
+        feedback.textContent = message;
+        feedback.style.display = 'block';
+    }
+}
+
+function clearFormErrors(form) {
+    form.classList.remove('was-validated');
+    form.querySelectorAll('.form-control').forEach(el => el.classList.remove('is-invalid'));
+    form.querySelectorAll('.invalid-feedback').forEach(el => el.style.display = 'none');
+}
 
 // ─── Lifecycle & Auth ─────────────────────────────────────────────────────────
 
@@ -65,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const user = auth.currentUser;
             if (!user) {
-                showToast('Please sign in first.', 'error');
+                showAlert('add-kindness-form', 'Please sign in first.');
                 window.location.href = 'login.html';
                 return;
             }
@@ -77,17 +95,30 @@ document.addEventListener('DOMContentLoaded', () => {
             const date = document.getElementById('kindness-date').value;
             const photoInput = document.getElementById('kindness-photo');
 
-            // Simple Validation
+            // Specific Validation
+            let isValid = true;
+            clearFormErrors(kindnessForm);
+
             if (!title) {
-                showToast('Please enter what you did.', 'error');
-                return;
+                showFieldError('kindness-title', 'Please enter what you did.');
+                isValid = false;
             }
             if (!category) {
-                showToast('Please select a category.', 'error');
-                return;
+                const feedback = document.getElementById('category-feedback');
+                if (feedback) feedback.style.display = 'block';
+                isValid = false;
             }
             if (description && description.length < 20) {
-                showToast('Description must be at least 20 characters to proceed and earn points.', 'error');
+                showFieldError('kindness-desc', 'Description must be at least 20 characters.');
+                isValid = false;
+            }
+            if (!date) {
+                showFieldError('kindness-date', 'Please select a date.');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                kindnessForm.classList.add('was-validated');
                 return;
             }
 
@@ -193,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             } catch (error) {
                 console.error('[Save Error]', error);
-                showToast('Failed to save data.', 'error');
+                showAlert('add-kindness-form', 'Failed to save data. Please check your connection.');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalText;

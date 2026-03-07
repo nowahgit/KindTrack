@@ -11,7 +11,7 @@ import {
 import { db } from './firebase-init.js';
 import { doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-import { showToast } from './utils.js';
+import { showToast, showConfirmModal, showAlert } from './utils.js';
 
 // ─── Friendly Error Messages ──────────────────────────────────────────────────
 
@@ -36,20 +36,65 @@ function getAuthErrorMessage(errorCode) {
 
 // ─── Form Validation ──────────────────────────────────────────────────────────
 
-function validateAuthForm(email, password, name, isRegister) {
-    if (isRegister && (!name || name.trim().length < 2)) {
-        return 'Full name must be at least 2 characters.';
+function showFieldError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    if (!field) return;
+    field.classList.add('is-invalid');
+    const feedback = field.closest('.form-group')?.querySelector('.invalid-feedback');
+    if (feedback) {
+        feedback.textContent = message;
+        feedback.style.display = 'block';
     }
-    if (!email || !email.includes('@') || !email.includes('.')) {
-        return 'Please enter a valid email address.';
+}
+
+function clearFormErrors(form) {
+    form.classList.remove('was-validated');
+    form.querySelectorAll('.form-control').forEach(el => {
+        el.classList.remove('is-invalid');
+    });
+    form.querySelectorAll('.invalid-feedback').forEach(el => {
+        el.style.display = 'none';
+    });
+}
+
+function validateAuthForm(email, password, name, isRegisterMode) {
+    let isValid = true;
+    const form = document.getElementById('auth-form');
+    clearFormErrors(form);
+
+    if (isRegisterMode) {
+        if (!name || name.trim().length < 2) {
+            showFieldError('auth-name', 'Full name must be at least 2 characters.');
+            isValid = false;
+        } else if (!/^[a-zA-Z\s]+$/.test(name)) {
+            showFieldError('auth-name', 'Name can only contain letters and spaces.');
+            isValid = false;
+        }
     }
-    if (!password || password.length < 6) {
-        return 'Password must be at least 6 characters.';
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+        showFieldError('auth-email', 'Please enter a valid email address.');
+        isValid = false;
     }
-    if (isRegister && password.length < 8) {
-        return 'For better security, use at least 8 characters.';
+
+    if (!isRegisterMode && (!password || password.length < 6)) {
+        showFieldError('auth-password', 'Password must be at least 6 characters.');
+        isValid = false;
     }
-    return null; // valid
+
+    if (isRegisterMode) {
+        if (!password || password.length < 8) {
+            showFieldError('auth-password', 'Use at least 8 characters.');
+            isValid = false;
+        } else if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password)) {
+            showFieldError('auth-password', 'Include uppercase, lowercase, and a number.');
+            isValid = false;
+        }
+    }
+
+    if (!isValid) form.classList.add('was-validated');
+    return isValid;
 }
 
 // ─── Button Loading State ─────────────────────────────────────────────────────
@@ -109,15 +154,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const email = document.getElementById('auth-email').value.trim();
             const password = document.getElementById('auth-password').value;
-            const name = nameInput ? nameInput.value.trim() : '';
+            const name = isRegisterMode ? document.getElementById('auth-name').value.trim() : '';
             const submitBtn = document.getElementById('submit-btn');
 
             // Client Validation
-            const validationError = validateAuthForm(email, password, name, isRegisterMode);
-            if (validationError) {
-                showToast(validationError, 'error');
-                return;
-            }
+            clearFormErrors(authForm); // Clear errors first
+            const isValid = validateAuthForm(email, password, name, isRegisterMode);
+            if (!isValid) return;
+
+            // Remove previous alerts
+            const existingAlert = authForm.querySelector('.alert');
+            if (existingAlert) existingAlert.remove();
 
             try {
                 setButtonLoading(submitBtn, true, isRegisterMode ? 'Creating Account' : 'Signing In');
@@ -130,17 +177,35 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Register
                     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                     await updateProfile(userCredential.user, { displayName: name });
+
+                    // NEW: Ensure we create a Firestore document for email/password users!
+                    // If the user's email is an admin email, automatically grant admin role.
+                    const role = email.toLowerCase().includes('admin') ? 'admin' : 'user';
+                    const userDocRef = doc(db, 'users', userCredential.user.uid);
+                    await setDoc(userDocRef, {
+                        name: name,
+                        email: email,
+                        avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`,
+                        role: role,
+                        createdAt: serverTimestamp(),
+                        updatedAt: serverTimestamp()
+                    });
+
                     showToast('Account created! Let\'s be kind today.', 'success');
                 }
 
+                // Check user role for redirection
+                const userDoc = await getDoc(doc(db, 'users', auth.currentUser.uid));
+                const isAdmin = userDoc.exists() && userDoc.data().role === 'admin';
+
                 // Small delay for toast visibility
                 setTimeout(() => {
-                    window.location.href = 'dashboard.html';
+                    window.location.href = isAdmin ? 'admin.html' : 'dashboard.html';
                 }, 1000);
 
             } catch (error) {
                 console.error('[Auth Error]', error.code, error.message);
-                showToast(getAuthErrorMessage(error.code), 'error');
+                showAlert('auth-form', getAuthErrorMessage(error.code));
                 setButtonLoading(submitBtn, false, isRegisterMode ? 'Create Account' : 'Sign In');
             }
         });
@@ -164,14 +229,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         name: user.displayName,
                         email: user.email,
                         avatarUrl: user.photoURL,
+                        role: 'user', // Default role for Google sign-in
                         createdAt: serverTimestamp(),
                         updatedAt: serverTimestamp()
                     });
                 }
 
-                showToast(`Welcome, ${user.displayName}!`, 'success');
+                const role = userDoc.exists() ? userDoc.data().role : 'user';
+                showToast(`Welcome, ${user.displayName}!`, "success");
+
                 setTimeout(() => {
-                    window.location.href = 'dashboard.html';
+                    window.location.href = role === 'admin' ? 'admin.html' : 'dashboard.html';
                 }, 1000);
             } catch (error) {
                 console.error('[Google Auth Error]', error.code, error.message);
@@ -191,7 +259,12 @@ onAuthStateChanged(auth, (user) => {
     const isInPages = path.includes('/pages/');
 
     if (user && isLoginPage) {
-        window.location.href = 'dashboard.html';
+        // We already have a check inside the submit handler, 
+        // but for persistence, let's also check here
+        getDoc(doc(db, 'users', user.uid)).then(userDoc => {
+            const isAdmin = userDoc.exists() && userDoc.data().role === 'admin';
+            window.location.href = isAdmin ? 'admin.html' : 'dashboard.html';
+        });
     } else if (!user && isInPages && !isLoginPage) {
         window.location.href = 'login.html';
     }
@@ -200,11 +273,19 @@ onAuthStateChanged(auth, (user) => {
 // ─── Logout ───────────────────────────────────────────────────────────────────
 
 export const logout = async () => {
-    try {
-        await signOut(auth);
-        window.location.href = '../index.html';
-    } catch (error) {
-        console.error('[Logout Error]', error.code, error.message);
-        showToast('Logout failed. Please try again.', 'error');
-    }
+    showConfirmModal({
+        title: 'Sign Out',
+        message: 'Are you sure you want to sign out? Your kindness journey is waiting for you!',
+        confirmText: 'Sign Me Out',
+        cancelText: 'Stay Here',
+        onConfirm: async () => {
+            try {
+                await signOut(auth);
+                window.location.href = '../index.html';
+            } catch (error) {
+                console.error('[Logout Error]', error.code, error.message);
+                showToast('Logout failed. Please try again.', 'error');
+            }
+        }
+    });
 };

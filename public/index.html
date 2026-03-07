@@ -1,181 +1,404 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KindTrack | Track Kindness. See the Impact.</title>
+    <title>KindTrack | Kesejahteraan Berbasis Empati</title>
     <meta name="description"
-        content="KindTrack helps you build a habit of kindness with AI insights and real impact tracking. Join 2,000+ kind humans.">
+        content="Merevolusi kesehatan mental melalui pelacakan dampak kolektif. KindTrack adalah suaka digital Anda untuk kebaikan.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --primary: #22C55E;
+            --primary-light: #dcfce7;
+            --secondary: #3B82F6;
+            --dark: #0f172a;
+            --slate: #64748B;
+            --font-main: 'Mulish', sans-serif;
+            --bg-canvas: #fafbfd;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-canvas);
+            color: var(--dark);
+            margin: 0;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        nav.nav-premium {
+            padding: 1.5rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        nav.nav-premium.scrolled {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .hero-v3 {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 5rem;
+            position: relative;
+        }
+
+        .hero-wrapper {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .hero-title-v3 {
+            font-size: clamp(3.5rem, 7vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title-v3 span {
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-title-v3 span::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: 100%;
+            height: 12px;
+            background: var(--primary-light);
+            z-index: -1;
+        }
+
+        .hero-p-v3 {
+            font-size: 1.3rem;
+            color: var(--slate);
+            line-height: 1.6;
+            max-width: 540px;
+            margin-bottom: 3rem;
+        }
+
+        .visual-organic {
+            position: relative;
+            height: 600px;
+        }
+
+        .card-overlap {
+            position: absolute;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 2rem;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.05);
+            width: 320px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            z-index: 5;
+            top: 10%;
+            right: 15%;
+            animation: float-y 6s ease-in-out infinite;
+        }
+
+        .blob-bg {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: var(--primary-light);
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            animation: blob-morph 15s linear infinite;
+        }
+
+        .section-refined {
+            padding: 12rem 0;
+            background: white;
+        }
+
+        .grid-asym {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .f-box-large {
+            background: #fff;
+            padding: 4rem;
+            border-radius: 3rem;
+            border: 1px solid #f1f5f9;
+            transition: all 0.5s var(--ease);
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .f-box-large:hover {
+            border-color: var(--primary);
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.04);
+        }
+
+        .f-icon-soft {
+            width: 70px;
+            height: 70px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .badge-pill {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 0.8rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .partner-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            margin-top: 4rem;
+            opacity: 0.7;
+        }
+
+        .partner-logo {
+            height: 60px;
+            width: auto;
+            object-fit: contain;
+            filter: grayscale(1);
+            transition: filter 0.3s ease;
+        }
+
+        .partner-logo:hover {
+            filter: grayscale(0);
+        }
+
+        .btn-v3 {
+            padding: 1.2rem 2.8rem;
+            border-radius: 1rem;
+            font-weight: 800;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-fill {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-fill:hover {
+            transform: translateY(-4px);
+            background: #16a34a;
+        }
+
+        @keyframes blob-morph {
+
+            0%,
+            100% {
+                border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            }
+
+            34% {
+                border-radius: 70% 30% 50% 50% / 30% 34% 60% 70%;
+            }
+
+            67% {
+                border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%;
+            }
+        }
+
+        @keyframes float-y {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @media (max-width: 992px) {
+
+            .hero-wrapper,
+            .grid-asym {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-title-v3 {
+                font-size: 3.5rem;
+            }
+
+            .visual-organic {
+                height: 400px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar" id="navbar">
+    <nav class="nav-premium" id="navbar">
         <div class="container flex items-center justify-between">
             <a href="index.html" class="logo">
-                <div class="logo-icon"><i class="fas fa-heart"></i></div>
-                KindTrack
+                <img src="assets/icons/logo-full-color.png" alt="KindTrack" style="height: 38px;">
             </a>
-            <div class="nav-links">
-                <a href="#vision" class="nav-link">Vision</a>
-                <a href="#features" class="nav-link">Features</a>
-                <a href="#impact" class="nav-link">Impact</a>
+            <div class="nav-links" style="gap: 3rem; display: flex; align-items: center;">
+                <a href="#vision" class="nav-link" style="font-weight: 700;">Visi</a>
+                <a href="#features" class="nav-link" style="font-weight: 700;">Infrastruktur</a>
                 <a href="pages/login.html" class="btn btn-outline"
-                    style="padding:0.55rem 1.2rem; font-size:0.85rem;">Sign In</a>
+                    style="border-radius: 12px; padding: 0.8rem 1.8rem;">Masuk</a>
                 <a href="pages/login.html" class="btn btn-primary"
-                    style="padding:0.55rem 1.2rem; font-size:0.85rem;">Get Started</a>
+                    style="background: var(--primary); border-radius: 12px; padding: 0.8rem 1.8rem;">Coba KindTrack</a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero -->
-    <section class="hero">
-        <div class="blob" style="width:600px;height:600px;background:rgba(34,197,94,0.12);top:-200px;left:-200px;">
-        </div>
-        <div class="blob" style="width:500px;height:500px;background:rgba(59,130,246,0.1);bottom:-100px;right:-100px;">
-        </div>
-
-        <div class="container" style="width:100%;">
-            <div class="flex items-center gap-4" style="padding:3rem 0 2rem;">
-
-                <!-- Left -->
-                <div class="hero-content animate-fade-up" style="flex:1.2; z-index:1;">
-                    <div class="hero-eyebrow">
-                        <i class="fas fa-sparkles"></i> Tracking the Good in the World
-                    </div>
-                    <h1 class="hero-title">
-                        Track <span class="gradient-text">kindness.</span><br>
-                        See the impact.
+    <section class="hero-v3">
+        <div class="container">
+            <div class="hero-wrapper">
+                <div class="animate-fade-up">
+                    <span class="badge-pill">Masa Depan Kesejahteraan</span>
+                    <h1 class="hero-title-v3">
+                        Lacak<br><span>empati Anda,</span><br>pulihkan jiwa.
                     </h1>
-                    <p class="hero-subtitle">
-                        KindTrack is the first AI-powered platform designed to measure the ripple effect of your actions
-                        — and inspire a kinder world, one act at a time.
+                    <p class="hero-p-v3">
+                        Kami melangkah lebih jauh dari sekadar melacak langkah kaki. KindTrack adalah suaka digital
+                        pertama yang dirancang untuk mengukur dan melipatgandakan sains kebaikan manusia.
                     </p>
-                    <div class="hero-actions">
-                        <a href="pages/login.html" class="btn btn-primary" style="font-size:1rem; padding:0.9rem 2rem;">
-                            Start for Free <i class="fas fa-arrow-right"></i>
+                    <div class="flex gap-2">
+                        <a href="pages/login.html" class="btn-v3 btn-fill">
+                            Mulai Gratis <i class="fas fa-arrow-right"></i>
                         </a>
-                        <a href="#features" class="btn btn-outline" style="font-size:1rem; padding:0.9rem 2rem;">
-                            See how it works
-                        </a>
-                    </div>
-
-                    <div class="hero-social-proof animate-fade-up stagger-3">
-                        <div class="avatar-stack">
-                            <img src="https://ui-avatars.com/api/?name=JS&background=22C55E&color=fff" alt="User">
-                            <img src="https://ui-avatars.com/api/?name=AM&background=3B82F6&color=fff" alt="User">
-                            <img src="https://ui-avatars.com/api/?name=RK&background=F59E0B&color=fff" alt="User">
-                            <img src="https://ui-avatars.com/api/?name=DP&background=EC4899&color=fff" alt="User">
-                        </div>
-                        <p class="social-proof-text"><strong>2,400+</strong> kind humans joined this week</p>
                     </div>
                 </div>
 
-                <!-- Right Visual -->
-                <div class="hero-visual animate-fade-up stagger-2">
-                    <div class="hero-app-preview">
-                        <!-- Badge top-left -->
-                        <div class="hero-badge hero-badge-1">
-                            <div class="hero-badge-icon" style="background:#dcfce7;color:#16a34a;">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div>
-                                <div style="font-weight:700;font-size:0.82rem;color:#0f172a;">Act Logged!</div>
-                                <div style="font-size:0.72rem;color:#64748b;">Helped elderly neighbour</div>
-                            </div>
+                <div class="visual-organic animate-fade-up stagger-2">
+                    <div class="blob-bg"></div>
+                    <div class="card-overlap">
+                        <div class="flex items-center gap-2" style="margin-bottom: 2rem;">
+                            <div style="width: 12px; height: 12px; background: #22C55E; border-radius: 50%;"></div>
+                            <span style="font-weight: 900; font-size: 0.9rem;">AKTIVITAS LANGSUNG</span>
                         </div>
-
-                        <!-- Dashboard mockup image placeholder -->
+                        <div style="font-size: 2.2rem; font-weight: 900; line-height: 1.2; margin-bottom: 0.5rem;">+14
+                            poin</div>
+                        <p style="color: var(--slate); font-size: 0.9rem; font-weight: 600;">Anda baru saja
+                            menginspirasi riak di Jakarta.</p>
                         <div
-                            style="width:340px;background:white;border-radius:20px;box-shadow:0 30px 80px rgba(0,0,0,0.15);overflow:hidden;border:1px solid #e2e8f0;">
-                            <!-- Mini topbar -->
+                            style="margin-top: 2.5rem; height: 6px; background: #f1f5f9; border-radius: 10px; position: relative;">
                             <div
-                                style="background:#0f172a;padding:1rem 1.2rem;display:flex;align-items:center;gap:0.5rem;">
-                                <div style="width:8px;height:8px;border-radius:50%;background:#ff5f56;"></div>
-                                <div style="width:8px;height:8px;border-radius:50%;background:#ffbd2e;"></div>
-                                <div style="width:8px;height:8px;border-radius:50%;background:#27c93f;"></div>
-                                <span
-                                    style="margin-left:auto;color:rgba(255,255,255,0.4);font-size:0.65rem;font-weight:600;">KINDTRACK</span>
-                            </div>
-                            <!-- Mini content -->
-                            <div style="padding:1.25rem;background:#f8fafc;">
-                                <div
-                                    style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:0.8rem;">
-                                    <div
-                                        style="background:white;border-radius:10px;padding:0.75rem;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
-                                        <div
-                                            style="font-size:0.6rem;color:#94a3b8;font-weight:600;margin-bottom:0.2rem;">
-                                            TOTAL ACTS</div>
-                                        <div
-                                            style="font-size:1.5rem;font-weight:800;color:#0f172a;font-family:'Outfit',sans-serif;">
-                                            48</div>
-                                        <div style="font-size:0.6rem;color:#22c55e;font-weight:600;">↑ 12% this month
-                                        </div>
-                                    </div>
-                                    <div
-                                        style="background:white;border-radius:10px;padding:0.75rem;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
-                                        <div
-                                            style="font-size:0.6rem;color:#94a3b8;font-weight:600;margin-bottom:0.2rem;">
-                                            STREAK</div>
-                                        <div
-                                            style="font-size:1.5rem;font-weight:800;color:#0f172a;font-family:'Outfit',sans-serif;">
-                                            7🔥</div>
-                                        <div style="font-size:0.6rem;color:#f59e0b;font-weight:600;">days in a row</div>
-                                    </div>
-                                </div>
-                                <!-- Mini chart -->
-                                <div
-                                    style="background:white;border-radius:10px;padding:0.75rem;margin-bottom:0.8rem;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
-                                    <div style="font-size:0.65rem;font-weight:700;color:#0f172a;margin-bottom:0.5rem;">
-                                        Impact over time</div>
-                                    <div style="display:flex;align-items:flex-end;gap:4px;height:44px;">
-                                        <div style="flex:1;background:#dcfce7;border-radius:3px 3px 0 0;height:30%;">
-                                        </div>
-                                        <div style="flex:1;background:#86efac;border-radius:3px 3px 0 0;height:55%;">
-                                        </div>
-                                        <div style="flex:1;background:#4ade80;border-radius:3px 3px 0 0;height:45%;">
-                                        </div>
-                                        <div style="flex:1;background:#22c55e;border-radius:3px 3px 0 0;height:75%;">
-                                        </div>
-                                        <div style="flex:1;background:#16a34a;border-radius:3px 3px 0 0;height:65%;">
-                                        </div>
-                                        <div style="flex:1;background:#15803d;border-radius:3px 3px 0 0;height:90%;">
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Recent item -->
-                                <div
-                                    style="background:white;border-radius:10px;padding:0.6rem 0.75rem;box-shadow:0 1px 4px rgba(0,0,0,0.06);display:flex;align-items:center;gap:0.6rem;">
-                                    <div
-                                        style="width:28px;height:28px;border-radius:8px;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:0.75rem;">
-                                        🤝</div>
-                                    <div>
-                                        <div style="font-size:0.72rem;font-weight:600;color:#0f172a;">Helped a colleague
-                                        </div>
-                                        <div style="font-size:0.62rem;color:#94a3b8;">Today · Helping Others</div>
-                                    </div>
-                                    <span
-                                        style="margin-left:auto;font-size:0.6rem;background:#dcfce7;color:#16a34a;padding:0.2rem 0.5rem;border-radius:99px;font-weight:600;">+10pts</span>
-                                </div>
+                                style="position: absolute; width: 65%; height: 100%; background: var(--primary); border-radius: 10px;">
                             </div>
                         </div>
-
-                        <!-- Badge bottom-right -->
-                        <div class="hero-badge hero-badge-2">
-                            <div class="hero-badge-icon" style="background:#dbeafe;color:#1d4ed8;">
+                    </div>
+                    <div class="card-overlap"
+                        style="top: 55%; right: 40%; width: 280px; padding: 2rem; animation-delay: -3s;">
+                        <div class="flex gap-3">
+                            <div
+                                style="width: 45px; height: 45px; border-radius: 12px; background: var(--primary-light); display: flex; align-items: center; justify-content: center; color: var(--primary);">
                                 <i class="fas fa-brain"></i>
                             </div>
                             <div>
-                                <div style="font-weight:700;font-size:0.82rem;color:#0f172a;">AI Insight Ready</div>
-                                <div style="font-size:0.72rem;color:#64748b;">Your weekly reflection</div>
+                                <div style="font-weight: 900; font-size: 0.95rem;">Skor Kesejahteraan</div>
+                                <div style="font-size: 0.8rem; color: var(--slate);">Meningkat stabil ↑</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="animate-fade-up" style="margin-top: 8rem; text-align: center;">
+                <p
+                    style="font-size: 0.8rem; font-weight: 800; letter-spacing: 0.2em; color: var(--slate); margin-bottom: 3rem;">
+                    KEMITRAAN RESMI</p>
+                <div class="partner-grid">
+                    <img src="https://cdn.kemenag.go.id/storage/archives/logo-kemenag-png-1png.png" alt="Kemenag"
+                        class="partner-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Logo_of_the_Ministry_of_Social_Affairs_of_the_Republic_of_Indonesia.svg"
+                        alt="Kemensos" class="partner-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Logo_Kementerian_Pemuda_dan_Olahraga_RI_%282025%29_%28cropped%29.png/330px-Logo_Kementerian_Pemuda_dan_Olahraga_RI_%282025%29_%28cropped%29.png"
+                        alt="Kemenpora" class="partner-logo">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="vision" class="section-refined" style="background: #fdfdfd;">
+        <div class="container">
+            <div class="grid-asym">
+                <div class="animate-fade-up">
+                    <div
+                        style="width: 100%; height: 500px; background: var(--dark); border-radius: 4rem; overflow: hidden; position: relative;">
+                        <div
+                            style="position: absolute; top:0; left:0; width: 100%; height: 100%; opacity: 0.4; background: radial-gradient(circle at 30% 30%, var(--primary), transparent 60%);">
+                        </div>
+                        <div style="padding: 4rem; position: relative; z-index: 2;">
+                            <h2
+                                style="color: white; font-size: 3rem; font-weight: 900; line-height: 1.1; letter-spacing: -0.04em;">
+                                Sains di balik efek riak.</h2>
+                        </div>
+                        <div style="position: absolute; bottom: 4rem; left: 4rem; right: 4rem;">
+                            <p style="color: rgba(255,255,255,0.6); font-size: 1.1rem; line-height: 1.6;">KindTrack
+                                menggunakan AI untuk mengukur manfaat neurokimia dari altruisme, membantu Anda membangun
+                                pola pikir yang lebih sehat melalui tindakan nyata.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="animate-fade-up stagger-2">
+                    <div style="display: flex; flex-direction: column; gap: 4rem;">
+                        <div class="f-box-large">
+                            <div class="f-icon-soft"><i class="fas fa-microscope"></i></div>
+                            <div>
+                                <h3 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 1rem;">Berbasis Bukti
+                                </h3>
+                                <p style="color: var(--slate); line-height: 1.7;">Metrik kami dikembangkan bersama
+                                    psikolog perilaku untuk memastikan pelacakan menghasilkan pertumbuhan dopamin dan
+                                    oksitosin yang nyata.</p>
+                            </div>
+                        </div>
+                        <div class="f-box-large" style="background: var(--primary-light); border: none;">
+                            <div class="f-icon-soft" style="background: white;"><i class="fas fa-globe-asia"></i></div>
+                            <div>
+                                <h3 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 1rem;">Integritas
+                                    Jaringan</h3>
+                                <p style="color: var(--slate); line-height: 1.7;">Setiap tindakan yang dicatat
+                                    berkontribusi pada peta kebaikan global, memvisualisasikan bagaimana empati kolektif
+                                    dapat mengubah sentimen dunia.</p>
                             </div>
                         </div>
                     </div>
@@ -184,225 +407,135 @@
         </div>
     </section>
 
-    <!-- Trusted by -->
-    <div style="border-top:1px solid #f1f5f9;border-bottom:1px solid #f1f5f9;padding:2rem 0;background:white;">
+    <section id="features" class="section-refined">
         <div class="container">
-            <div class="flex items-center justify-between"
-                style="opacity:0.4;gap:3rem;flex-wrap:wrap;justify-content:center;">
-                <span
-                    style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#94a3b8;">Trusted
-                    by people at</span>
-                <span style="font-weight:800;font-size:1rem;letter-spacing:-0.03em;">Google</span>
-                <span style="font-weight:800;font-size:1rem;letter-spacing:-0.03em;">UNICEF</span>
-                <span style="font-weight:800;font-size:1rem;letter-spacing:-0.03em;">Gojek</span>
-                <span style="font-weight:800;font-size:1rem;letter-spacing:-0.03em;">Tokopedia</span>
-                <span style="font-weight:800;font-size:1rem;letter-spacing:-0.03em;">Bukalapak</span>
+            <div style="margin-bottom: 8rem; text-align: center;">
+                <span class="badge-pill">Protokol Inti</span>
+                <h2 style="font-size: 4rem; font-weight: 900; letter-spacing: -0.05em; line-height: 0.9;">Infrastruktur
+                    untuk kemanusiaan.</h2>
             </div>
-        </div>
-    </div>
 
-    <!-- Vision Section -->
-    <section id="vision" class="section" style="background:#fafafa;">
-        <div class="container">
-            <div class="flex items-center gap-4" style="flex-wrap:wrap;">
-                <div style="flex:1;min-width:280px;" class="animate-fade-up">
-                    <div class="section-eyebrow"><i class="fas fa-globe"></i> Our Vision</div>
-                    <h2 class="section-title">The power of a <span style="color:var(--primary);">ripple</span>.</h2>
-                    <p class="section-subtitle" style="text-align:left;">We believe kindness isn't just a moment — it's
-                        a movement. Every small act creates a ripple that touches lives you may never meet. KindTrack
-                        helps you visualize that impact.</p>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2.5rem;">
-                        <div
-                            style="padding:1.25rem;background:white;border-radius:var(--r-lg);border:1px solid var(--border-light);box-shadow:var(--shadow-sm);">
-                            <div style="font-size:1.75rem;margin-bottom:0.5rem;">🌎</div>
-                            <h4 style="font-size:0.95rem;margin-bottom:0.35rem;">Global Impact</h4>
-                            <p style="font-size:0.82rem;color:var(--text-muted);line-height:1.6;">Your kindness connects
-                                to a worldwide network of good.</p>
-                        </div>
-                        <div
-                            style="padding:1.25rem;background:white;border-radius:var(--r-lg);border:1px solid var(--border-light);box-shadow:var(--shadow-sm);margin-top:1.5rem;">
-                            <div style="font-size:1.75rem;margin-bottom:0.5rem;">🧠</div>
-                            <h4 style="font-size:0.95rem;margin-bottom:0.35rem;">AI Reflection</h4>
-                            <p style="font-size:0.82rem;color:var(--text-muted);line-height:1.6;">Deep insights into how
-                                your actions improve well-being.</p>
-                        </div>
-                    </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem;">
+                <div class="animate-fade-up stagger-1">
+                    <div
+                        style="font-size: 4rem; font-weight: 900; color: #f1f5f9; line-height: 1; margin-bottom: 1.5rem;">
+                        01</div>
+                    <h3 style="font-size: 1.6rem; font-weight: 900; margin-bottom: 1.5rem;">Buku Catatan</h3>
+                    <p style="color: var(--slate); line-height: 1.6;">Buku harian yang indah dan mudah digunakan untuk
+                        mencatat kontribusi dan momen hubungan Anda.</p>
                 </div>
-
-                <div style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:1rem;"
-                    class="animate-fade-up stagger-2">
-                    <div style="background:var(--text);color:white;padding:2rem;border-radius:var(--r-xl);">
-                        <div
-                            style="font-family:var(--font-heading);font-size:3.5rem;font-weight:900;letter-spacing:-0.05em;line-height:1;background:linear-gradient(90deg,var(--primary),#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
-                            142K</div>
-                        <div style="font-size:0.9rem;opacity:0.6;margin-top:0.5rem;">Acts of kindness logged globally
-                        </div>
-                    </div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-                        <div style="background:var(--primary-soft);padding:1.5rem;border-radius:var(--r-lg);">
-                            <div
-                                style="font-family:var(--font-heading);font-size:2rem;font-weight:800;color:var(--primary-dark);">
-                                98%</div>
-                            <div style="font-size:0.8rem;color:var(--primary-dark);opacity:0.8;">User satisfaction</div>
-                        </div>
-                        <div style="background:var(--secondary-soft);padding:1.5rem;border-radius:var(--r-lg);">
-                            <div style="font-family:var(--font-heading);font-size:2rem;font-weight:800;color:#1d4ed8;">
-                                4.9★</div>
-                            <div style="font-size:0.8rem;color:#1d4ed8;opacity:0.8;">Average rating</div>
-                        </div>
-                    </div>
+                <div class="animate-fade-up stagger-2">
+                    <div
+                        style="font-size: 4rem; font-weight: 900; color: #f1f5f9; line-height: 1; margin-bottom: 1.5rem;">
+                        02</div>
+                    <h3 style="font-size: 1.6rem; font-weight: 900; margin-bottom: 1.5rem;">Refleksi AI</h3>
+                    <p style="color: var(--slate); line-height: 1.6;">Dapatkan wawasan mingguan tentang pola empati Anda
+                        dan bagaimana pengaruhnya terhadap tingkat stres Anda.</p>
+                </div>
+                <div class="animate-fade-up stagger-3">
+                    <div
+                        style="font-size: 4rem; font-weight: 900; color: #f1f5f9; line-height: 1; margin-bottom: 1.5rem;">
+                        03</div>
+                    <h3 style="font-size: 1.6rem; font-weight: 900; margin-bottom: 1.5rem;">Peta Riak</h3>
+                    <p style="color: var(--slate); line-height: 1.6;">Visualisasikan koneksi tersembunyi. See bagaimana
+                        satu tindakan Anda mendorong orang lain untuk melakukan hal yang sama.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features -->
-    <section id="features" class="section">
-        <div class="container">
-            <div class="text-center" style="margin-bottom:4rem;">
-                <div class="section-eyebrow" style="display:inline-flex;"><i class="fas fa-stars"></i> Core Features
-                </div>
-                <h2 class="section-title">Designed for real transformation</h2>
-                <p class="section-subtitle" style="margin:0 auto;">Beyond simple logging — tools to build a lasting
-                    habit of empathy and human connection.</p>
-            </div>
-
-            <div class="features-grid">
-                <div class="feature-card animate-fade-up stagger-1">
-                    <div class="feature-icon" style="background:#dcfce7;color:#16a34a;">
-                        <i class="fas fa-pen-to-square"></i>
-                    </div>
-                    <h3>Intuitive Logging</h3>
-                    <p>Log acts in seconds. Categorize by impact and emotional reach with our beautiful interface.</p>
-                </div>
-                <div class="feature-card animate-fade-up stagger-2">
-                    <div class="feature-icon" style="background:#dbeafe;color:#1d4ed8;">
-                        <i class="fas fa-wand-magic-sparkles"></i>
-                    </div>
-                    <h3>AI Insights</h3>
-                    <p>Our AI analyzes patterns in your kindness habits to provide personalized growth reflections.</p>
-                </div>
-                <div class="feature-card animate-fade-up stagger-3">
-                    <div class="feature-icon" style="background:#fef3c7;color:#92400e;">
-                        <i class="fas fa-fire-flame-curved"></i>
-                    </div>
-                    <h3>Impact Streaks</h3>
-                    <p>Gamify the good. Stay motivated with visual streaks and milestones that celebrate consistency.
-                    </p>
-                </div>
-                <div class="feature-card animate-fade-up stagger-4">
-                    <div class="feature-icon" style="background:#fce7f3;color:#be185d;">
-                        <i class="fas fa-lightbulb"></i>
-                    </div>
-                    <h3>Smart Daily Ideas</h3>
-                    <p>Never run out of inspiration. Get daily contextual kindness ideas tailored to your lifestyle.</p>
-                </div>
-            </div>
+    <section
+        style="padding: 8rem 0; background: var(--dark); border-radius: 4rem; margin: 4rem 2rem; overflow: hidden; position: relative; text-align: center;">
+        <div class="container animate-fade-up" style="position: relative; z-index: 5;">
+            <h2
+                style="color: white; font-size: 4.5rem; font-weight: 900; line-height: 0.95; letter-spacing: -0.05em; margin-bottom: 2.5rem;">
+                Siap melacak<br>kebaikan?</h2>
+            <p style="color: rgba(255,255,255,0.5); font-size: 1.3rem; max-width: 500px; margin: 0 auto 4rem;">Jadilah
+                bagian dari kelompok pelopor yang membangun dunia yang digerakkan oleh empati kolektif.</p>
+            <a href="pages/login.html" class="btn-v3 btn-fill"
+                style="padding: 1.5rem 4rem; font-size: 1.2rem; border-radius: 2rem;">
+                Buat Akun Anda
+            </a>
         </div>
     </section>
 
-    <!-- Stats Banner -->
-    <section id="impact" class="stats-banner">
-        <div class="blob" style="width:600px;height:600px;background:rgba(34,197,94,1);top:-300px;left:-200px;"></div>
-        <div class="container text-center" style="position:relative;z-index:1;">
-            <div class="section-eyebrow"
-                style="display:inline-flex;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.15);">
-                <i class="fas fa-chart-line"></i> Live Global Data
-            </div>
-            <div class="banner-number" id="global-counter" style="margin:1rem 0;">0</div>
-            <p class="banner-desc">Total acts of kindness logged worldwide by our community. This is just the beginning.
-            </p>
-            <div style="margin-top:2.5rem;">
-                <a href="pages/login.html" class="btn btn-primary" style="font-size:1rem;padding:0.9rem 2.5rem;">
-                    Join the movement <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
+    <footer style="padding: 10rem 0 4rem; background: white;">
         <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <a href="index.html" class="logo">
-                        <div class="logo-icon"><i class="fas fa-heart"></i></div>
-                        KindTrack
-                    </a>
-                    <p>Empowering human connection through tracked impact and conscious empathy. Built by the community,
-                        for the world.</p>
-                    <div class="footer-socials" style="margin-top:1.25rem;">
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-github"></i></a>
+            <div
+                style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; padding-bottom: 8rem; border-bottom: 1px solid #f1f5f9;">
+                <div>
+                    <img src="assets/icons/logo-full-color.png" style="height: 35px; margin-bottom: 2rem;">
+                    <p style="color: var(--slate); font-size: 1rem; line-height: 1.7; max-width: 320px;">KindTrack Labs
+                        adalah kolektif riset yang digerakkan oleh misi, merancang teknologi untuk hubungan antar
+                        manusia.</p>
+                </div>
+                <div>
+                    <h5
+                        style="font-weight: 900; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark); margin-bottom: 2rem;">
+                        Platform</h5>
+                    <ul
+                        style="list-style: none; padding: 0; color: var(--slate); font-size: 0.95rem; line-height: 2.5; font-weight: 600;">
+                        <li>Buku Catatan</li>
+                        <li>Analisis AI</li>
+                        <li>Statistik Jaringan</li>
+                    </ul>
+                </div>
+                <div>
+                    <h5
+                        style="font-weight: 900; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark); margin-bottom: 2rem;">
+                        Etika</h5>
+                    <ul
+                        style="list-style: none; padding: 0; color: var(--slate); font-size: 0.95rem; line-height: 2.5; font-weight: 600;">
+                        <li>Model Privasi</li>
+                        <li>Kedaulatan Data</li>
+                        <li>Riset</li>
+                    </ul>
+                </div>
+                <div>
+                    <h5
+                        style="font-weight: 900; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark); margin-bottom: 2rem;">
+                        Hubungi Kami</h5>
+                    <div style="display: flex; gap: 1.5rem; font-size: 1.4rem; color: var(--slate);">
+                        <i class="fab fa-twitter"></i>
+                        <i class="fab fa-instagram"></i>
+                        <i class="fab fa-linkedin-in"></i>
                     </div>
                 </div>
-                <div class="footer-col">
-                    <h4>Product</h4>
-                    <ul>
-                        <li><a href="#">AI Engine</a></li>
-                        <li><a href="#">Impact Tracking</a></li>
-                        <li><a href="#">Mobile App</a></li>
-                        <li><a href="#">Community API</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Ecosystem</h4>
-                    <ul>
-                        <li><a href="#">Non-profits</a></li>
-                        <li><a href="#">Schools</a></li>
-                        <li><a href="#">Enterprise</a></li>
-                        <li><a href="#">Volunteers</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
             </div>
-            <div class="footer-bottom">
-                <p>© 2025 KindTrack Labs. All rights reserved.</p>
-                <p>Made with <span style="color:var(--primary);">♥</span> for a kinder world</p>
+            <div
+                style="padding-top: 4rem; display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--slate); font-weight: 700;">
+                <p>© <span id="copyright-year"></span> ELNOARTC. HAK CIPTA DILINDUNGI.</p>
+                <div style="display: flex; gap: 4rem;">
+                    <span>GERBANG PRIVASI</span>
+                    <span>KETENTUAN DAMPAK</span>
+                </div>
             </div>
         </div>
     </footer>
 
     <script>
-        // Navbar scroll
+        document.getElementById('copyright-year').textContent = new Date().getFullYear();
+
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
-            navbar.classList.toggle('scrolled', window.scrollY > 20);
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
         });
 
-        // Counter animation
-        function animateCounter(el, target, duration = 2000) {
-            let start = 0;
-            const step = target / (duration / 16);
-            const timer = setInterval(() => {
-                start += step;
-                if (start >= target) { el.textContent = target.toLocaleString(); clearInterval(timer); return; }
-                el.textContent = Math.floor(start).toLocaleString();
-            }, 16);
-        }
-
-        const counterEl = document.getElementById('global-counter');
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(e => { if (e.isIntersecting) { animateCounter(counterEl, 142847); observer.disconnect(); } });
-        }, { threshold: 0.4 });
-        observer.observe(counterEl);
-
-        // Scroll reveal
-        const reveals = document.querySelectorAll('.animate-fade-up');
-        const revealObs = new IntersectionObserver((entries) => {
-            entries.forEach(e => { if (e.isIntersecting) e.target.style.opacity = '1'; });
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
         }, { threshold: 0.1 });
-        reveals.forEach(r => { r.style.opacity = '0'; revealObs.observe(r); });
+
+        document.querySelectorAll('.animate-fade-up').forEach(el => {
+            el.style.opacity = "0";
+            el.style.transform = "translateY(40px)";
+            el.style.transition = "all 1s cubic-bezier(0.16, 1, 0.3, 1)";
+            observer.observe(el);
+        });
     </script>
 
     <script type="module">
@@ -411,21 +544,13 @@
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Change "Sign In" and "Get Started" links to "Dashboard" automatically if user is logged in
                 document.querySelectorAll('a[href="pages/login.html"]').forEach(link => {
                     link.href = 'pages/dashboard.html';
-                    if (link.textContent.includes('Sign In')) {
-                        link.textContent = 'Dashboard';
-                    } else if (link.textContent.includes('Get Started')) {
-                        link.textContent = 'Go to Dashboard';
-                    } else if (link.textContent.includes('Start for Free') || link.textContent.includes('Join the movement')) {
-                        link.innerHTML = 'Go to Dashboard <i class="fas fa-arrow-right"></i>';
-                    }
+                    link.textContent = link.classList.contains('btn-primary') ? 'Buka Dashboard' : 'Dashboard';
                 });
             }
         });
     </script>
-    <script src="js/app.js"></script>
 </body>
 
 </html>

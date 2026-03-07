@@ -12,57 +12,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
     <style>
-        .admin-grid {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            min-height: 100vh;
+        .section-tab {
+            display: none;
         }
 
-        .admin-sidebar {
-            background: #0f172a;
-            color: white;
-            padding: 2rem;
-            position: sticky;
-            top: 0;
-            height: 100vh;
-        }
-
-        .admin-nav-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.85rem 1rem;
-            border-radius: 10px;
-            color: #94a3b8;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-bottom: 0.5rem;
-            text-decoration: none;
-        }
-
-        .admin-nav-item:hover,
-        .admin-nav-item.active {
-            background: #1e293b;
-            color: white;
-        }
-
-        .admin-nav-item i {
-            width: 20px;
-            text-align: center;
-        }
-
-        .admin-content {
-            padding: 2.5rem;
-            background: #f8fafc;
-        }
-
-        .admin-card {
-            background: white;
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            border: 1px solid #e2e8f0;
-            margin-bottom: 1.5rem;
+        .section-tab.active {
+            display: block;
+            animation: fadeUp 0.3s ease-out;
         }
 
         .user-table {
@@ -74,8 +30,8 @@
         .user-table th {
             text-align: left;
             padding: 1rem;
-            border-bottom: 2px solid #f1f5f9;
-            color: #64748b;
+            border-bottom: 2px solid var(--border-light);
+            color: var(--text-muted);
             font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -83,16 +39,9 @@
 
         .user-table td {
             padding: 1rem;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid var(--border-light);
             font-size: 0.9rem;
             vertical-align: middle;
-        }
-
-        .badge {
-            padding: 0.25rem 0.6rem;
-            border-radius: 99px;
-            font-size: 0.75rem;
-            font-weight: 600;
         }
 
         .badge-admin {
@@ -101,53 +50,65 @@
         }
 
         .badge-user {
-            background: #f1f5f9;
-            color: #475569;
+            background: var(--bg-1);
+            color: var(--text);
+        }
+
+        .admin-card {
+            background: white;
+            border-radius: var(--r-xl);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            margin-bottom: 1.5rem;
         }
 
         .chat-container {
             display: grid;
             grid-template-columns: 300px 1fr;
-            height: 600px;
+            height: calc(100vh - 250px);
             background: white;
-            border-radius: 16px;
+            border-radius: var(--r-xl);
             overflow: hidden;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
         }
 
         .users-list {
-            border-right: 1px solid #e2e8f0;
+            border-right: 1px solid var(--border-light);
             overflow-y: auto;
+            background: #fff;
         }
 
         .chat-user-item {
             padding: 1rem;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid var(--bg-1);
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            transition: background 0.2s;
         }
 
         .chat-user-item:hover {
-            background: #f8fafc;
+            background: var(--bg-1);
         }
 
         .chat-user-item.active {
-            background: #f1f5f9;
+            background: var(--primary-soft);
             border-left: 4px solid var(--primary);
         }
 
         .chat-box {
             display: flex;
             flex-direction: column;
+            background: #f8fafc;
         }
 
         .chat-messages {
             flex: 1;
             padding: 1.5rem;
             overflow-y: auto;
-            background: #f8fafc;
             display: flex;
             flex-direction: column;
             gap: 1rem;
@@ -157,7 +118,7 @@
             max-width: 80%;
             padding: 0.75rem 1rem;
             border-radius: 12px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .msg-admin {
@@ -170,23 +131,17 @@
         .msg-user {
             align-self: flex-start;
             background: white;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border-light);
             border-bottom-left-radius: 2px;
+            box-shadow: var(--shadow-sm);
         }
 
         .chat-input {
             padding: 1rem;
             display: flex;
             gap: 0.75rem;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .section-tab {
-            display: none;
-        }
-
-        .section-tab.active {
-            display: block;
+            border-top: 1px solid var(--border-light);
+            background: #fff;
         }
 
         .report-card {
@@ -194,132 +149,220 @@
             padding: 1rem;
             background: #fff1f2;
             margin-bottom: 1rem;
-            border-radius: 8px;
+            border-radius: var(--r-md);
+        }
+
+        .admin-nav-item.active {
+            background: var(--bg-1);
+            color: var(--primary);
+            font-weight: 700;
         }
     </style>
 </head>
 
 <body>
-    <div class="admin-grid">
-        <aside class="admin-sidebar">
-            <div class="logo" style="color:white; margin-bottom:2.5rem;">
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <a href="../index.html" class="sidebar-logo">
                 <img src="../assets/icons/logo-full-white.png" alt="KindTrack"
                     style="height: 35px; width: auto; object-fit: contain;">
-                <span style="font-size:0.7rem; display:block; color:#94a3b8; margin-top:0.25rem;">ADMIN PORTAL</span>
-            </div>
-            <nav>
-                <a href="#" class="admin-nav-item active" data-tab="users">
+                <span
+                    style="font-size:0.7rem; display:block; color:var(--text-muted); margin-top:0.25rem; font-weight:normal;">ADMIN
+                    PORTAL</span>
+            </a>
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-label">Management</p>
+                <a href="#" class="sidebar-item admin-nav-item active" data-tab="users">
                     <i class="fas fa-user-shield"></i> User Management
                 </a>
-                <a href="#" class="admin-nav-item" data-tab="community">
+                <a href="#" class="sidebar-item admin-nav-item" data-tab="community">
                     <i class="fas fa-users-viewfinder"></i> Community Feed
                 </a>
-                <a href="#" class="admin-nav-item" data-tab="reports">
+                <a href="#" class="sidebar-item admin-nav-item" data-tab="reports">
                     <i class="fas fa-flag"></i> Reports <span id="report-count" class="badge"
                         style="background:#ef4444; color:white; display:none;">0</span>
                 </a>
-                <a href="#" class="admin-nav-item" data-tab="chat">
+                <a href="#" class="sidebar-item admin-nav-item" data-tab="chat">
                     <i class="fas fa-comment-dots"></i> Chat Support
                 </a>
-                <div style="margin-top:2rem; padding-top:2rem; border-top:1px solid #1e293b;">
-                    <a href="dashboard.html" class="admin-nav-item">
-                        <i class="fas fa-arrow-left"></i> Back to App
-                    </a>
-                </div>
+                <a href="#" class="sidebar-item admin-nav-item" data-tab="profile">
+                    <i class="fas fa-user-edit"></i> Edit Profile
+                </a>
+                <p class="sidebar-section-label" style="margin-top:1.5rem;">System</p>
+                <a href="dashboard.html" class="sidebar-item">
+                    <i class="fas fa-arrow-left"></i> Back to App
+                </a>
             </nav>
+            <div class="sidebar-footer">
+                <a href="profile.html" style="text-decoration:none; color:inherit;">
+                    <div class="sidebar-user"
+                        style="display:flex; align-items:center; gap:0.75rem; cursor:pointer; padding:0.5rem; margin:-0.5rem; margin-bottom:0.5rem; border-radius:12px; transition:background 0.2s;"
+                        onmouseover="this.style.background='var(--bg-2)'"
+                        onmouseout="this.style.background='transparent'">
+                        <div class="sidebar-avatar" id="admin-avatar">A</div>
+                        <div class="sidebar-user-info">
+                            <div class="sidebar-user-name" id="admin-name" style="font-weight:700;">Loading...</div>
+                            <div class="sidebar-user-role"
+                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profile <i
+                                    class="fas fa-angle-right"></i></div>
+                        </div>
+                    </div>
+                </a>
+                <button class="sidebar-item" id="logout-btn" style="color:#ef4444;">
+                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Sign Out
+                </button>
+            </div>
         </aside>
 
-        <main class="admin-content">
-            <header style="margin-bottom:2.5rem; display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <h1 id="page-title">User Management</h1>
-                    <p id="page-subtitle" style="color:#64748b;">Monitor and manage all KindTrack registered users.</p>
-                </div>
-                <div id="admin-info" style="display:flex; align-items:center; gap:1rem;">
-                    <div style="text-align:right;">
-                        <span id="admin-name" style="font-weight:700; display:block;">Admin Name</span>
-                        <span class="badge badge-admin">Master Admin</span>
+        <!-- Main Area -->
+        <div class="app-main">
+            <!-- Header -->
+            <header class="app-header">
+                <div class="flex items-center gap-2">
+                    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                        <span></span><span></span><span></span>
+                    </button>
+                    <div>
+                        <h1 id="page-title">User Management</h1>
+                        <p id="page-subtitle">Monitor and manage all KindTrack registered users.</p>
                     </div>
-                    <div id="admin-avatar"
-                        style="width:45px; height:45px; border-radius:12px; background:var(--primary); display:flex; align-items:center; justify-content:center; color:white; font-weight:800;">
-                        A</div>
                 </div>
             </header>
 
-            <!-- Users Tab -->
-            <div id="tab-users" class="section-tab active">
-                <div class="admin-card">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                        <h3>Active Users</h3>
-                        <input type="text" placeholder="Search users..." id="user-search"
-                            style="padding:0.5rem 1rem; border:1px solid #e2e8f0; border-radius:8px; width:250px;">
-                    </div>
-                    <div style="overflow-x:auto;">
-                        <table class="user-table">
-                            <thead>
-                                <tr>
-                                    <th>User</th>
-                                    <th>Email</th>
-                                    <th>Joined</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="users-tbody">
-                                <!-- Users list injected here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Community Tab -->
-            <div id="tab-community" class="section-tab">
-                <div class="admin-card">
-                    <h3>Community Feed Monitoring</h3>
-                    <div id="admin-feed" style="margin-top:1.5rem;">
-                        <!-- Global feed injected here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Reports Tab -->
-            <div id="tab-reports" class="section-tab">
-                <div class="admin-card">
-                    <h3>Content Reports</h3>
-                    <p style="color:#64748b; margin-bottom:1.5rem;">Posts reported by users for review.</p>
-                    <div id="reports-list">
-                        <!-- Reports injected here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chat Tab -->
-            <div id="tab-chat" class="section-tab">
-                <div class="chat-container">
-                    <div class="users-list" id="chat-users-list">
-                        <!-- Users to chat with -->
-                    </div>
-                    <div class="chat-box">
-                        <div id="chat-header"
-                            style="padding:1rem 1.5rem; border-bottom:1px solid #e2e8f0; font-weight:700;">
-                            Select a user to start chatting
+            <!-- Body -->
+            <div class="app-body">
+                <!-- Users Tab -->
+                <div id="tab-users" class="section-tab active">
+                    <div class="content-card">
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:1rem;">
+                            <h3 style="font-weight:800; font-size:1.2rem;">Active Users</h3>
+                            <input type="text" placeholder="Search users by name..." id="user-search"
+                                style="padding:0.6rem 1rem; border:1px solid var(--border-light); border-radius:var(--r-md); width:250px; outline:none;"
+                                oninput="filterUsers(this.value)">
                         </div>
-                        <div class="chat-messages" id="chat-messages">
-                            <!-- Messages -->
+                        <div style="overflow-x:auto;">
+                            <table class="user-table">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Email</th>
+                                        <th>Joined</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-tbody">
+                                    <!-- Users list injected here -->
+                                </tbody>
+                            </table>
                         </div>
-                        <form class="chat-input" id="chat-form">
-                            <input type="text" id="chat-input-field" placeholder="Type a message..."
-                                style="flex:1; padding:0.75rem; border:1px solid #e2e8f0; border-radius:8px;">
-                            <button type="submit" class="btn btn-primary" style="padding:0.5rem 1.5rem;">Send</button>
+                    </div>
+                </div>
+
+                <!-- Community Tab -->
+                <div id="tab-community" class="section-tab">
+                    <div class="content-card">
+                        <h3 style="font-weight:800; font-size:1.2rem; margin-bottom:1rem;">Community Feed Monitoring
+                        </h3>
+                        <div id="admin-feed">
+                            <!-- Global feed injected here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Tab -->
+                <div id="tab-reports" class="section-tab">
+                    <div class="content-card">
+                        <h3 style="font-weight:800; font-size:1.2rem; margin-bottom:0.5rem;">Content Reports</h3>
+                        <p style="color:var(--text-muted); margin-bottom:1.5rem; font-size:0.9rem;">Posts reported by
+                            users for review.</p>
+                        <div id="reports-list">
+                            <!-- Reports injected here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Tab -->
+                <div id="tab-chat" class="section-tab">
+                    <div class="chat-container">
+                        <div class="users-list" id="chat-users-list">
+                            <!-- Users to chat with -->
+                        </div>
+                        <div class="chat-box">
+                            <div id="chat-header"
+                                style="padding:1rem 1.5rem; border-bottom:1px solid var(--border-light); font-weight:700; background:#fff;">
+                                Select a user to start chatting
+                            </div>
+                            <div class="chat-messages" id="chat-messages">
+                                <!-- Messages -->
+                            </div>
+                            <form class="chat-input" id="chat-form">
+                                <input type="text" id="chat-input-field" placeholder="Type a message..."
+                                    style="flex:1; padding:0.75rem 1rem; border:1px solid var(--border-light); border-radius:var(--r-full); outline:none;">
+                                <button type="submit" class="btn btn-primary"
+                                    style="padding:0.5rem 1.5rem; border-radius:var(--r-full);">Send</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Tab -->
+                <div id="tab-profile" class="section-tab">
+                    <div class="content-card" style="max-width: 600px;">
+                        <h3 style="font-weight:800; font-size:1.2rem; margin-bottom:1.5rem;">Edit Admin Profile</h3>
+                        <form id="admin-profile-form" novalidate>
+                            <div class="form-group">
+                                <label class="form-label" for="admin-profile-name">Display Name</label>
+                                <input type="text" id="admin-profile-name" class="form-control" required>
+                                <div class="invalid-feedback">Please enter your display name.</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="admin-profile-avatar">Avatar Image URL (Optional)</label>
+                                <input type="text" id="admin-profile-avatar" class="form-control"
+                                    placeholder="https://example.com/avatar.png">
+                                <div class="invalid-feedback">Please enter a valid URL.</div>
+                            </div>
+                            <div style="margin-top: 2rem;">
+                                <button type="submit" class="btn btn-primary" id="admin-profile-save"
+                                    style="padding: 0.8rem 2rem;">Save
+                                    Changes</button>
+                            </div>
                         </form>
                     </div>
                 </div>
+
             </div>
-        </main>
+        </div>
     </div>
 
+    <!-- Mobile overlay -->
+    <div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;"
+        onclick="closeSidebar()"></div>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        document.getElementById('hamburger')?.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+        });
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            overlay.style.display = 'none';
+        }
+        function filterUsers(val) {
+            const rows = document.querySelectorAll('#users-tbody tr');
+            rows.forEach(row => {
+                if (row.id === 'load-more-btn-row') return;
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(val.toLowerCase()) ? '' : 'none';
+            });
+        }
+    </script>
     <script type="module" src="../js/admin.js"></script>
+    <script type="module" src="../js/auth.js"></script>
 </body>
 
 </html>

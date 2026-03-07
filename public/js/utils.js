@@ -96,6 +96,94 @@ export function showToast(message, type = 'error') {
     }, 4500);
 }
 
+// ─── Tailwind-style Alerts (Form level) ───────────────────────────────────────
+
+export function showAlert(containerId, message, type = 'error') {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    // Remove existing
+    const existing = container.querySelector('.alert');
+    if (existing) existing.remove();
+
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type}`;
+
+    const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle';
+
+    alert.innerHTML = `
+        <i class="fas ${icon}"></i>
+        <span>${message}</span>
+    `;
+
+    // Insert at the beginning of container
+    container.prepend(alert);
+
+    // Auto remove after 5s if success
+    if (type === 'success') {
+        setTimeout(() => {
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 300);
+        }, 5000);
+    }
+}
+
+// ─── Custom Modern Confirm Modal ──────────────────────────────────────────────
+
+export function showConfirmModal({ title, message, confirmText, cancelText, onConfirm, type = 'danger' }) {
+    // Remove existing if any
+    const existing = document.getElementById('kt-modal-overlay');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.id = 'kt-modal-overlay';
+    overlay.className = 'modal-overlay';
+
+    const iconClass = type === 'warning' ? 'icon-warning' : '';
+    const iconI = type === 'warning' ? 'fa-exclamation-triangle' : 'fa-sign-out-alt';
+
+    overlay.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-icon ${iconClass}">
+                    <i class="fas ${iconI}"></i>
+                </div>
+                <div class="modal-title">${title || 'Are you sure?'}</div>
+            </div>
+            <div class="modal-body">
+                ${message}
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="modal-cancel-btn">${cancelText || 'Cancel'}</button>
+                <button class="btn ${type === 'danger' ? 'btn-primary' : 'btn-primary'}" id="modal-confirm-btn" style="${type === 'danger' ? 'background:#ef4444; border-color:#ef4444;' : ''}">
+                    ${confirmText || 'Confirm'}
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    // Trigger animation
+    setTimeout(() => overlay.classList.add('active'), 10);
+
+    const close = () => {
+        overlay.classList.remove('active');
+        setTimeout(() => overlay.remove(), 200);
+    };
+
+    overlay.querySelector('#modal-cancel-btn').onclick = close;
+    overlay.querySelector('#modal-confirm-btn').onclick = () => {
+        if (onConfirm) onConfirm();
+        close();
+    };
+
+    // Close on click outside
+    overlay.onclick = (e) => {
+        if (e.target === overlay) close();
+    };
+}
+
 // ─── Formatting ───────────────────────────────────────────────────────────────
 
 export function formatDate(val) {
