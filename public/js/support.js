@@ -34,14 +34,13 @@ function loadMessages() {
 
     const q = query(
         collection(db, 'admin_chats'),
-        where('chatID', '>=', ''), // Dummy to allow complex filter if needed, but we'll filter in JS if necessary
+        where('chatID', '==', `admin_${currentUser.uid}`),
         orderBy('timestamp', 'asc')
     );
 
-    // Filter messages for this user in memory for simplicity or use composite index
     onSnapshot(q, (snapshot) => {
         const msgContainer = document.getElementById('chat-messages');
-        const initialMsg = `<div class="msg msg-admin">Hello! How can we help you today? Feel free to ask anything about KindTrack.</div>`;
+        const initialMsg = `<div class="msg msg-admin">Halo! Ada yang bisa kami bantu hari ini? Jangan ragu untuk bertanya apa pun tentang KindTrack.</div>`;
         msgContainer.innerHTML = initialMsg;
 
         snapshot.forEach((docSnap) => {
@@ -61,21 +60,33 @@ function loadMessages() {
 document.getElementById('chat-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const input = document.getElementById('chat-input');
+    const submitBtn = e.target.querySelector('button');
     const text = input.value.trim();
-    if (!text) return;
 
-    // For simplicity, we send to a conceptual 'admin' 
-    // The admin will see it in the list because their UID will be part of the chatID logic in admin.js
-    // Let's use a fixed ID for the "Main Admin" if we had one, 
-    // but here we'll just tag it so admins can find it.
+    if (!text || submitBtn.disabled) return;
+    if (text.length > 500) {
+        alert("Pesan terlalu panjang (maksimal 500 karakter)");
+        return;
+    }
 
-    await addDoc(collection(db, 'admin_chats'), {
-        chatID: `admin_${currentUser.uid}`, // Simplified chatID for users -> any admin
-        senderId: currentUser.uid,
-        receiverId: 'admin', // Flag for any admin to pick up
-        text,
-        timestamp: serverTimestamp()
-    });
+    try {
+        submitBtn.disabled = true;
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
-    input.value = '';
+        await addDoc(collection(db, 'admin_chats'), {
+            chatID: `admin_${currentUser.uid}`,
+            senderId: currentUser.uid,
+            receiverId: 'admin',
+            text,
+            timestamp: serverTimestamp()
+        });
+
+        input.value = '';
+    } catch (err) {
+        console.error("Gagal mengirim:", err);
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+    }
 });

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile | KindTrack</title>
+    <title>Profil Saya | KindTrack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
@@ -169,29 +169,29 @@
                     style="height: 35px; width: auto; object-fit: contain;">
             </a>
             <nav class="sidebar-nav">
-                <p class="sidebar-section-label">Main</p>
+                <p class="sidebar-section-label">Utama</p>
                 <a href="dashboard.html" class="sidebar-item">
                     <i class="fas fa-house"></i> Dashboard
                 </a>
                 <a href="activity.html" class="sidebar-item">
-                    <i class="fas fa-list-check"></i> My Activities
+                    <i class="fas fa-list-check"></i> Aktivitas Saya
                 </a>
                 <a href="community.html" class="sidebar-item">
-                    <i class="fas fa-users"></i> Community Feed
+                    <i class="fas fa-users"></i> Beranda Komunitas
                 </a>
                 <a href="add-kindness.html" class="sidebar-item">
-                    <i class="fas fa-plus-circle"></i> Log Kindness
+                    <i class="fas fa-plus-circle"></i> Catat Kebaikan
                 </a>
 
-                <p class="sidebar-section-label" style="margin-top:1.5rem;">Insights</p>
+                <p class="sidebar-section-label" style="margin-top:1.5rem;">Wawasan</p>
                 <a href="analytics.html" class="sidebar-item">
-                    <i class="fas fa-chart-line"></i> Analytics
+                    <i class="fas fa-chart-line"></i> Analisis
                 </a>
                 <a href="milestones.html" class="sidebar-item">
-                    <i class="fas fa-trophy"></i> Milestones
+                    <i class="fas fa-trophy"></i> Pencapaian
                 </a>
                 <a href="leaderboard.html" class="sidebar-item">
-                    <i class="fas fa-medal"></i> Leaderboard
+                    <i class="fas fa-medal"></i> Papan Peringkat
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -199,15 +199,15 @@
                     <div class="sidebar-user" style="display:flex; align-items:center; gap:0.75rem;">
                         <div class="sidebar-avatar" id="sidebar-avatar">U</div>
                         <div class="sidebar-user-info">
-                            <div class="sidebar-user-name" id="sidebar-user-name">Loading...</div>
+                            <div class="sidebar-user-name" id="sidebar-user-name">Memuat...</div>
                             <div class="sidebar-user-role"
-                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profile <i
+                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profil <i
                                     class="fas fa-angle-right"></i></div>
                         </div>
                     </div>
                 </a>
                 <button class="sidebar-item" id="logout-btn" style="color:#ef4444;">
-                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Sign Out
+                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Keluar
                 </button>
             </div>
         </aside>
@@ -217,8 +217,8 @@
                 <div class="flex items-center gap-2">
                     <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
                     <div>
-                        <h1>My Profile</h1>
-                        <p>Customize your identity in the kindest community.</p>
+                        <h1>Profil Saya</h1>
+                        <p>Sesuaikan identitas Anda di komunitas kebaikan.</p>
                     </div>
                 </div>
             </header>
@@ -231,73 +231,84 @@
                             <div class="profile-header">
                                 <div class="profile-avatar-wrapper">
                                     <div class="profile-avatar-preview" id="avatar-preview">U</div>
-                                    <label for="avatar-input" class="edit-avatar-btn" title="Change Avatar">
+                                    <label for="avatar-input" class="edit-avatar-btn" title="Ubah Avatar">
                                         <i class="fas fa-camera"></i>
                                     </label>
                                     <input type="file" id="avatar-input" class="hidden-file-input" accept="image/*">
                                 </div>
                                 <div style="flex:1;">
-                                    <h2 style="margin-bottom:0.25rem;" id="greeting-name">Loading...</h2>
+                                    <h2 style="margin-bottom:0.25rem;" id="greeting-name">Memuat...</h2>
                                     <p style="color:var(--text-muted); font-size:0.9rem;" id="greeting-email">...</p>
                                 </div>
                             </div>
 
                             <h3
                                 style="font-size: 1.1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">
-                                Basic Info</h3>
+                                Informasi Dasar</h3>
 
                             <div class="form-group">
-                                <label for="profile-username"><i class="fas fa-at"></i> Username</label>
+                                <label for="profile-username"><i class="fas fa-at"></i> Nama Pengguna</label>
                                 <input type="text" id="profile-username" class="form-control" placeholder="steve_jobs"
                                     required>
-                                <div class="invalid-feedback">Please enter a unique username.</div>
-                                <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">Unique handle
-                                    for your community profile.</p>
+                                <div class="invalid-feedback">Silakan masukkan nama pengguna yang unik.</div>
+                                <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">Nama unik
+                                    untuk profil komunitas Anda.</p>
                             </div>
 
                             <div class="form-group">
-                                <label for="profile-name"><i class="far fa-id-card"></i> Display Name</label>
+                                <label for="profile-name"><i class="far fa-id-card"></i> Nama Tampilan</label>
                                 <input type="text" id="profile-name" class="form-control" placeholder="Steve Jobs"
                                     required>
-                                <div class="invalid-feedback">Please enter your display name.</div>
+                                <div class="invalid-feedback">Silakan masukkan nama tampilan Anda.</div>
                             </div>
 
                             <div class="form-group">
-                                <label for="profile-bio"><i class="far fa-comment-dots"></i> Short Bio
-                                    (Optional)</label>
+                                <label for="profile-bio"><i class="far fa-comment-dots"></i> Bio Singkat
+                                    (Opsional)</label>
                                 <textarea id="profile-bio" class="form-control"
-                                    placeholder="I love spreading joy and helping people around me."></textarea>
-                                <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">This bio will
-                                    be shown on your community posts in the future.</p>
+                                    placeholder="Saya suka berbagi kebahagiaan dan membantu orang-orang di sekitar saya."></textarea>
+                                <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">Bio ini akan
+                                    ditampilkan pada postingan komunitas Anda nantinya.</p>
                             </div>
 
                             <h3
                                 style="font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">
-                                Security</h3>
+                                Keamanan</h3>
 
                             <div class="form-group">
-                                <label for="profile-password"><i class="fas fa-lock"></i> Change Password</label>
+                                <label for="profile-password"><i class="fas fa-lock"></i> Ubah Kata Sandi</label>
                                 <input type="password" id="profile-password" class="form-control"
-                                    placeholder="Enter new password (optional)">
-                                <div class="invalid-feedback">Password must be at least 8 characters.</div>
-                                <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">Leave blank to
-                                    keep your current password.</p>
+                                    placeholder="Masukkan kata sandi baru (opsional)">
+                                <div class="invalid-feedback">Kata sandi harus minimal 8 karakter.</div>
+                                <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">Kosongkan jika
+                                    ingin tetap menggunakan kata sandi saat ini.</p>
                             </div>
                             <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
                                 <a href="dashboard.html" class="btn btn-outline"
-                                    style="padding: 0.8rem 1.5rem;">Cancel</a>
+                                    style="padding: 0.8rem 1.5rem;">Batal</a>
                                 <button type="submit" class="btn btn-primary" id="save-btn"
                                     style="padding: 0.8rem 2rem;">
-                                    Save Changes
+                                    Simpan Perubahan
                                 </button>
                             </div>
                         </form>
 
+                        <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed #fee2e2;">
+                            <h3 style="color: #ef4444; font-size: 1.1rem; margin-bottom: 0.5rem;"><i
+                                    class="fas fa-exclamation-triangle"></i> Zona Bahaya</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">Setelah Anda
+                                menghapus akun, tidak ada jalan kembali. Mohon pastikan kembali.</p>
+                            <button id="delete-account-btn" class="btn btn-outline"
+                                style="color: #ef4444; border-color: #fee2e2; background: #fff1f2; font-weight: 700;">
+                                <i class="fas fa-user-slash"></i> Hapus Akun Saya Secara Permanen
+                            </button>
+                        </div>
+
                         <div class="mobile-only-logout"
-                            style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-light); display: none;">
+                            style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-light); display: none;">
                             <button id="mobile-logout-btn" class="btn btn-outline"
-                                style="width: 100%; justify-content: center; color: #ef4444; border-color: #fecaca; background: #fff1f2;">
-                                <i class="fas fa-right-from-bracket"></i> Sign Out
+                                style="width: 100%; justify-content: center; color: var(--text-muted); border-color: var(--border-light);">
+                                <i class="fas fa-right-from-bracket"></i> Keluar
                             </button>
                         </div>
                     </div>
@@ -329,7 +340,7 @@
         <ul class="mobile-nav-list">
             <a href="dashboard.html" class="mobile-nav-item" id="mnav-dashboard">
                 <i class="fas fa-house"></i>
-                Home
+                Beranda
             </a>
             <a href="community.html" class="mobile-nav-item" id="mnav-community">
                 <i class="fas fa-users"></i>
@@ -340,11 +351,11 @@
             </a>
             <a href="support.html" class="mobile-nav-item" id="mnav-messages">
                 <i class="fas fa-comments"></i>
-                Messages
+                Pesan
             </a>
             <a href="profile.html" class="mobile-nav-item" id="mnav-profile">
                 <i class="fas fa-user-circle"></i>
-                Profile
+                Profil
             </a>
         </ul>
     </nav>

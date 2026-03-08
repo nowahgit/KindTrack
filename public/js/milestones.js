@@ -51,8 +51,8 @@ async function loadMilestones(user) {
         const badges = [
             {
                 id: 'first_act',
-                title: 'First Step',
-                desc: 'Log your very first act of kindness.',
+                title: 'Langkah Pertama',
+                desc: 'Mencatat aksi kebaikan pertama Anda.',
                 icon: '<i class="fas fa-shoe-prints"></i>',
                 req: 1,
                 current: totalActs,
@@ -60,8 +60,8 @@ async function loadMilestones(user) {
             },
             {
                 id: 'five_acts',
-                title: 'Kindness Novice',
-                desc: 'Complete 5 acts of kindness.',
+                title: 'Pemula Baik',
+                desc: 'Menyelesaikan 5 aksi kebaikan.',
                 icon: '<i class="fas fa-hand-holding-heart"></i>',
                 req: 5,
                 current: totalActs,
@@ -69,8 +69,8 @@ async function loadMilestones(user) {
             },
             {
                 id: 'pts_100',
-                title: 'Century Impact',
-                desc: 'Earn 100 kindness points.',
+                title: 'Dampak Seabad',
+                desc: 'Dapatkan 100 poin kebaikan.',
                 icon: '<i class="fas fa-star"></i>',
                 req: 100,
                 current: points,
@@ -78,8 +78,8 @@ async function loadMilestones(user) {
             },
             {
                 id: 'photo_proof',
-                title: 'Social Proof',
-                desc: 'Upload 1 photo as proof of your act.',
+                title: 'Bukti Sosial',
+                desc: 'Unggah 1 foto sebagai bukti aksi Anda.',
                 icon: '<i class="fas fa-camera"></i>',
                 req: 1,
                 current: photosUpload,
@@ -87,8 +87,8 @@ async function loadMilestones(user) {
             },
             {
                 id: 'fifty_acts',
-                title: 'Heart of Gold',
-                desc: 'Complete 50 acts of kindness.',
+                title: 'Hati Emas',
+                desc: 'Menyelesaikan 50 aksi kebaikan.',
                 icon: '<i class="fas fa-crown"></i>',
                 req: 50,
                 current: totalActs,

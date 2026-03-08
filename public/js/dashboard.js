@@ -11,7 +11,6 @@ import {
 // Common Utils
 import {
     getCategoryColor,
-    getCategoryEmoji,
     getCategoryIcon,
     formatDate,
     showToast
@@ -32,10 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (refreshAiBtn) {
         refreshAiBtn.addEventListener('click', async () => {
             if (window.dashboardActivities) {
-                refreshAiBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Thinking...';
+                refreshAiBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sedang berpikir...';
                 const reflection = await getAIReflection(window.dashboardActivities);
                 document.getElementById('ai-reflection-text').textContent = reflection;
-                refreshAiBtn.innerHTML = '<i class="fas fa-rotate-right"></i> Refresh';
+                refreshAiBtn.innerHTML = '<i class="fas fa-rotate-right"></i> Perbarui';
             }
         });
     }
@@ -47,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const sidebarName = document.getElementById('sidebar-user-name');
             const sidebarAvatar = document.getElementById('sidebar-avatar');
 
-            if (userNameEl) userNameEl.textContent = user.displayName?.split(' ')[0] || 'there';
+            if (userNameEl) userNameEl.textContent = user.displayName?.split(' ')[0] || 'Sobat';
             if (sidebarName) sidebarName.textContent = user.displayName || user.email;
             if (sidebarAvatar) sidebarAvatar.textContent = (user.displayName || user.email || 'U')[0].toUpperCase();
 
@@ -73,14 +72,20 @@ async function loadDashboardData(userId) {
         const kindnessRef = collection(db, 'kindness');
         const q = query(
             kindnessRef,
-            where('userId', '==', userId),
-            orderBy('timestamp', 'desc')
+            where('userId', '==', userId)
         );
         const querySnapshot = await getDocs(q);
 
-        const activities = [];
+        let activities = [];
         querySnapshot.forEach((doc) => {
             activities.push({ id: doc.id, ...doc.data() });
+        });
+
+        // Sort in-memory to avoid composite index requirements
+        activities.sort((a, b) => {
+            const timeA = a.timestamp?.toMillis ? a.timestamp.toMillis() : new Date(a.date).getTime();
+            const timeB = b.timestamp?.toMillis ? b.timestamp.toMillis() : new Date(b.date).getTime();
+            return timeB - timeA;
         });
 
         window.dashboardActivities = activities;
@@ -90,16 +95,15 @@ async function loadDashboardData(userId) {
         renderImpactChart(activities);
         renderHeatmap(activities);
 
-        // Load AI Reflection
-        const reflection = await getAIReflection(activities);
-        const reflectionElement = document.getElementById('ai-reflection-text');
-        if (reflectionElement) reflectionElement.textContent = reflection;
+        // Load AI Reflection (Effect is handled inside the service)
+        await getAIReflection(activities);
+
 
     } catch (error) {
         console.error('[Dashboard Error]', error.code, error.message);
         const errorMsg = error.code === 'permission-denied'
-            ? 'Access denied. Please login again.'
-            : 'Failed to load data. Please refresh the page.';
+            ? 'Akses ditolak. Silakan login kembali.'
+            : 'Gagal memuat data. Silakan muat ulang halaman.';
 
         const statEl = document.getElementById('stat-total');
         if (statEl) {
@@ -130,7 +134,7 @@ function updateStats(activities) {
     document.getElementById('stat-score').textContent = score || 0;
 
     // Streak logic (Mock for now, or use real date logic)
-    document.getElementById('stat-streak').textContent = total > 0 ? `${total % 10 + 1} days` : '0 days';
+    document.getElementById('stat-streak').textContent = total > 0 ? `${total % 10 + 1} hari` : '0 hari';
 }
 
 function renderRecentActivities(activities) {
@@ -138,7 +142,7 @@ function renderRecentActivities(activities) {
     if (!container) return;
 
     if (activities.length === 0) {
-        container.innerHTML = '<p style="font-size:0.85rem;color:var(--text-muted);text-align:center;padding:1.5rem 0;">No activities yet. Start spreading kindness!</p>';
+        container.innerHTML = '<p style="font-size:0.85rem;color:var(--text-muted);text-align:center;padding:1.5rem 0;">Belum ada aktivitas. Mulailah menyebarkan kebaikan!</p>';
         return;
     }
 
@@ -149,11 +153,11 @@ function renderRecentActivities(activities) {
 
         const date = formatDate(activity.date || activity.timestamp);
         const color = getCategoryColor(activity.category);
-        const emoji = getCategoryEmoji(activity.category);
+        const icon = getCategoryIcon(activity.category);
 
         div.innerHTML = `
             <div class="activity-icon" style="background-color: ${color}18; color: ${color}; font-size:1.1rem;">
-                ${emoji}
+                <i class="fas ${icon}"></i>
             </div>
             <div class="activity-details" style="flex: 1;">
                 <div class="activity-name">${activity.title}</div>
@@ -176,7 +180,7 @@ function renderImpactChart(activities) {
 
     for (let i = 5; i >= 0; i--) {
         const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-        monthLabels.push(d.toLocaleString('default', { month: 'short' }));
+        monthLabels.push(d.toLocaleString('id-ID', { month: 'short' }));
 
         const count = activities.filter(a => {
             const ts = a.timestamp?.toDate ? a.timestamp.toDate() : new Date(a.date);
@@ -193,7 +197,7 @@ function renderImpactChart(activities) {
         data: {
             labels: monthLabels,
             datasets: [{
-                label: 'Acts Logged',
+                label: 'Aksi Dicatat',
                 data: monthData,
                 borderColor: '#22C55E',
                 backgroundColor: 'rgba(34, 197, 94, 0.08)',
@@ -252,7 +256,7 @@ function renderHeatmap(activities) {
 
         const cell = document.createElement('div');
         cell.className = 'heatmap-cell';
-        cell.title = `${dateStr}: ${dateMap[dateStr] || 0} act(s)`;
+        cell.title = `${dateStr}: ${dateMap[dateStr] || 0} aksi`;
 
         const count = dateMap[dateStr] || 0;
         if (count >= 4) cell.classList.add('level-4');

@@ -6,7 +6,8 @@ import {
     signOut,
     onAuthStateChanged,
     GoogleAuthProvider,
-    signInWithPopup
+    signInWithPopup,
+    sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { db } from './firebase-init.js';
 import { doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -17,21 +18,21 @@ import { showToast, showConfirmModal, showAlert } from './utils.js';
 
 function getAuthErrorMessage(errorCode) {
     const messages = {
-        'auth/invalid-email': 'Invalid email format. Please check your address.',
-        'auth/user-disabled': 'This account has been disabled. Contact support.',
-        'auth/user-not-found': 'Email not found. Try signing up instead.',
-        'auth/wrong-password': 'Incorrect password. Please try again.',
-        'auth/invalid-credential': 'Email or password does not match. Please check again.',
-        'auth/email-already-in-use': 'Email is already registered. Try signing in.',
-        'auth/weak-password': 'Password is too weak. Use at least 6 characters.',
-        'auth/too-many-requests': 'Too many failed attempts. Try again later.',
-        'auth/network-request-failed': 'Network error. Please check your internet.',
-        'auth/popup-closed-by-user': 'Login cancelled. Try again.',
-        'auth/requires-recent-login': 'Your session has expired. Please login again.',
-        'auth/missing-password': 'Password cannot be empty.',
-        'auth/missing-email': 'Email cannot be empty.',
+        'auth/invalid-email': 'Format email tidak valid. Silakan periksa kembali.',
+        'auth/user-disabled': 'Akun ini telah dinonaktifkan. Hubungi dukungan.',
+        'auth/user-not-found': 'Email tidak ditemukan. Silakan daftar terlebih dahulu.',
+        'auth/wrong-password': 'Kata sandi salah. Silakan coba lagi.',
+        'auth/invalid-credential': 'Email atau kata sandi tidak cocok. Periksa kembali.',
+        'auth/email-already-in-use': 'Email sudah terdaftar. Silakan masuk.',
+        'auth/weak-password': 'Kata sandi terlalu lemah. Gunakan minimal 6 karakter.',
+        'auth/too-many-requests': 'Terlalu banyak percobaan gagal. Coba lagi nanti.',
+        'auth/network-request-failed': 'Kesalahan jaringan. Periksa koneksi internet Anda.',
+        'auth/popup-closed-by-user': 'Login dibatalkan. Coba lagi.',
+        'auth/requires-recent-login': 'Sesi Anda telah berakhir. Silakan login kembali.',
+        'auth/missing-password': 'Kata sandi tidak boleh kosong.',
+        'auth/missing-email': 'Email tidak boleh kosong.',
     };
-    return messages[errorCode] || `An unexpected error occurred (${errorCode}).`;
+    return messages[errorCode] || `Terjadi kesalahan tak terduga (${errorCode}).`;
 }
 
 // ─── Form Validation ──────────────────────────────────────────────────────────
@@ -64,31 +65,31 @@ function validateAuthForm(email, password, name, isRegisterMode) {
 
     if (isRegisterMode) {
         if (!name || name.trim().length < 2) {
-            showFieldError('auth-name', 'Full name must be at least 2 characters.');
+            showFieldError('auth-name', 'Nama lengkap minimal 2 karakter.');
             isValid = false;
         } else if (!/^[a-zA-Z\s]+$/.test(name)) {
-            showFieldError('auth-name', 'Name can only contain letters and spaces.');
+            showFieldError('auth-name', 'Nama hanya boleh berisi huruf dan spasi.');
             isValid = false;
         }
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email || !emailRegex.test(email)) {
-        showFieldError('auth-email', 'Please enter a valid email address.');
+        showFieldError('auth-email', 'Harap masukkan alamat email yang valid.');
         isValid = false;
     }
 
     if (!isRegisterMode && (!password || password.length < 6)) {
-        showFieldError('auth-password', 'Password must be at least 6 characters.');
+        showFieldError('auth-password', 'Kata sandi minimal 6 karakter.');
         isValid = false;
     }
 
     if (isRegisterMode) {
         if (!password || password.length < 8) {
-            showFieldError('auth-password', 'Use at least 8 characters.');
+            showFieldError('auth-password', 'Gunakan minimal 8 karakter.');
             isValid = false;
         } else if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password)) {
-            showFieldError('auth-password', 'Include uppercase, lowercase, and a number.');
+            showFieldError('auth-password', 'Sertakan huruf besar, huruf kecil, dan angka.');
             isValid = false;
         }
     }
@@ -99,11 +100,11 @@ function validateAuthForm(email, password, name, isRegisterMode) {
 
 // ─── Button Loading State ─────────────────────────────────────────────────────
 
-function setButtonLoading(btn, loading, text = 'Sign In') {
+function setButtonLoading(btn, loading, text = 'Masuk') {
     if (!btn) return;
     btn.disabled = loading;
     btn.innerHTML = loading
-        ? `<i class="fas fa-spinner fa-spin"></i> Loading...`
+        ? `<i class="fas fa-spinner fa-spin"></i> Memuat...`
         : `<span>${text}</span>`;
 }
 
@@ -128,21 +129,21 @@ document.addEventListener('DOMContentLoaded', () => {
             isRegisterMode = !isRegisterMode;
 
             if (isRegisterMode) {
-                authTitle.textContent = 'Create Account';
-                authSubtitle.textContent = 'Join the kindness movement today.';
+                authTitle.textContent = 'Daftar Akun';
+                authSubtitle.textContent = 'Bergabunglah dengan gerakan kebaikan hari ini.';
                 nameGroup.style.display = 'block';
                 if (nameInput) nameInput.setAttribute('required', 'true');
-                if (submitText) submitText.textContent = 'Create Account';
-                if (toggleText) toggleText.textContent = 'Already have an account?';
-                authToggle.textContent = 'Sign in';
+                if (submitText) submitText.textContent = 'Daftar Sekarang';
+                if (toggleText) toggleText.textContent = 'Sudah punya akun?';
+                authToggle.textContent = 'Masuk';
             } else {
-                authTitle.textContent = 'Welcome back';
-                authSubtitle.textContent = 'Enter your details to sign in to KindTrack.';
+                authTitle.textContent = 'Selamat Datang';
+                authSubtitle.textContent = 'Masukkan detail Anda untuk masuk ke KindTrack.';
                 nameGroup.style.display = 'none';
                 if (nameInput) nameInput.removeAttribute('required');
-                if (submitText) submitText.textContent = 'Sign In';
-                if (toggleText) toggleText.textContent = "Don't have an account?";
-                authToggle.textContent = 'Sign up';
+                if (submitText) submitText.textContent = 'Masuk';
+                if (toggleText) toggleText.textContent = "Belum punya akun?";
+                authToggle.textContent = 'Daftar';
             }
         });
     }
@@ -167,19 +168,24 @@ document.addEventListener('DOMContentLoaded', () => {
             if (existingAlert) existingAlert.remove();
 
             try {
-                setButtonLoading(submitBtn, true, isRegisterMode ? 'Creating Account' : 'Signing In');
+                setButtonLoading(submitBtn, true, isRegisterMode ? 'Mendaftar...' : 'Masuk...');
 
                 if (!isRegisterMode) {
                     // Login
                     await signInWithEmailAndPassword(auth, email, password);
-                    showToast('Login successful! Welcome back.', 'success');
+                    showToast('Login berhasil! Selamat datang kembali.', 'success');
                 } else {
                     // Register
                     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                     await updateProfile(userCredential.user, { displayName: name });
 
+                    try {
+                        await sendEmailVerification(userCredential.user);
+                    } catch (e) {
+                        console.error('Email verification error:', e);
+                    }
+
                     // NEW: Ensure we create a Firestore document for email/password users!
-                    // If the user's email is an admin email, automatically grant admin role.
                     const role = email.toLowerCase().includes('admin') ? 'admin' : 'user';
                     const userDocRef = doc(db, 'users', userCredential.user.uid);
                     await setDoc(userDocRef, {
@@ -187,11 +193,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         email: email,
                         avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`,
                         role: role,
+                        totalPoints: 0,
                         createdAt: serverTimestamp(),
                         updatedAt: serverTimestamp()
                     });
 
-                    showToast('Account created! Let\'s be kind today.', 'success');
+                    showToast('Akun berhasil dibuat! Silakan cek email Anda untuk verifikasi.', 'success');
                 }
 
                 // Check user role for redirection
@@ -206,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (error) {
                 console.error('[Auth Error]', error.code, error.message);
                 showAlert('auth-form', getAuthErrorMessage(error.code));
-                setButtonLoading(submitBtn, false, isRegisterMode ? 'Create Account' : 'Sign In');
+                setButtonLoading(submitBtn, false, isRegisterMode ? 'Daftar' : 'Masuk');
             }
         });
     }
@@ -230,13 +237,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         email: user.email,
                         avatarUrl: user.photoURL,
                         role: 'user', // Default role for Google sign-in
+                        totalPoints: 0,
                         createdAt: serverTimestamp(),
                         updatedAt: serverTimestamp()
                     });
                 }
 
                 const role = userDoc.exists() ? userDoc.data().role : 'user';
-                showToast(`Welcome, ${user.displayName}!`, "success");
+                showToast(`Selamat datang, ${user.displayName}!`, "success");
 
                 setTimeout(() => {
                     window.location.href = role === 'admin' ? 'admin.html' : 'dashboard.html';
@@ -274,17 +282,17 @@ onAuthStateChanged(auth, (user) => {
 
 export const logout = async () => {
     showConfirmModal({
-        title: 'Sign Out',
-        message: 'Are you sure you want to sign out? Your kindness journey is waiting for you!',
-        confirmText: 'Sign Me Out',
-        cancelText: 'Stay Here',
+        title: 'Keluar Akun',
+        message: 'Apakah Anda yakin ingin keluar? Perjalanan kebaikan Anda sedang menunggu!',
+        confirmText: 'Keluar Sekarang',
+        cancelText: 'Tetap di Sini',
         onConfirm: async () => {
             try {
                 await signOut(auth);
                 window.location.href = '../index.html';
             } catch (error) {
                 console.error('[Logout Error]', error.code, error.message);
-                showToast('Logout failed. Please try again.', 'error');
+                showToast('Gagal keluar. Silakan coba lagi.', 'error');
             }
         }
     });

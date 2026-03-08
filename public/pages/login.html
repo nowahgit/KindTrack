@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In | KindTrack</title>
+    <title>Masuk | KindTrack</title>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -22,13 +22,15 @@
         </a>
 
         <div class="auth-left-content">
-            <h2>Every act of kindness<br>creates a ripple.</h2>
-            <p>Join thousands of people who are making the world a better place — one act at a time. Track your impact,
-                get AI insights, and stay inspired.</p>
+            <h2>Setiap aksi kebaikan<br>menciptakan riak.</h2>
+            <p>Bergabunglah dengan ribuan orang yang membuat dunia menjadi tempat yang lebih baik — satu per satu aksi.
+                Pantau dampak Anda,
+                dapatkan wawasan AI, dan tetap terinspirasi.</p>
 
             <div class="auth-testimonial">
-                <p>"KindTrack completely changed how I see my daily interactions. I've logged 200+ acts this year and
-                    the AI insights are genuinely powerful."</p>
+                <p>"KindTrack benar-benar mengubah cara saya melihat interaksi harian saya. Saya telah mencatat 200+
+                    aksi tahun ini dan
+                    wawasan AI-nya benar-benar luar biasa."</p>
                 <div class="auth-testimonial-author">
                     <div class="auth-testimonial-avatar">AR</div>
                     <div>
@@ -43,15 +45,15 @@
             style="position:relative;z-index:1;display:flex;align-items:center;gap:2rem;margin-top:auto;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.08);">
             <div>
                 <div style="font-family:var(--font-heading);font-weight:800;font-size:1.5rem;color:white;">2.4K+</div>
-                <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">Active users</div>
+                <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">Pengguna aktif</div>
             </div>
             <div>
                 <div style="font-family:var(--font-heading);font-weight:800;font-size:1.5rem;color:white;">142K</div>
-                <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">Acts logged</div>
+                <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">Aksi tercatat</div>
             </div>
             <div>
                 <div style="font-family:var(--font-heading);font-weight:800;font-size:1.5rem;color:white;">4.9★</div>
-                <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">User rating</div>
+                <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">Rating pengguna</div>
             </div>
         </div>
     </div>
@@ -59,27 +61,27 @@
     <!-- Right Panel -->
     <div class="auth-right">
         <div class="auth-box">
-            <h3 id="auth-title">Welcome back</h3>
-            <p class="auth-desc" id="auth-subtitle">Enter your details to sign in to KindTrack.</p>
+            <h3 id="auth-title">Selamat datang kembali</h3>
+            <p class="auth-desc" id="auth-subtitle">Masukkan detail Anda untuk masuk ke KindTrack.</p>
 
             <form id="auth-form" novalidate>
                 <div class="form-group" id="name-group" style="display:none;">
-                    <label class="form-label" for="auth-name">Full Name</label>
+                    <label class="form-label" for="auth-name">Nama Lengkap</label>
                     <input type="text" id="auth-name" class="form-control" placeholder="John Doe" autocomplete="name">
-                    <div class="invalid-feedback">Please enter your full name.</div>
+                    <div class="invalid-feedback">Silakan masukkan nama lengkap Anda.</div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" for="auth-email">Email Address</label>
-                    <input type="email" id="auth-email" class="form-control" placeholder="name@example.com" required
+                    <label class="form-label" for="auth-email">Alamat Email</label>
+                    <input type="email" id="auth-email" class="form-control" placeholder="nama@contoh.com" required
                         autocomplete="email">
-                    <div class="invalid-feedback">Please enter a valid email address.</div>
+                    <div class="invalid-feedback">Silakan masukkan alamat email yang valid.</div>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="auth-password">
-                        Password
+                        Kata Sandi
                         <a href="#" id="forgot-link"
-                            style="float:right;font-size:0.8rem;color:var(--primary);font-weight:500;">Forgot
-                            password?</a>
+                            style="float:right;font-size:0.8rem;color:var(--primary);font-weight:500;">Lupa
+                            kata sandi?</a>
                     </label>
                     <div style="position:relative;">
                         <input type="password" id="auth-password" class="form-control" placeholder="••••••••" required
@@ -89,29 +91,31 @@
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
-                    <div class="invalid-feedback">Password must meet requirements.</div>
+                    <div class="invalid-feedback">Kata sandi harus memenuhi persyaratan.</div>
                 </div>
 
                 <button type="submit" class="btn btn-primary"
-                    style="width:100%;justify-content:center;margin-top:0.5rem;padding:0.875rem;" id="submit-btn">
-                    <span id="submit-text">Sign In</span>
+                    style="width:100%;justify-content:center;margin-top:0.5rem;padding:0.875rem;" id="submit-btn"
+                    disabled>
+                    <span id="submit-text">Masuk</span>
                 </button>
             </form>
 
             <p class="auth-switch">
-                <span id="toggle-text">Don't have an account?</span>
-                <a href="#" id="auth-toggle">Sign up</a>
+                <span id="toggle-text">Belum punya akun?</span>
+                <a href="#" id="auth-toggle">Daftar</a>
             </p>
 
             <div style="display:flex;align-items:center;gap:1rem;margin:1.5rem 0;">
                 <div style="flex:1;height:1px;background:var(--border-light);"></div>
-                <span style="font-size:0.78rem;color:var(--text-muted);white-space:nowrap;">or continue with</span>
+                <span style="font-size:0.78rem;color:var(--text-muted);white-space:nowrap;">atau lanjutkan dengan</span>
                 <div style="flex:1;height:1px;background:var(--border-light);"></div>
             </div>
 
-            <button class="btn btn-outline" id="google-btn" style="width:100%;justify-content:center;gap:0.75rem;">
+            <button class="btn btn-outline" id="google-btn" style="width:100%;justify-content:center;gap:0.75rem;"
+                disabled>
                 <img src="https://www.google.com/favicon.ico" width="16" height="16" alt="Google">
-                Continue with Google
+                Lanjutkan dengan Google
             </button>
         </div>
     </div>

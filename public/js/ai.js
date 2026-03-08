@@ -1,35 +1,62 @@
 // AI Services for KindTrack
 // In a real production app, these should be called via a backend (Firebase Functions) to protect API keys.
 
+/**
+ * Simulates a typewriter effect for AI responses
+ */
+function typeWriter(text, elementId, speed = 30) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+
+    element.innerHTML = "";
+    element.classList.add('ai-text-loading');
+
+    let i = 0;
+    function type() {
+        if (i < text.length) {
+            element.classList.remove('ai-text-loading');
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(type, speed);
+        }
+    }
+    type();
+}
+
 export async function getAIReflection(activities) {
-    if (activities.length === 0) {
-        return "Start logging your acts of kindness to see personalized AI reflections on your impact!";
+    if (!activities || activities.length === 0) {
+        return "Inisialisasi sistem... Hubungkan data kebaikan Anda untuk memicu analisis neural. Dampak Anda menunggu untuk dipetakan.";
     }
 
-    const activityTitles = activities.map(a => a.title).join(", ");
-
-    // Simulate API call to OpenAI
-    // Prompt: "Analisis daftar tindakan kebaikan berikut dan tuliskan refleksi singkat yang memotivasi pengguna untuk terus melakukan kebaikan: [activityTitles]"
-
-    // Mock response based on activity count
+    const latestTitle = activities[0].title;
     const count = activities.length;
-    if (count < 3) {
-        return "You've started a wonderful journey. Even these small acts like '" + activities[0].title + "' show that you care. Keep going!";
-    } else if (count < 10) {
-        return "You've been consistent! With " + count + " acts of kindness, you're building a habit that changes the world. Your recent act: '" + activities[0].title + "' is truly inspiring.";
-    } else {
-        return "You are a kindness champion! Your dedication to help others is creating a significant impact. Remember, global change starts with people like you.";
+
+    // Skenario Respons AI Futuristik
+    const responses = [
+        `Analisis Neural Selesai. Pola kebaikan terdeteksi: "${latestTitle}". Frekuensi kebaikan Anda berada di level optimal. Terus pancarkan energi positif ini ke seluruh jaringan sosial Anda.`,
+        `Sistem KindTrack mengidentifikasi resonansi moral tinggi. Dengan ${count} aksi terverifikasi, Anda sedang merekayasa ulang lingkungan sekitar menjadi lebih harmonis. Target efisiensi dampak tercapai.`,
+        `Proyeksi Masa Depan: Aksi Anda "${latestTitle}" telah menciptakan riak (ripple effect) yang tak terlihat. Data menunjukkan peningkatan indeks kebahagiaan kolektif di sekitar koordinat Anda.`,
+        `Protokol 'Altruisme' Berjalan. Anda bukan sekadar pengguna; Anda adalah node utama dalam jaringan kebaikan global kami. ${count} kontribusi Anda telah memperkuat infrastruktur empati digital.`
+    ];
+
+    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+
+    // Jika dipanggil dari dashboard, gunakan typewriter
+    if (document.getElementById('ai-reflection-text')) {
+        typeWriter(randomResponse, 'ai-reflection-text');
+        return randomResponse; // Return tetap untuk sync
     }
+
+    return randomResponse;
 }
 
 export async function getDailyIdea() {
-    // In a real app, this would be fetched from a DB or generated once per day via AI
     const ideas = [
-        "Hari ini coba kirim pesan apresiasi kepada seseorang yang pernah membantu kamu.",
-        "Give a sincere compliment to 3 people you meet today.",
-        "Leave a positive comment on a friend's social media post.",
-        "Pick up one piece of litter you see on the street.",
-        "Hold the door open for someone today with a smile."
+        "Transmisi Pesan: Kirimkan frekuensi apresiasi kepada rekan kerja atau teman melalui sinyal digital hari ini.",
+        "Protokol Apresiasi: Berikan validasi positif kepada 3 node (orang) di jaringan terdekat Anda.",
+        "Optimasi Lingkungan: Ambil satu entitas sampah (polutan) dan tempatkan pada wadah pembuangan yang tepat.",
+        "Interaksi Empatetik: Gunakan sensor sosial Anda untuk mendeteksi siapa yang membutuhkan dukungan mental hari ini.",
+        "Sinyal Senyuman: Pancarkan visualisasi keramahan saat berinteraksi dengan orang asing pertama yang Anda temui."
     ];
 
     // Persistent daily idea (saved in localStorage)

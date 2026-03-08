@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log Kindness | KindTrack</title>
+    <title>Catat Kebaikan | KindTrack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
@@ -23,23 +23,23 @@
                     style="height: 35px; width: auto; object-fit: contain;">
             </a>
             <nav class="sidebar-nav">
-                <p class="sidebar-section-label">Main</p>
+                <p class="sidebar-section-label">Utama</p>
                 <a href="dashboard.html" class="sidebar-item">
                     <i class="fas fa-house"></i> Dashboard
                 </a>
                 <a href="activity.html" class="sidebar-item">
-                    <i class="fas fa-list-check"></i> My Activities
+                    <i class="fas fa-list-check"></i> Aktivitas Saya
                 </a>
                 <a href="community.html" class="sidebar-item">
-                    <i class="fas fa-users"></i> Community Feed
+                    <i class="fas fa-users"></i> Beranda Komunitas
                 </a>
                 <a href="add-kindness.html" class="sidebar-item active">
-                    <i class="fas fa-plus-circle"></i> Log Kindness
+                    <i class="fas fa-plus-circle"></i> Catat Kebaikan
                 </a>
-                <p class="sidebar-section-label" style="margin-top:1.5rem;">Insights</p>
-                <a href="analytics.html" class="sidebar-item"><i class="fas fa-chart-line"></i> Analytics</a>
-                <a href="milestones.html" class="sidebar-item"><i class="fas fa-trophy"></i> Milestones</a>
-                <a href="leaderboard.html" class="sidebar-item"><i class="fas fa-medal"></i> Leaderboard</a>
+                <p class="sidebar-section-label" style="margin-top:1.5rem;">Wawasan</p>
+                <a href="analytics.html" class="sidebar-item"><i class="fas fa-chart-line"></i> Analisis</a>
+                <a href="milestones.html" class="sidebar-item"><i class="fas fa-trophy"></i> Pencapaian</a>
+                <a href="leaderboard.html" class="sidebar-item"><i class="fas fa-medal"></i> Papan Peringkat</a>
             </nav>
             <div class="sidebar-footer">
                 <a href="profile.html" style="text-decoration:none; color:inherit;">
@@ -49,15 +49,15 @@
                         onmouseout="this.style.background='transparent'">
                         <div class="sidebar-avatar" id="sidebar-avatar">U</div>
                         <div class="sidebar-user-info">
-                            <div class="sidebar-user-name" id="sidebar-user-name">Loading...</div>
+                            <div class="sidebar-user-name" id="sidebar-user-name">Memuat...</div>
                             <div class="sidebar-user-role"
-                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profile <i
+                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profil <i
                                     class="fas fa-angle-right"></i></div>
                         </div>
                     </div>
                 </a>
                 <button class="sidebar-item" id="logout-btn" style="color:#ef4444;">
-                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Sign Out
+                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Keluar
                 </button>
             </div>
         </aside>
@@ -67,148 +67,184 @@
                 <div class="flex items-center gap-2">
                     <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
                     <div>
-                        <h1>Log an Act of Kindness</h1>
-                        <p>Every small action matters. Share what you've done today.</p>
+                        <h1>Catat Aksi Kebaikan</h1>
+                        <p>Setiap tindakan kecil sangat berarti. Bagikan apa yang Anda lakukan hari ini.</p>
                     </div>
                 </div>
                 <a href="dashboard.html" class="btn btn-outline" style="padding:0.6rem 1.25rem;font-size:0.875rem;">
-                    <i class="fas fa-arrow-left"></i> Back
+                    <i class="fas fa-arrow-left"></i> Kembali
                 </a>
             </header>
 
             <div class="app-body">
-                <div style="max-width:680px;">
-                    <div class="form-card">
-                        <form id="add-kindness-form" novalidate>
+                <div class="add-kindness-container">
+                    <form id="add-kindness-form" novalidate>
+                        <div class="add-kindness-grid">
 
-                            <!-- What did you do -->
-                            <div class="form-group">
-                                <label class="form-label" for="kindness-title">What did you do? <span
-                                        style="color:#ef4444;">*</span></label>
-                                <input type="text" id="kindness-title" class="form-control"
-                                    placeholder="e.g., Helped an elderly person with groceries" maxlength="120"
-                                    required>
-                                <div class="invalid-feedback">Please describe what you did briefly.</div>
-                                <p class="form-hint">Be specific — it helps the AI give better insights.</p>
-                            </div>
+                            <!-- KIRI: Kategori & Apa yang dilakukan -->
+                            <div class="grid-left">
+                                <div class="left-panel-content">
+                                    <h2>Bagikan Kebaikan Anda</h2>
+                                    <p class="subtitle">Setiap tindakan kecil sangat berarti bagi dunia.</p>
 
-                            <!-- Category -->
-                            <div class="form-group">
-                                <label class="form-label">Category <span style="color:#ef4444;">*</span></label>
-                                <div class="category-grid">
-                                    <div>
-                                        <input type="radio" name="category" id="cat-helping" value="Helping Others"
-                                            class="category-option" checked>
-                                        <label for="cat-helping" class="category-label">
-                                            <span class="cat-emoji">🤝</span>
-                                            <span class="cat-name">Helping Others</span>
-                                        </label>
+                                    <!-- What did you do -->
+                                    <div class="form-group" style="margin-bottom: 2.5rem;">
+                                        <label class="form-label" for="kindness-title"
+                                            style="font-size: 1.1rem; font-weight: 800;">Apa yang Anda lakukan? <span
+                                                style="color:#ef4444;">*</span></label>
+                                        <input type="text" id="kindness-title" class="form-control"
+                                            placeholder="Contoh: Memberi makan kucing jalanan" maxlength="120" required
+                                            style="border: none; border-bottom: 2px solid var(--border); border-radius: 0; padding: 1rem 0; background: transparent; font-size: 1.25rem;">
+                                        <div class="invalid-feedback">Harap beri judul aksi Anda.</div>
+                                        <p class="form-hint">Bersikaplah spesifik — ini membantu AI memberikan wawasan
+                                            yang lebih baik.</p>
                                     </div>
-                                    <div>
-                                        <input type="radio" name="category" id="cat-charity" value="Charity"
-                                            class="category-option">
-                                        <label for="cat-charity" class="category-label">
-                                            <span class="cat-emoji">🎁</span>
-                                            <span class="cat-name">Charity</span>
-                                        </label>
+
+                                    <!-- Category -->
+                                    <div class="form-group">
+                                        <label class="form-label"
+                                            style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1.25rem;">Pilih
+                                            Kategori <span style="color:#ef4444;">*</span></label>
+                                        <div class="category-grid">
+                                            <div>
+                                                <input type="radio" name="category" id="cat-helping"
+                                                    value="Membantu Sesama" class="category-option" checked>
+                                                <label for="cat-helping" class="category-label">
+                                                    <span class="cat-emoji"><i class="fas fa-hands-helping"></i></span>
+                                                    <span class="cat-name">Bantuan</span>
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" name="category" id="cat-charity" value="Sedekah"
+                                                    class="category-option">
+                                                <label for="cat-charity" class="category-label">
+                                                    <span class="cat-emoji"><i
+                                                            class="fas fa-hand-holding-heart"></i></span>
+                                                    <span class="cat-name">Sedekah</span>
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" name="category" id="cat-support" value="Dukungan"
+                                                    class="category-option">
+                                                <label for="cat-support" class="category-label">
+                                                    <span class="cat-emoji"><i class="fas fa-comment-alt"></i></span>
+                                                    <span class="cat-name">Dukungan</span>
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" name="category" id="cat-volunteer" value="Relawan"
+                                                    class="category-option">
+                                                <label for="cat-volunteer" class="category-label">
+                                                    <span class="cat-emoji"><i class="fas fa-user-friends"></i></span>
+                                                    <span class="cat-name">Relawan</span>
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" name="category" id="cat-encourage" value="Motivasi"
+                                                    class="category-option">
+                                                <label for="cat-encourage" class="category-label">
+                                                    <span class="cat-emoji"><i class="fas fa-smile"></i></span>
+                                                    <span class="cat-name">Motivasi</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="invalid-feedback" id="category-feedback">Harap pilih kategori.</div>
                                     </div>
-                                    <div>
-                                        <input type="radio" name="category" id="cat-support" value="Support"
-                                            class="category-option">
-                                        <label for="cat-support" class="category-label">
-                                            <span class="cat-emoji">💬</span>
-                                            <span class="cat-name">Support</span>
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <input type="radio" name="category" id="cat-volunteer" value="Volunteering"
-                                            class="category-option">
-                                        <label for="cat-volunteer" class="category-label">
-                                            <span class="cat-emoji">🙋</span>
-                                            <span class="cat-name">Volunteering</span>
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <input type="radio" name="category" id="cat-encourage" value="Encouragement"
-                                            class="category-option">
-                                        <label for="cat-encourage" class="category-label">
-                                            <span class="cat-emoji">⭐</span>
-                                            <span class="cat-name">Encouragement</span>
-                                        </label>
+
+                                    <!-- Tips card inside left (desktop only) -->
+                                    <div class="desktop-tips"
+                                        style="background:var(--primary-soft);border:1px dashed var(--primary);border-radius:var(--r-xl);padding:1.5rem;margin-top:3rem;">
+                                        <h4 style="font-size:0.9rem;color:var(--primary-dark);margin-bottom:0.75rem;">
+                                            <i class="fas fa-lightbulb" style="margin-right:0.35rem;"></i> Tips Kebaikan
+                                        </h4>
+                                        <ul style="display:flex;flex-direction:column;gap:0.4rem; list-style: none;">
+                                            <li
+                                                style="font-size:0.82rem;color:var(--primary-dark);display:flex;align-items:flex-start;gap:0.5rem;">
+                                                <i class="fas fa-check" style="margin-top:0.15rem;flex-shrink:0;"></i>
+                                                Tulis deskripsi yang jujur dari hati
+                                            </li>
+                                            <li
+                                                style="font-size:0.82rem;color:var(--primary-dark);display:flex;align-items:flex-start;gap:0.5rem;">
+                                                <i class="fas fa-check" style="margin-top:0.15rem;flex-shrink:0;"></i>
+                                                Sebutkan perasaan Anda setelah melakukannya
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
-                                <div class="invalid-feedback" id="category-feedback">Please select a category.</div>
                             </div>
 
-                            <!-- Description -->
-                            <div class="form-group">
-                                <label class="form-label" for="kindness-desc">
-                                    Description
-                                    <span id="desc-counter"
-                                        style="float:right;font-weight:400;color:var(--text-muted);">0/500</span>
-                                </label>
-                                <textarea id="kindness-desc" class="form-control" rows="4"
-                                    placeholder="Describe the impact or how it made you feel... (Min. 20 chars for points)"
-                                    maxlength="500"></textarea>
-                                <div class="invalid-feedback">Description must be at least 20 characters.</div>
-                                <p class="form-hint" id="desc-warning" style="color:#ef4444; display:none;">
-                                    Please write at least 20 characters to get points! (Quality matters)
-                                </p>
+                            <!-- KANAN: Detail Pelengkap dalam Card -->
+                            <div class="grid-right">
+                                <div class="form-card"
+                                    style="box-shadow: var(--shadow-xl); border: none; padding: 3rem;">
+                                    <!-- Description -->
+                                    <div class="form-group">
+                                        <label class="form-label" for="kindness-desc">
+                                            Ceritakan lebih lanjut
+                                            <span id="desc-counter"
+                                                style="float:right;font-weight:400;color:var(--text-muted);">0/500</span>
+                                        </label>
+                                        <textarea id="kindness-desc" class="form-control" rows="5"
+                                            placeholder="Gambarkan dampak positif yang Anda rasakan atau berikan..."
+                                            maxlength="500"></textarea>
+                                        <p class="form-hint" id="desc-warning" style="color:#ef4444; display:none;">
+                                            Harap tulis minimal 20 karakter untuk poin maksimal.
+                                        </p>
+                                    </div>
+
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                                        <!-- Date -->
+                                        <div class="form-group">
+                                            <label class="form-label" for="kindness-date">Tanggal <span
+                                                    style="color:#ef4444;">*</span></label>
+                                            <input type="date" id="kindness-date" class="form-control" required>
+                                        </div>
+                                        <!-- Visibility -->
+                                        <div class="form-group">
+                                            <label class="form-label">Tampilkan di Feed</label>
+                                            <label class="switch" style="margin-top: 5px;">
+                                                <input type="checkbox" id="kindness-public" checked>
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Photo Upload -->
+                                    <div class="form-group" style="margin-top: 1rem;">
+                                        <div
+                                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                            <label class="form-label" style="margin-bottom:0;">Tambahkan Bukti
+                                                Foto</label>
+                                            <span class="badge badge-purple" style="font-size:0.65rem;">+20 Poin</span>
+                                        </div>
+                                        <div class="photo-upload-container"
+                                            style="position: relative; border: 2px dashed var(--border); border-radius: var(--r-lg); padding: 1.5rem; text-align: center;">
+                                            <input type="file" id="kindness-photo" accept="image/*"
+                                                style="opacity: 0; position: absolute; inset: 0; cursor: pointer; width: 100%;">
+                                            <div id="photo-preview-text">
+                                                <i class="fas fa-camera"
+                                                    style="font-size: 1.5rem; color: var(--text-light); margin-bottom: 0.5rem;"></i>
+                                                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Klik
+                                                    atau seret foto ke sini</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit buttons -->
+                                    <div style="display:flex; flex-direction: column; gap:0.75rem; margin-top:2.5rem;">
+                                        <button type="submit" class="btn btn-primary"
+                                            style="padding: 1.1rem; font-size: 1rem; border-radius: 14px;"
+                                            id="submit-btn">
+                                            <i class="fas fa-heart"></i> Dokumentasikan Kebaikan
+                                        </button>
+                                        <a href="dashboard.html" class="btn btn-outline"
+                                            style="border: none; color: var(--text-muted); font-size: 0.9rem;">Urungkan</a>
+                                    </div>
+                                </div>
                             </div>
 
-                            <!-- Photo Upload (Social Proof) -->
-                            <div class="form-group">
-                                <label class="form-label" for="kindness-photo">Add a Photo (Optional) <span
-                                        class="badge badge-purple" style="font-size:0.6rem; padding: 2px 6px;">+20
-                                        Points</span></label>
-                                <input type="file" id="kindness-photo" class="form-control" accept="image/*"
-                                    style="padding-bottom: 2.2rem;">
-                                <p class="form-hint">Upload a picture to verify your act and earn bonus points!</p>
-                            </div>
-
-                            <!-- Date -->
-                            <div class="form-group">
-                                <label class="form-label" for="kindness-date">Date <span
-                                        style="color:#ef4444;">*</span></label>
-                                <input type="date" id="kindness-date" class="form-control" required>
-                                <div class="invalid-feedback">Please select a valid date.</div>
-                            </div>
-
-                            <div style="display:flex;gap:1rem;margin-top:0.5rem;">
-                                <a href="dashboard.html" class="btn btn-outline"
-                                    style="flex:0.3;justify-content:center;">Cancel</a>
-                                <button type="submit" class="btn btn-primary" style="flex:1;justify-content:center;"
-                                    id="submit-btn">
-                                    <i class="fas fa-heart"></i> Save Act of Kindness
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- Tips card -->
-                    <div
-                        style="background:var(--primary-soft);border:1px dashed var(--primary);border-radius:var(--r-xl);padding:1.5rem;margin-top:1.25rem;">
-                        <h4 style="font-size:0.9rem;color:var(--primary-dark);margin-bottom:0.75rem;">
-                            <i class="fas fa-lightbulb" style="margin-right:0.35rem;"></i> Tips for better AI insights
-                        </h4>
-                        <ul style="display:flex;flex-direction:column;gap:0.4rem;">
-                            <li
-                                style="font-size:0.82rem;color:var(--primary-dark);display:flex;align-items:flex-start;gap:0.5rem;">
-                                <i class="fas fa-check" style="margin-top:0.15rem;flex-shrink:0;"></i>
-                                Be specific about what you did and how it helped
-                            </li>
-                            <li
-                                style="font-size:0.82rem;color:var(--primary-dark);display:flex;align-items:flex-start;gap:0.5rem;">
-                                <i class="fas fa-check" style="margin-top:0.15rem;flex-shrink:0;"></i>
-                                Mention the person or group who benefited
-                            </li>
-                            <li
-                                style="font-size:0.82rem;color:var(--primary-dark);display:flex;align-items:flex-start;gap:0.5rem;">
-                                <i class="fas fa-check" style="margin-top:0.15rem;flex-shrink:0;"></i>
-                                Log daily for streak bonuses and better pattern analysis
-                            </li>
-                        </ul>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -239,11 +275,11 @@
         <ul class="mobile-nav-list">
             <a href="dashboard.html" class="mobile-nav-item" id="mnav-dashboard">
                 <i class="fas fa-house"></i>
-                Home
+                Beranda
             </a>
             <a href="support.html" class="mobile-nav-item" id="mnav-messages">
                 <i class="fas fa-comments"></i>
-                Messages
+                Pesan
             </a>
             <a href="add-kindness.html" class="mobile-nav-item mobile-fab" id="mnav-add">
                 <i class="fas fa-plus"></i>
@@ -254,7 +290,7 @@
             </a>
             <a href="profile.html" class="mobile-nav-item" id="mnav-profile">
                 <i class="fas fa-user-circle"></i>
-                Profile
+                Profil
             </a>
         </ul>
     </nav>

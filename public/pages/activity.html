@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Activities | KindTrack</title>
+    <title>Aktivitas Saya | KindTrack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
@@ -23,23 +23,23 @@
                     style="height: 35px; width: auto; object-fit: contain;">
             </a>
             <nav class="sidebar-nav">
-                <p class="sidebar-section-label">Main</p>
+                <p class="sidebar-section-label">Utama</p>
                 <a href="dashboard.html" class="sidebar-item">
                     <i class="fas fa-house"></i> Dashboard
                 </a>
                 <a href="activity.html" class="sidebar-item active">
-                    <i class="fas fa-list-check"></i> My Activities
+                    <i class="fas fa-list-check"></i> Aktivitas Saya
                 </a>
                 <a href="community.html" class="sidebar-item">
-                    <i class="fas fa-users"></i> Community Feed
+                    <i class="fas fa-users"></i> Beranda Komunitas
                 </a>
                 <a href="add-kindness.html" class="sidebar-item">
-                    <i class="fas fa-plus-circle"></i> Log Kindness
+                    <i class="fas fa-plus-circle"></i> Catat Kebaikan
                 </a>
-                <p class="sidebar-section-label" style="margin-top:1.5rem;">Insights</p>
-                <a href="analytics.html" class="sidebar-item"><i class="fas fa-chart-line"></i> Analytics</a>
-                <a href="milestones.html" class="sidebar-item"><i class="fas fa-trophy"></i> Milestones</a>
-                <a href="leaderboard.html" class="sidebar-item"><i class="fas fa-medal"></i> Leaderboard</a>
+                <p class="sidebar-section-label" style="margin-top:1.5rem;">Wawasan</p>
+                <a href="analytics.html" class="sidebar-item"><i class="fas fa-chart-line"></i> Analisis</a>
+                <a href="milestones.html" class="sidebar-item"><i class="fas fa-trophy"></i> Pencapaian</a>
+                <a href="leaderboard.html" class="sidebar-item"><i class="fas fa-medal"></i> Papan Peringkat</a>
             </nav>
             <div class="sidebar-footer">
                 <a href="profile.html" style="text-decoration:none; color:inherit;">
@@ -49,15 +49,15 @@
                         onmouseout="this.style.background='transparent'">
                         <div class="sidebar-avatar" id="sidebar-avatar">U</div>
                         <div class="sidebar-user-info">
-                            <div class="sidebar-user-name" id="sidebar-user-name">Loading...</div>
+                            <div class="sidebar-user-name" id="sidebar-user-name">Memuat...</div>
                             <div class="sidebar-user-role"
-                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profile <i
+                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profil <i
                                     class="fas fa-angle-right"></i></div>
                         </div>
                     </div>
                 </a>
                 <button class="sidebar-item" id="logout-btn" style="color:#ef4444;">
-                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Sign Out
+                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Keluar
                 </button>
             </div>
         </aside>
@@ -67,12 +67,12 @@
                 <div class="flex items-center gap-2">
                     <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
                     <div>
-                        <h1>My Activities</h1>
-                        <p>All your logged acts of kindness</p>
+                        <h1>Aktivitas Saya</h1>
+                        <p>Semua catatan aksi kebaikan Anda</p>
                     </div>
                 </div>
                 <a href="add-kindness.html" class="btn btn-primary" style="padding:0.6rem 1.25rem;font-size:0.875rem;">
-                    <i class="fas fa-plus"></i> Log New
+                    <i class="fas fa-plus"></i> Catat Baru
                 </a>
             </header>
 
@@ -82,12 +82,12 @@
                 <div class="filter-bar">
                     <span style="font-size:0.85rem;font-weight:600;color:var(--text-muted);">Filter:</span>
                     <select id="filter-category" class="filter-select">
-                        <option value="all">All Categories</option>
-                        <option value="Helping Others">🤝 Helping Others</option>
-                        <option value="Charity">🎁 Charity</option>
-                        <option value="Support">💬 Support</option>
-                        <option value="Volunteering">🙋 Volunteering</option>
-                        <option value="Encouragement">⭐ Encouragement</option>
+                        <option value="all">Semua Kategori</option>
+                        <option value="Membantu Sesama">🤝 Membantu Sesama</option>
+                        <option value="Sedekah">🎁 Sedekah</option>
+                        <option value="Dukungan">💬 Dukungan</option>
+                        <option value="Relawan">🙋 Relawan</option>
+                        <option value="Motivasi">⭐ Motivasi</option>
                     </select>
                     <span id="activity-count"
                         style="margin-left:auto;font-size:0.82rem;color:var(--text-muted);"></span>
@@ -147,11 +147,11 @@
         <ul class="mobile-nav-list">
             <a href="dashboard.html" class="mobile-nav-item" id="mnav-dashboard">
                 <i class="fas fa-house"></i>
-                Home
+                Beranda
             </a>
             <a href="support.html" class="mobile-nav-item" id="mnav-messages">
                 <i class="fas fa-comments"></i>
-                Messages
+                Pesan
             </a>
             <a href="add-kindness.html" class="mobile-nav-item mobile-fab" id="mnav-add">
                 <i class="fas fa-plus"></i>
@@ -162,7 +162,7 @@
             </a>
             <a href="profile.html" class="mobile-nav-item" id="mnav-profile">
                 <i class="fas fa-user-circle"></i>
-                Profile
+                Profil
             </a>
         </ul>
     </nav>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaderboard | KindTrack</title>
+    <title>Papan Peringkat | KindTrack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
@@ -116,23 +116,23 @@
                     style="height: 35px; width: auto; object-fit: contain;">
             </a>
             <nav class="sidebar-nav">
-                <p class="sidebar-section-label">Main</p>
+                <p class="sidebar-section-label">Utama</p>
                 <a href="dashboard.html" class="sidebar-item">
                     <i class="fas fa-house"></i> Dashboard
                 </a>
                 <a href="activity.html" class="sidebar-item">
-                    <i class="fas fa-list-check"></i> My Activities
+                    <i class="fas fa-list-check"></i> Aktivitas Saya
                 </a>
                 <a href="community.html" class="sidebar-item">
-                    <i class="fas fa-users"></i> Community Feed
+                    <i class="fas fa-users"></i> Beranda Komunitas
                 </a>
                 <a href="add-kindness.html" class="sidebar-item">
-                    <i class="fas fa-plus-circle"></i> Log Kindness
+                    <i class="fas fa-plus-circle"></i> Catat Kebaikan
                 </a>
-                <p class="sidebar-section-label" style="margin-top:1.5rem;">Insights</p>
-                <a href="analytics.html" class="sidebar-item"><i class="fas fa-chart-line"></i> Analytics</a>
-                <a href="milestones.html" class="sidebar-item"><i class="fas fa-trophy"></i> Milestones</a>
-                <a href="leaderboard.html" class="sidebar-item active"><i class="fas fa-medal"></i> Leaderboard</a>
+                <p class="sidebar-section-label" style="margin-top:1.5rem;">Wawasan</p>
+                <a href="analytics.html" class="sidebar-item"><i class="fas fa-chart-line"></i> Analisis</a>
+                <a href="milestones.html" class="sidebar-item"><i class="fas fa-trophy"></i> Pencapaian</a>
+                <a href="leaderboard.html" class="sidebar-item active"><i class="fas fa-medal"></i> Papan Peringkat</a>
             </nav>
             <div class="sidebar-footer">
                 <a href="profile.html" style="text-decoration:none; color:inherit;">
@@ -142,15 +142,15 @@
                         onmouseout="this.style.background='transparent'">
                         <div class="sidebar-avatar" id="sidebar-avatar">U</div>
                         <div class="sidebar-user-info">
-                            <div class="sidebar-user-name" id="sidebar-user-name">Loading...</div>
+                            <div class="sidebar-user-name" id="sidebar-user-name">Memuat...</div>
                             <div class="sidebar-user-role"
-                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profile <i
+                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profil <i
                                     class="fas fa-angle-right"></i></div>
                         </div>
                     </div>
                 </a>
                 <button class="sidebar-item" id="logout-btn" style="color:#ef4444;">
-                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Sign Out
+                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Keluar
                 </button>
             </div>
         </aside>
@@ -161,20 +161,20 @@
                 <div class="flex items-center gap-2">
                     <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
                     <div>
-                        <h1>Global Leaderboard</h1>
-                        <p>See who is spreading the most kindness globally.</p>
+                        <h1>Papan Peringkat Global</h1>
+                        <p>Lihat siapa yang menyebarkan kebaikan paling banyak secara global.</p>
                     </div>
                 </div>
                 <a href="add-kindness.html" class="btn btn-primary" style="padding:0.6rem 1.25rem;font-size:0.875rem;">
-                    <i class="fas fa-plus"></i> Increase Score
+                    <i class="fas fa-plus"></i> Tingkatkan Skor
                 </a>
             </header>
 
             <div class="app-body">
                 <div class="content-card">
                     <div class="card-header">
-                        <div class="card-title">Top 10 Kindest Humans</div>
-                        <span class="badge badge-yellow"><i class="fas fa-crown"></i> Top Ranked</span>
+                        <div class="card-title">10 Manusia Paling Baik</div>
+                        <span class="badge badge-yellow"><i class="fas fa-crown"></i> Peringkat Teratas</span>
                     </div>
                     <div class="leaderboard-list" id="leaderboard-list">
                         <!-- Skeleton Loading -->
@@ -217,11 +217,11 @@
         <ul class="mobile-nav-list">
             <a href="dashboard.html" class="mobile-nav-item" id="mnav-dashboard">
                 <i class="fas fa-house"></i>
-                Home
+                Beranda
             </a>
             <a href="support.html" class="mobile-nav-item" id="mnav-messages">
                 <i class="fas fa-comments"></i>
-                Messages
+                Pesan
             </a>
             <a href="add-kindness.html" class="mobile-nav-item mobile-fab" id="mnav-add">
                 <i class="fas fa-plus"></i>
@@ -232,7 +232,7 @@
             </a>
             <a href="profile.html" class="mobile-nav-item" id="mnav-profile">
                 <i class="fas fa-user-circle"></i>
-                Profile
+                Profil
             </a>
         </ul>
     </nav>

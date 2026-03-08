@@ -40,14 +40,14 @@ onAuthStateChanged(auth, async (user) => {
                         const adminDivider = document.createElement('p');
                         adminDivider.className = 'sidebar-section-label';
                         adminDivider.style.marginTop = '1.5rem';
-                        adminDivider.textContent = 'Administration';
+                        adminDivider.textContent = 'Administrasi';
 
                         const adminLink = document.createElement('a');
                         adminLink.href = 'admin.html';
                         adminLink.className = 'sidebar-item';
                         adminLink.id = 'sidebar-admin-link';
                         adminLink.style.color = '#ef4444';
-                        adminLink.innerHTML = '<i class="fas fa-hammer"></i> Admin Panel';
+                        adminLink.innerHTML = '<i class="fas fa-hammer"></i> Panel Admin';
 
                         sidebarNav.appendChild(adminDivider);
                         sidebarNav.appendChild(adminLink);
@@ -62,7 +62,7 @@ onAuthStateChanged(auth, async (user) => {
                     supportLink.href = 'support.html';
                     supportLink.className = 'sidebar-item';
                     supportLink.id = 'sidebar-support-link';
-                    supportLink.innerHTML = '<i class="fas fa-comments"></i> Messages';
+                    supportLink.innerHTML = '<i class="fas fa-comments"></i> Pesan';
                     sidebarNav.appendChild(supportLink);
                 }
 
@@ -88,23 +88,23 @@ onAuthStateChanged(auth, async (user) => {
                             if (window.activeChatUserId === msg.senderId) return;
 
                             // get sender name
-                            let senderName = 'Someone';
+                            let senderName = 'Seseorang';
                             try {
                                 const sDoc = await getDoc(doc(db, 'users', msg.senderId));
-                                if (sDoc.exists()) senderName = sDoc.data().name || sDoc.data().username || 'A user';
+                                if (sDoc.exists()) senderName = sDoc.data().name || sDoc.data().username || 'Seorang pengguna';
                             } catch (e) { }
 
-                            showToast(`New message from ${senderName}`, 'info');
+                            showToast(`Pesan baru dari ${senderName}`, 'info');
 
                             const supportLink = document.getElementById('sidebar-support-link');
                             if (supportLink && !supportLink.querySelector('.chat-badge')) {
-                                supportLink.innerHTML += ' <span class="chat-badge" style="background:var(--primary); color:white; padding:2px 6px; border-radius:10px; font-size:0.7rem; margin-left:5px;">New</span>';
+                                supportLink.innerHTML += ' <span class="chat-badge" style="background:var(--primary); color:white; padding:2px 6px; border-radius:10px; font-size:0.7rem; margin-left:5px;">Baru</span>';
                             }
 
                             const mobileSupportLink = document.getElementById('mnav-messages');
                             if (mobileSupportLink && !mobileSupportLink.querySelector('.chat-badge')) {
                                 mobileSupportLink.style.position = 'relative';
-                                mobileSupportLink.innerHTML += ' <span class="chat-badge" style="position:absolute; top:0; right:10%; background:var(--primary); color:white; padding:1px 4px; border-radius:10px; font-size:0.6rem;">New</span>';
+                                mobileSupportLink.innerHTML += ' <span class="chat-badge" style="position:absolute; top:0; right:10%; background:var(--primary); color:white; padding:1px 4px; border-radius:10px; font-size:0.6rem;">Baru</span>';
                             }
                         }
                     });

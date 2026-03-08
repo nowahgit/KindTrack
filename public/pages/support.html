@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messages | KindTrack</title>
+    <title>Pesan | KindTrack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
@@ -103,17 +103,17 @@
                     style="height: 35px; width: auto; object-fit: contain;">
             </a>
             <nav class="sidebar-nav">
-                <p class="sidebar-section-label">Main</p>
+                <p class="sidebar-section-label">Utama</p>
                 <a href="dashboard.html" class="sidebar-item"><i class="fas fa-house"></i> Dashboard</a>
-                <a href="community.html" class="sidebar-item"><i class="fas fa-users"></i> Community</a>
-                <a href="profile.html" class="sidebar-item"><i class="fas fa-user-circle"></i> Profile</a>
+                <a href="community.html" class="sidebar-item"><i class="fas fa-users"></i> Komunitas</a>
+                <a href="profile.html" class="sidebar-item"><i class="fas fa-user-circle"></i> Profil</a>
             </nav>
         </aside>
 
         <div class="app-main">
             <header class="app-header">
-                <h1>Messages</h1>
-                <p>Chat with users and admins in real-time.</p>
+                <h1>Pesan</h1>
+                <p>Mengobrol dengan pengguna dan admin secara real-time.</p>
             </header>
 
             <div class="app-body">
@@ -122,11 +122,11 @@
                     <!-- View 1: Contact List -->
                     <div id="chat-contact-list-view" style="display:flex; flex-direction:column; height: 100%;">
                         <div class="chat-header">
-                            <h2 style="margin:0; font-size:1.2rem;">All Contacts</h2>
+                            <h2 style="margin:0; font-size:1.2rem;">Semua Kontak</h2>
                         </div>
                         <div style="padding: 1rem; border-bottom: 1px solid var(--border-light);">
                             <input type="text" id="chat-search" class="form-control"
-                                placeholder="Search users by name or role..."
+                                placeholder="Cari pengguna berdasarkan nama atau peran..."
                                 style="width:100%; padding:0.8rem; border-radius: var(--r-md); border:1px solid var(--border-light); outline:none;">
                         </div>
                         <div id="chat-contacts-container" style="flex:1; overflow-y:auto; background:white;">
@@ -145,9 +145,9 @@
                                     style="width:40px; height:40px; background:rgba(255,255,255,0.2); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:700;">
                                     U</div>
                                 <div style="margin-left:0.5rem;">
-                                    <div id="chat-active-name" style="font-weight:700; font-size:1.1rem;">User Name
+                                    <div id="chat-active-name" style="font-weight:700; font-size:1.1rem;">Nama Pengguna
                                     </div>
-                                    <div id="chat-active-role" style="font-size:0.8rem; opacity:0.8;">Role</div>
+                                    <div id="chat-active-role" style="font-size:0.8rem; opacity:0.8;">Peran</div>
                                 </div>
                             </div>
                         </div>
@@ -155,7 +155,7 @@
                             <!-- Messages -->
                         </div>
                         <form class="chat-input-area" id="chat-form">
-                            <input type="text" id="chat-input" class="chat-input" placeholder="Type a message...">
+                            <input type="text" id="chat-input" class="chat-input" placeholder="Ketik pesan...">
                             <input type="hidden" id="chat-edit-id" value="">
                             <button type="submit" class="btn btn-primary" id="chat-submit-btn"
                                 style="padding: 0 1.5rem;">
@@ -176,13 +176,14 @@
     <!-- Mobile Bottom Navigation -->
     <nav class="mobile-nav">
         <ul class="mobile-nav-list">
-            <a href="dashboard.html" class="mobile-nav-item" id="mnav-dashboard"><i class="fas fa-house"></i> Home</a>
+            <a href="dashboard.html" class="mobile-nav-item" id="mnav-dashboard"><i class="fas fa-house"></i>
+                Beranda</a>
             <a href="support.html" class="mobile-nav-item" id="mnav-messages"><i class="fas fa-comments"></i>
-                Messages</a>
+                Pesan</a>
             <a href="add-kindness.html" class="mobile-nav-item mobile-fab" id="mnav-add"><i class="fas fa-plus"></i></a>
             <a href="community.html" class="mobile-nav-item" id="mnav-community"><i class="fas fa-users"></i> Feed</a>
             <a href="profile.html" class="mobile-nav-item" id="mnav-profile"><i class="fas fa-user-circle"></i>
-                Profile</a>
+                Profil</a>
         </ul>
     </nav>
 

@@ -5,35 +5,24 @@
 
 // ─── Category Helpers ─────────────────────────────────────────────────────────
 
-export function getCategoryEmoji(category) {
-    switch (category) {
-        case 'Helping Others': return '🤝';
-        case 'Charity': return '🎁';
-        case 'Support': return '💬';
-        case 'Volunteering': return '🙋';
-        case 'Encouragement': return '⭐';
-        default: return '💚';
-    }
-}
-
 export function getCategoryColor(category) {
     switch (category) {
-        case 'Helping Others': return '#22C55E';
-        case 'Charity': return '#3B82F6';
-        case 'Support': return '#F59E0B';
-        case 'Volunteering': return '#8B5CF6';
-        case 'Encouragement': return '#EC4899';
+        case 'Membantu Sesama': return '#22C55E';
+        case 'Sedekah': return '#3B82F6';
+        case 'Dukungan': return '#F59E0B';
+        case 'Relawan': return '#8B5CF6';
+        case 'Motivasi': return '#EC4899';
         default: return '#22C55E';
     }
 }
 
 export function getCategoryIcon(category) {
     switch (category) {
-        case 'Helping Others': return 'fa-hands-helping';
-        case 'Charity': return 'fa-hand-holding-heart';
-        case 'Support': return 'fa-comment-alt';
-        case 'Volunteering': return 'fa-user-friends';
-        case 'Encouragement': return 'fa-smile';
+        case 'Membantu Sesama': return 'fa-hands-helping';
+        case 'Sedekah': return 'fa-hand-holding-heart';
+        case 'Dukungan': return 'fa-comment-alt';
+        case 'Relawan': return 'fa-user-friends';
+        case 'Motivasi': return 'fa-smile';
         default: return 'fa-heart';
     }
 }
@@ -148,15 +137,15 @@ export function showConfirmModal({ title, message, confirmText, cancelText, onCo
                 <div class="modal-icon ${iconClass}">
                     <i class="fas ${iconI}"></i>
                 </div>
-                <div class="modal-title">${title || 'Are you sure?'}</div>
+                <div class="modal-title">${title || 'Apakah Anda yakin?'}</div>
             </div>
             <div class="modal-body">
                 ${message}
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline" id="modal-cancel-btn">${cancelText || 'Cancel'}</button>
+                <button class="btn btn-outline" id="modal-cancel-btn">${cancelText || 'Batal'}</button>
                 <button class="btn ${type === 'danger' ? 'btn-primary' : 'btn-primary'}" id="modal-confirm-btn" style="${type === 'danger' ? 'background:#ef4444; border-color:#ef4444;' : ''}">
-                    ${confirmText || 'Confirm'}
+                    ${confirmText || 'Konfirmasi'}
                 </button>
             </div>
         </div>
@@ -187,13 +176,13 @@ export function showConfirmModal({ title, message, confirmText, cancelText, onCo
 // ─── Formatting ───────────────────────────────────────────────────────────────
 
 export function formatDate(val) {
-    if (!val) return 'Recently';
+    if (!val) return 'Baru saja';
     let date;
     if (typeof val === 'string') date = new Date(val);
     else if (val.toDate) date = val.toDate(); // Firebase Timestamp
     else date = new Date(val);
 
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString('id-ID', {
         month: 'short',
         day: 'numeric',
         year: 'numeric'

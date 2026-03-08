@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Community Feed | KindTrack</title>
+    <title>Beranda Komunitas | KindTrack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
@@ -250,23 +250,23 @@
                     style="height: 35px; width: auto; object-fit: contain;">
             </a>
             <nav class="sidebar-nav">
-                <p class="sidebar-section-label">Main</p>
+                <p class="sidebar-section-label">Utama</p>
                 <a href="dashboard.html" class="sidebar-item">
                     <i class="fas fa-house"></i> Dashboard
                 </a>
                 <a href="activity.html" class="sidebar-item">
-                    <i class="fas fa-list-check"></i> My Activities
+                    <i class="fas fa-list-check"></i> Aktivitas Saya
                 </a>
                 <a href="community.html" class="sidebar-item active">
-                    <i class="fas fa-users"></i> Community Feed
+                    <i class="fas fa-users"></i> Beranda Komunitas
                 </a>
                 <a href="add-kindness.html" class="sidebar-item">
-                    <i class="fas fa-plus-circle"></i> Log Kindness
+                    <i class="fas fa-plus-circle"></i> Catat Kebaikan
                 </a>
-                <p class="sidebar-section-label" style="margin-top:1.5rem;">Insights</p>
-                <a href="#" class="sidebar-item"><i class="fas fa-chart-line"></i> Analytics</a>
-                <a href="#" class="sidebar-item"><i class="fas fa-trophy"></i> Milestones</a>
-                <a href="leaderboard.html" class="sidebar-item"><i class="fas fa-medal"></i> Leaderboard</a>
+                <p class="sidebar-section-label" style="margin-top:1.5rem;">Wawasan</p>
+                <a href="analytics.html" class="sidebar-item"><i class="fas fa-chart-line"></i> Analisis</a>
+                <a href="milestones.html" class="sidebar-item"><i class="fas fa-trophy"></i> Pencapaian</a>
+                <a href="leaderboard.html" class="sidebar-item"><i class="fas fa-medal"></i> Papan Peringkat</a>
             </nav>
             <div class="sidebar-footer">
                 <a href="profile.html" style="text-decoration:none; color:inherit;">
@@ -276,15 +276,15 @@
                         onmouseout="this.style.background='transparent'">
                         <div class="sidebar-avatar" id="sidebar-avatar">U</div>
                         <div class="sidebar-user-info">
-                            <div class="sidebar-user-name" id="sidebar-user-name">Loading...</div>
+                            <div class="sidebar-user-name" id="sidebar-user-name">Memuat...</div>
                             <div class="sidebar-user-role"
-                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profile <i
+                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profil <i
                                     class="fas fa-angle-right"></i></div>
                         </div>
                     </div>
                 </a>
                 <button class="sidebar-item" id="logout-btn" style="color:#ef4444;">
-                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Sign Out
+                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Keluar
                 </button>
             </div>
         </aside>
@@ -294,12 +294,12 @@
                 <div class="flex items-center gap-2">
                     <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
                     <div>
-                        <h1>Community Feed</h1>
-                        <p>Get inspired by acts of kindness around the world.</p>
+                        <h1>Beranda Komunitas</h1>
+                        <p>Terinspirasi oleh aksi kebaikan di seluruh dunia.</p>
                     </div>
                 </div>
                 <a href="add-kindness.html" class="btn btn-primary" style="padding:0.6rem 1.25rem;font-size:0.875rem;">
-                    <i class="fas fa-plus"></i> Share Yours
+                    <i class="fas fa-plus"></i> Bagikan Milikmu
                 </a>
             </header>
 
@@ -307,7 +307,7 @@
                 <div class="community-grid">
                     <div class="feed-container" id="feed-container">
                         <a href="support.html" class="btn btn-primary mobile-chat-btn">
-                            <i class="fas fa-comments"></i> Messages
+                            <i class="fas fa-comments"></i> Pesan
                         </a>
 
                         <!-- Skeletons -->
@@ -332,10 +332,10 @@
                             <!-- View 1: Contact List -->
                             <div id="chat-contact-list-view" style="display:flex; flex-direction:column; height: 100%;">
                                 <div class="chat-widget-header">
-                                    <div style="font-size:1.1rem; width:100%; text-align:center;">Messages</div>
+                                    <div style="font-size:1.1rem; width:100%; text-align:center;">Pesan</div>
                                 </div>
                                 <div style="padding: 1rem; border-bottom: 1px solid var(--border-light);">
-                                    <input type="text" id="chat-search" placeholder="Search users..."
+                                    <input type="text" id="chat-search" placeholder="Cari pengguna..."
                                         style="width:100%; padding:0.6rem 1rem; border-radius: var(--r-full); border:1px solid var(--border-light); outline:none; font-family:inherit; font-size: 0.85rem;">
                                 </div>
                                 <div id="chat-contacts-container" style="flex:1; overflow-y:auto; background:white;">
@@ -354,9 +354,9 @@
                                             style="width:36px; height:36px; background:rgba(255,255,255,0.2); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:700;">
                                             U</div>
                                         <div>
-                                            <div id="chat-active-name" style="font-size:0.95rem;">User Name</div>
+                                            <div id="chat-active-name" style="font-size:0.95rem;">Nama Pengguna</div>
                                             <div id="chat-active-role"
-                                                style="font-size:0.7rem; font-weight:normal; opacity:0.8;">Role</div>
+                                                style="font-size:0.7rem; font-weight:normal; opacity:0.8;">Peran</div>
                                         </div>
                                     </div>
                                 </div>
@@ -364,8 +364,7 @@
                                     <!-- Messages -->
                                 </div>
                                 <form class="chat-input-area" id="chat-form">
-                                    <input type="text" id="chat-input" class="chat-input"
-                                        placeholder="Type a message...">
+                                    <input type="text" id="chat-input" class="chat-input" placeholder="Ketik pesan...">
                                     <input type="hidden" id="chat-edit-id" value="">
                                     <button type="submit" class="btn btn-primary" id="chat-submit-btn"
                                         style="padding: 0 1.25rem; border-radius: var(--r-full);"><i
@@ -410,11 +409,11 @@
         <ul class="mobile-nav-list">
             <a href="dashboard.html" class="mobile-nav-item" id="mnav-dashboard">
                 <i class="fas fa-house"></i>
-                Home
+                Beranda
             </a>
             <a href="support.html" class="mobile-nav-item" id="mnav-messages">
                 <i class="fas fa-comments"></i>
-                Messages
+                Pesan
             </a>
             <a href="add-kindness.html" class="mobile-nav-item mobile-fab" id="mnav-add">
                 <i class="fas fa-plus"></i>
@@ -425,7 +424,7 @@
             </a>
             <a href="profile.html" class="mobile-nav-item" id="mnav-profile">
                 <i class="fas fa-user-circle"></i>
-                Profile
+                Profil
             </a>
         </ul>
     </nav>

@@ -14,7 +14,7 @@ import {
     getDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-import { escapeHtml, formatDate, getCategoryEmoji, getCategoryColor, showToast } from './utils.js';
+import { escapeHtml, formatDate, getCategoryColor, getCategoryIcon, showToast } from './utils.js';
 import { logout } from './auth.js';
 
 let currentUser = null;
@@ -59,15 +59,20 @@ async function loadCommunityFeed() {
 
     try {
         const kindnessRef = collection(db, 'kindness');
-        const q = query(kindnessRef, orderBy('timestamp', 'desc'), limit(20));
+        const q = query(
+            kindnessRef,
+            where('isPublic', '==', true),
+            orderBy('timestamp', 'desc'),
+            limit(20)
+        );
         const querySnapshot = await getDocs(q);
 
         if (querySnapshot.empty) {
             feedContainer.innerHTML = `
                 <div style="text-align:center; padding: 4rem 1rem; color: var(--text-muted);">
                     <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                    <h3 style="color: var(--text);">No acts of kindness yet</h3>
-                    <p>Be the first to inspire the community!</p>
+                    <h3 style="color: var(--text);">Belum ada aksi kebaikan</h3>
+                    <p>Jadilah yang pertama menginspirasi komunitas!</p>
                 </div>
             `;
             return;
@@ -96,7 +101,7 @@ async function loadCommunityFeed() {
             } catch (e) { }
 
             const dateStr = formatDate(data.date || data.timestamp);
-            const emoji = getCategoryEmoji(data.category);
+            const icon = getCategoryIcon(data.category);
             const color = getCategoryColor(data.category);
 
             // Fetch Likes count and status
@@ -154,13 +159,13 @@ async function loadCommunityFeed() {
                                 ${escapeHtml(authorName)}
                                 ${authorId !== currentUser.uid ? `
                                     <button class="follow-btn ${isFollowing ? 'following' : ''}" data-author-id="${authorId}" data-follow-id="${followDocId}" style="margin-left: 0.5rem; background: ${isFollowing ? 'var(--bg-2)' : 'var(--primary-soft)'}; color: ${isFollowing ? 'var(--text-muted)' : 'var(--primary)'}; border: none; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem; font-weight: 700; cursor: pointer;">
-                                        ${isFollowing ? 'Following' : 'Follow'}
+                                        ${isFollowing ? 'Diikuti' : 'Ikuti'}
                                     </button>
                                 ` : ''}
                             </div>
                             <!-- Report Button -->
                             ${authorId !== currentUser.uid ? `
-                                <button class="report-btn" data-post-id="${postId}" style="background:none; border:none; color:var(--text-muted); cursor:pointer;" title="Report this post">
+                                <button class="report-btn" data-post-id="${postId}" style="background:none; border:none; color:var(--text-muted); cursor:pointer;" title="Laporkan postingan ini">
                                     <i class="fas fa-flag"></i>
                                 </button>
                             ` : ''}
@@ -168,7 +173,7 @@ async function loadCommunityFeed() {
                         <div class="post-meta">
                             <span><i class="far fa-clock"></i> ${dateStr}</span>
                             •
-                            <span class="badge" style="background:${color}18; color:${color}; font-size:0.7rem;">${emoji} ${data.category}</span>
+                            <span class="badge" style="background:${color}18; color:${color}; font-size:0.7rem;"><i class="fas ${icon}" style="margin-right:3px;"></i> ${data.category}</span>
                         </div>
                     </div>
                 </div>
@@ -182,7 +187,7 @@ async function loadCommunityFeed() {
                             <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i> <span class="like-count">${totalLikes}</span>
                         </div>
                         <div class="action-btn comment-toggle">
-                            <i class="far fa-comment"></i> Applaud
+                            <i class="far fa-comment"></i> Beri Apresiasi
                         </div>
                     </div>
                     ${data.points ? `<div style="font-size: 0.8rem; font-weight: 700; color: var(--primary-dark);"><i class="fas fa-star" style="color:var(--accent);"></i> +${data.points} pts</div>` : ''}
@@ -191,11 +196,11 @@ async function loadCommunityFeed() {
                 <!-- Comments Section -->
                 <div class="comments-section" style="display:none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border-light);">
                     <div class="comments-list" style="max-height: 200px; overflow-y: auto; margin-bottom: 1rem;">
-                        ${commentsHtml || '<div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">No applauds yet. Say something kind!</div>'}
+                        ${commentsHtml || '<div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Belum ada apresiasi. Katakan sesuatu yang baik!</div>'}
                     </div>
                     <div style="display:flex; gap:0.5rem; align-items:center;">
-                        <input type="text" class="form-control comment-input" placeholder="Write a kind comment..." style="padding: 0.5rem 0.8rem; font-size: 0.9rem;">
-                        <button class="btn btn-primary submit-comment-btn" data-post-id="${postId}" style="padding: 0.5rem 1rem;">Post</button>
+                        <input type="text" class="form-control comment-input" placeholder="Tulis komentar baik..." style="padding: 0.5rem 0.8rem; font-size: 0.9rem;">
+                        <button class="btn btn-primary submit-comment-btn" data-post-id="${postId}" style="padding: 0.5rem 1rem;">Kirim</button>
                     </div>
                 </div>
             `;
@@ -210,7 +215,9 @@ async function loadCommunityFeed() {
         feedContainer.innerHTML = `
             <div style="text-align:center; padding: 2rem; color: #ef4444; background: #fef2f2; border-radius: 12px;">
                 <i class="fas fa-exclamation-triangle" style="margin-bottom: 0.5rem; font-size: 1.5rem;"></i>
-                <p>Failed to load community feed. Make sure Firestore rules are updated!</p>
+                <p>Gagal memuat kiriman komunitas.</p>
+                <p style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.8;">Detail Error: ${error.message}</p>
+                <p style="font-size: 0.8rem; margin-top: 0.5rem;">Pastikan aturan dan indeks Firestore telah diperbarui!</p>
             </div>
         `;
     }
@@ -220,11 +227,15 @@ function attachEventListeners() {
     // Like logic
     document.querySelectorAll('.like-btn').forEach(btn => {
         btn.addEventListener('click', async function () {
+            if (this.style.pointerEvents === 'none') return; // Debounce
+
             const postId = this.getAttribute('data-post-id');
             const likeId = this.getAttribute('data-like-id');
             const icon = this.querySelector('i');
             const countSpan = this.querySelector('.like-count');
             let count = parseInt(countSpan.textContent);
+
+            this.style.pointerEvents = 'none'; // Lock button ephemeral
 
             if (this.classList.contains('liked')) {
                 // Unlike
@@ -253,6 +264,7 @@ function attachEventListeners() {
                 });
                 this.setAttribute('data-like-id', likeDoc.id);
             }
+            this.style.pointerEvents = 'auto'; // Unlock after Firestore update
         });
     });
 
@@ -297,7 +309,7 @@ function attachEventListeners() {
                 list.innerHTML += `
                     <div id="comment-${docRef.id}" style="margin-bottom: 0.8rem; padding: 0.5rem; background: var(--bg-1); border-radius: 8px; animation: fadeUp 0.3s forwards; position: relative;">
                         <span style="font-weight:700; font-size: 0.85rem;">${escapeHtml(currentUserName)}</span>
-                        <span style="font-size: 0.85rem; color: var(--text-muted); margin-left: 0.5rem;">Just now</span>
+                        <span style="font-size: 0.85rem; color: var(--text-muted); margin-left: 0.5rem;">Baru saja</span>
                         <button class="delete-comment-btn" data-comment-id="${docRef.id}" style="position:absolute; right:0.5rem; top:0.5rem; background:none; border:none; color:var(--text-muted); cursor:pointer;"><i class="fas fa-trash-alt" style="font-size:0.8rem;"></i></button>
                         <div style="font-size: 0.9rem; margin-top: 0.2rem;">${escapeHtml(text)}</div>
                     </div>
@@ -306,10 +318,10 @@ function attachEventListeners() {
                 list.scrollTop = list.scrollHeight;
             } catch (err) {
                 console.error(err);
-                showToast("Failed to post comment", "error");
+                showToast("Gagal mengirim komentar", "error");
             } finally {
                 this.disabled = false;
-                this.textContent = 'Post';
+                this.textContent = 'Kirim';
             }
         });
     });
@@ -318,7 +330,7 @@ function attachEventListeners() {
     document.querySelectorAll('.report-btn').forEach(btn => {
         btn.addEventListener('click', async function () {
             const postId = this.getAttribute('data-post-id');
-            const confirmReport = confirm("Do you want to report this post to the admins?");
+            const confirmReport = confirm("Apakah Anda ingin melaporkan postingan ini ke admin?");
             if (confirmReport) {
                 try {
                     await addDoc(collection(db, 'reports'), {
@@ -326,10 +338,10 @@ function attachEventListeners() {
                         reporterId: currentUser.uid,
                         timestamp: serverTimestamp()
                     });
-                    showToast("Post reported. Thank you for keeping our community safe!", "success");
-                    this.parentElement.innerHTML = `<span style="font-size:0.75rem; color:var(--text-muted);"><i class="fas fa-flag"></i> Reported</span>`;
+                    showToast("Postingan dilaporkan. Terima kasih telah menjaga keamanan komunitas kami!", "success");
+                    this.parentElement.innerHTML = `<span style="font-size:0.75rem; color:var(--text-muted);"><i class="fas fa-flag"></i> Dilaporkan</span>`;
                 } catch (e) {
-                    showToast("Failed to report", "error");
+                    showToast("Gagal melaporkan", "error");
                 }
             }
         });
@@ -338,13 +350,16 @@ function attachEventListeners() {
     // Follow Logic
     document.querySelectorAll('.follow-btn').forEach(btn => {
         btn.addEventListener('click', async function () {
+            if (this.style.pointerEvents === 'none') return; // Debounce
+            this.style.pointerEvents = 'none';
+
             const authorId = this.getAttribute('data-author-id');
             let followId = this.getAttribute('data-follow-id');
 
             if (this.classList.contains('following')) {
                 // Unfollow
                 this.classList.remove('following');
-                this.textContent = 'Follow';
+                this.textContent = 'Ikuti';
                 this.style.background = 'var(--primary-soft)';
                 this.style.color = 'var(--primary)';
                 this.setAttribute('data-follow-id', '');
@@ -352,11 +367,11 @@ function attachEventListeners() {
                 if (followId && followId !== 'null') {
                     deleteDoc(doc(db, 'follows', followId)).catch(e => console.error(e));
                 }
-                showToast("Unfollowed user.", "success");
+                showToast("Berhenti mengikuti pengguna.", "success");
             } else {
                 // Follow
                 this.classList.add('following');
-                this.textContent = 'Following';
+                this.textContent = 'Diikuti';
                 this.style.background = 'var(--bg-2)';
                 this.style.color = 'var(--text-muted)';
 
@@ -366,8 +381,9 @@ function attachEventListeners() {
                     timestamp: serverTimestamp()
                 });
                 this.setAttribute('data-follow-id', docRef.id);
-                showToast("You are now following this user!", "success");
+                showToast("Anda sekarang mengikuti pengguna ini!", "success");
             }
+            this.style.pointerEvents = 'auto'; // Reset after process
         });
     });
 
@@ -377,7 +393,7 @@ function attachEventListeners() {
             const btn = e.target.closest('.delete-comment-btn');
             if (btn) {
                 const commentId = btn.getAttribute('data-comment-id');
-                const confirmDelete = confirm("Are you sure you want to delete this comment?");
+                const confirmDelete = confirm("Apakah Anda yakin ingin menghapus komentar ini?");
                 if (confirmDelete) {
                     try {
                         const originalHtml = btn.innerHTML;
@@ -389,7 +405,7 @@ function attachEventListeners() {
                         }
                     } catch (err) {
                         console.error(err);
-                        showToast("Failed to delete comment", "error");
+                        showToast("Gagal menghapus komentar", "error");
                         btn.innerHTML = originalHtml;
                     }
                 }

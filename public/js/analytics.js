@@ -52,11 +52,11 @@ function renderCategoryChart(acts) {
 
     // Default categories if empty
     const counts = {
-        'Helping Others': 0,
-        'Charity': 0,
-        'Support': 0,
-        'Volunteering': 0,
-        'Encouragement': 0
+        'Membantu Sesama': 0,
+        'Sedekah': 0,
+        'Dukungan': 0,
+        'Relawan': 0,
+        'Motivasi': 0
     };
 
     // Add real data
@@ -69,7 +69,7 @@ function renderCategoryChart(acts) {
     new Chart(ctx.getContext('2d'), {
         type: 'doughnut',
         data: {
-            labels: Object.keys(counts),
+            labels: ['Membantu Sesama', 'Sedekah', 'Dukungan', 'Relawan', 'Motivasi'],
             datasets: [{
                 data: Object.values(counts),
                 backgroundColor: [
@@ -110,9 +110,9 @@ function renderWeeklyChart(acts) {
     new Chart(ctx.getContext('2d'), {
         type: 'bar',
         data: {
-            labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            labels: ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
             datasets: [{
-                label: 'Acts Logged',
+                label: 'Aksi Dicatat',
                 data: dayCounts,
                 backgroundColor: 'rgba(34, 197, 94, 0.8)',
                 borderRadius: 4

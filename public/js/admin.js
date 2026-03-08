@@ -33,7 +33,7 @@ onAuthStateChanged(auth, async (user) => {
     const userDoc = await getDoc(userDocRef);
 
     if (!userDoc.exists() || userDoc.data().role !== 'admin') {
-        showToast('Unauthorized access. Admin only.', 'error');
+        showToast('Akses tidak diizinkan. Khusus admin.', 'error');
         setTimeout(() => {
             window.location.href = 'dashboard.html';
         }, 1500);
@@ -101,12 +101,12 @@ function setupProfileListener() {
         clearFormErrors(form);
 
         if (!name || name.length < 2) {
-            showFieldError('admin-profile-name', 'Display name must be at least 2 characters.');
+            showFieldError('admin-profile-name', 'Nama tampilan harus minimal 2 karakter.');
             isValid = false;
         }
 
         if (avatarUrl && !avatarUrl.startsWith('http')) {
-            showFieldError('admin-profile-avatar', 'Please enter a valid URL (starting with http/https).');
+            showFieldError('admin-profile-avatar', 'Silakan masukkan URL yang valid (diawali dengan http/https).');
             isValid = false;
         }
 
@@ -116,14 +116,14 @@ function setupProfileListener() {
         }
 
         try {
-            btn.textContent = 'Saving...';
+            btn.textContent = 'Menyimpan...';
             btn.disabled = true;
 
             await updateDoc(doc(db, 'users', currentUser.uid), {
                 name,
                 avatarUrl
             });
-            showToast('Admin Profile updated successfully!', 'success');
+            showToast('Profil Admin berhasil diperbarui!', 'success');
 
             // update UI immediately
             document.getElementById('admin-name').textContent = name || 'Admin';
@@ -135,7 +135,7 @@ function setupProfileListener() {
             }
         } catch (err) {
             console.error(err);
-            showToast('Failed to update profile', 'error');
+            showToast('Gagal memperbarui profil', 'error');
         } finally {
             btn.textContent = originalText;
             btn.disabled = false;
@@ -163,11 +163,11 @@ function switchTab(tabId) {
 
     // Update titles
     const titles = {
-        'users': ['User Management', 'Monitor and manage all KindTrack registered users.'],
-        'community': ['Community Monitoring', 'Browse and moderate public acts of kindness.'],
-        'reports': ['Content Reports', 'Review items flagged by the community.'],
-        'chat': ['Messages', 'Direct communication with KindTrack users.'],
-        'profile': ['Admin Profile', 'Manage your display details and avatar.']
+        'users': ['Manajemen Pengguna', 'Pantau dan kelola semua pengguna terdaftar KindTrack.'],
+        'community': ['Pemantauan Komunitas', 'Jelajahi dan moderasi aksi kebaikan publik.'],
+        'reports': ['Laporan Konten', 'Tinjau item yang ditandai oleh komunitas.'],
+        'chat': ['Pesan', 'Komunikasi langsung dengan pengguna KindTrack.'],
+        'profile': ['Profil Admin', 'Kelola detail tampilan dan avatar Anda.']
     };
     document.getElementById('page-title').textContent = titles[tabId][0];
     document.getElementById('page-subtitle').textContent = titles[tabId][1];
@@ -200,7 +200,7 @@ async function loadUsers(loadMore = false) {
     if (!snapshot.empty) {
         usersLastVisible = snapshot.docs[snapshot.docs.length - 1];
     } else {
-        if (loadMore) showToast("No more users to load", "info");
+        if (loadMore) showToast("Tidak ada lagi pengguna untuk dimuat", "info");
         return;
     }
 
@@ -217,7 +217,7 @@ async function loadUsers(loadMore = false) {
                         ${user.avatarUrl ? `<img src="${user.avatarUrl}" style="width:100%; height:100%; object-fit:cover;">` : (user.name ? user.name[0] : 'U')}
                     </div>
                     <div>
-                        <div style="font-weight:700;">${user.name || 'Incognito User'}</div>
+                        <div style="font-weight:700;">${user.name || 'Pengguna Anonim'}</div>
                         <div style="font-size:0.7rem; color:#64748b;">@${user.username || 'user'}</div>
                     </div>
                 </div>
@@ -230,10 +230,10 @@ async function loadUsers(loadMore = false) {
                     <i class="fas fa-message"></i> Chat
                 </button>
                 ${user.role !== 'admin' ? `
-                    <button class="btn btn-outline" style="padding:0.4rem 0.75rem; font-size:0.75rem; color:var(--primary); border-color:var(--primary-soft);" onclick="window.promoteUser('${id}')">Promote</button>
-                    <button class="btn btn-outline" style="padding:0.4rem 0.75rem; font-size:0.75rem; color:#ef4444; border-color:#fee2e2;" onclick="window.deleteUser('${id}')">Delete</button>
+                    <button class="btn btn-outline" style="padding:0.4rem 0.75rem; font-size:0.75rem; color:var(--primary); border-color:var(--primary-soft);" onclick="window.promoteUser('${id}')">Promosikan</button>
+                    <button class="btn btn-outline" style="padding:0.4rem 0.75rem; font-size:0.75rem; color:#ef4444; border-color:#fee2e2;" onclick="window.deleteUser('${id}')">Hapus</button>
                 ` : `
-                    <button class="btn btn-outline" style="padding:0.4rem 0.75rem; font-size:0.75rem; color:#f59e0b; border-color:#fef3c7;" onclick="window.demoteUser('${id}')">Demote</button>
+                    <button class="btn btn-outline" style="padding:0.4rem 0.75rem; font-size:0.75rem; color:#f59e0b; border-color:#fef3c7;" onclick="window.demoteUser('${id}')">Turunkan</button>
                 `}
             </td>
         `;
@@ -246,7 +246,7 @@ async function loadUsers(loadMore = false) {
         if (!existingBtn) {
             const trBtn = document.createElement('tr');
             trBtn.id = 'load-more-btn-row';
-            trBtn.innerHTML = `<td colspan="5" style="text-align:center; padding: 1rem;"><button id="load-more-users" class="btn btn-outline" style="font-size:0.8rem;">Load More</button></td>`;
+            trBtn.innerHTML = `<td colspan="5" style="text-align:center; padding: 1rem;"><button id="load-more-users" class="btn btn-outline" style="font-size:0.8rem;">Muat Lebih Banyak</button></td>`;
             tbody.appendChild(trBtn);
             document.getElementById('load-more-users').addEventListener('click', () => {
                 document.getElementById('load-more-btn-row').remove();
@@ -262,23 +262,23 @@ window.chatWithUser = (uid) => {
 };
 
 window.promoteUser = async (uid) => {
-    if (confirm('Promote this user to Admin?')) {
+    if (confirm('Promosikan pengguna ini menjadi Admin?')) {
         await updateDoc(doc(db, 'users', uid), { role: 'admin' });
-        showToast('User promoted to admin', 'success');
+        showToast('Pengguna dipromosikan menjadi admin', 'success');
     }
 };
 
 window.demoteUser = async (uid) => {
-    if (confirm('Demote this admin to user?')) {
+    if (confirm('Turunkan admin ini menjadi pengguna biasa?')) {
         await updateDoc(doc(db, 'users', uid), { role: 'user' });
-        showToast('Admin demoted to user', 'success');
+        showToast('Admin diturunkan menjadi pengguna', 'success');
     }
 };
 
 window.deleteUser = async (uid) => {
-    if (confirm('Are you sure you want to delete this user completely?')) {
+    if (confirm('Apakah Anda yakin ingin menghapus pengguna ini sepenuhnya?')) {
         await deleteDoc(doc(db, 'users', uid));
-        showToast('User deleted successfully', 'success');
+        showToast('Pengguna berhasil dihapus', 'success');
     }
 };
 
@@ -292,7 +292,7 @@ function loadReports() {
 
         container.innerHTML = '';
         if (snapshot.empty) {
-            container.innerHTML = '<p style="text-align:center; padding:2rem; color:#64748b;">No pending reports. Community is safe! ✨</p>';
+            container.innerHTML = '<p style="text-align:center; padding:2rem; color:#64748b;">Tidak ada laporan tertunda. Komunitas aman! ✨</p>';
             countBadge.style.display = 'none';
             return;
         }
@@ -306,24 +306,24 @@ function loadReports() {
 
             // Get post details
             const postDoc = await getDoc(doc(db, 'kindness', report.postId));
-            const post = postDoc.exists() ? postDoc.data() : { content: '[Post Deleted]', authorName: 'Unknown' };
+            const post = postDoc.exists() ? postDoc.data() : { content: '[Postingan Dihapus]', authorName: 'Tidak Diketahui' };
 
             const div = document.createElement('div');
             div.className = 'report-card';
             div.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                     <div>
-                        <div style="font-weight:700; color:#ef4444; font-size:0.8rem; margin-bottom:0.5rem;">FLAGGED CONTENT</div>
+                        <div style="font-weight:700; color:#ef4444; font-size:0.8rem; margin-bottom:0.5rem;">KONTEN DITANDAI</div>
                         <p style="font-size:0.95rem; margin-bottom:0.5rem;">" ${post.content} "</p>
                         <div style="display:flex; gap:1rem; font-size:0.75rem; color:#64748b;">
-                            <span>Post Author: <b>${post.authorName || 'User'}</b></span>
-                            <span>Reported by: <b>User ${report.reporterId.substring(0, 5)}</b></span>
-                            <span>Date: ${report.timestamp?.toDate().toLocaleString()}</span>
+                            <span>Penulis: <b>${post.authorName || 'Pengguna'}</b></span>
+                            <span>Dilaporkan oleh: <b>Pengguna ${report.reporterId.substring(0, 5)}</b></span>
+                            <span>Tanggal: ${report.timestamp?.toDate().toLocaleString()}</span>
                         </div>
                     </div>
                     <div style="display:flex; gap:0.5rem;">
-                        <button class="btn btn-primary" style="padding:0.4rem 0.8rem; font-size:0.8rem; background:#22c55e;" onclick="window.dismissReport('${id}')">Keep Post</button>
-                        <button class="btn btn-primary" style="padding:0.4rem 0.8rem; font-size:0.8rem; background:#ef4444;" onclick="window.takedownPost('${report.postId}', '${id}')">Takedown</button>
+                        <button class="btn btn-primary" style="padding:0.4rem 0.8rem; font-size:0.8rem; background:#22c55e;" onclick="window.dismissReport('${id}')">Biarkan</button>
+                        <button class="btn btn-primary" style="padding:0.4rem 0.8rem; font-size:0.8rem; background:#ef4444;" onclick="window.takedownPost('${report.postId}', '${id}')">Hapus</button>
                     </div>
                 </div>
             `;
@@ -334,14 +334,33 @@ function loadReports() {
 
 window.dismissReport = async (rid) => {
     await deleteDoc(doc(db, 'reports', rid));
-    showToast('Report dismissed', 'success');
+    showToast('Laporan diabaikan', 'success');
 };
 
 window.takedownPost = async (pid, rid) => {
-    if (confirm('Are you sure you want to permanently delete this post?')) {
-        await deleteDoc(doc(db, 'kindness', pid));
-        if (rid !== 'bypass') await deleteDoc(doc(db, 'reports', rid));
-        showToast('Post removed successfully', 'success');
+    if (confirm('Apakah Anda yakin ingin menghapus postingan ini secara permanen? Ini juga akan menghapus semua suka dan komentar terkait.')) {
+        try {
+            // 1. Delete associated Likes
+            const likesQ = query(collection(db, 'likes'), where('postId', '==', pid));
+            const likesSnap = await getDocs(likesQ);
+            likesSnap.forEach(l => deleteDoc(doc(db, 'likes', l.id)));
+
+            // 2. Delete associated Comments
+            const commentsQ = query(collection(db, 'comments'), where('postId', '==', pid));
+            const commentsSnap = await getDocs(commentsQ);
+            commentsSnap.forEach(c => deleteDoc(doc(db, 'comments', c.id)));
+
+            // 3. Delete the post itself
+            await deleteDoc(doc(db, 'kindness', pid));
+
+            // 4. Close the report if applicable
+            if (rid && rid !== 'bypass') await deleteDoc(doc(db, 'reports', rid));
+
+            showToast('Postingan dan semua metadata berhasil dihapus.', 'success');
+        } catch (err) {
+            console.error(err);
+            showToast('Kesalahan saat penghapusan bertahap.', 'error');
+        }
     }
 };
 
@@ -358,7 +377,7 @@ function loadCommunity() {
             const id = docSnap.id;
 
             // Try fetch real name if missing
-            let authorName = act.authorName || 'Kind Stranger';
+            let authorName = act.authorName || 'Orang Baik';
             if (act.userId && !act.authorName) {
                 try {
                     const uDoc = await getDoc(doc(db, 'users', act.userId));
@@ -366,7 +385,7 @@ function loadCommunity() {
                 } catch (e) { }
             }
 
-            const title = act.title || 'Untitled Act of Kindness';
+            const title = act.title || 'Aksi Kebaikan Tanpa Judul';
             const desc = act.description || '';
             const contentDisplay = title + (desc ? `<br><span style="color:#64748b; font-size:0.85rem; font-weight:normal;">${desc}</span>` : '');
 
@@ -413,7 +432,7 @@ async function loadChatUsers() {
             </div>
             <div style="flex:1;">
                 <div style="font-weight:600; font-size:0.85rem;">${user.name}</div>
-                <div style="font-size:0.7rem; color:#64748b;">Click to chat</div>
+                <div style="font-size:0.7rem; color:#64748b;">Klik untuk mengobrol</div>
             </div>
         `;
         div.onclick = () => selectChatUser(id);
@@ -439,7 +458,7 @@ async function selectChatUser(uid) {
 
     const userDoc = await getDoc(doc(db, 'users', uid));
     const userData = userDoc.data();
-    document.getElementById('chat-header').textContent = `Chatting with ${userData.name}`;
+    document.getElementById('chat-header').textContent = `Mengobrol dengan ${userData.name}`;
 
     const chatID = [currentUser.uid, uid].sort().join('_');
 
@@ -460,7 +479,7 @@ async function selectChatUser(uid) {
             mDiv.className = `msg ${isMe ? 'msg-admin' : 'msg-user'}`;
             mDiv.style.position = 'relative';
 
-            const editedTag = msg.isEdited ? `<span style="font-size:0.65rem; opacity:0.7; margin-left:5px;">(edited)</span>` : '';
+            const editedTag = msg.isEdited ? `<span style="font-size:0.65rem; opacity:0.7; margin-left:5px;">(diedit)</span>` : '';
             mDiv.innerHTML = `<div>${escapeHtml(msg.text)} ${editedTag}</div>`;
 
             if (isMe) {
@@ -512,17 +531,17 @@ window.enableAdminEdit = (id, currentText) => {
 window.cancelAdminEdit = () => {
     chatEditId = null;
     document.getElementById('chat-input-field').value = '';
-    document.querySelector('#chat-form button[type="submit"]').textContent = 'Send';
+    document.querySelector('#chat-form button[type="submit"]').textContent = 'Kirim';
 };
 
 window.deleteAdminMessage = async (id) => {
-    if (confirm("Delete this message?")) {
+    if (confirm("Hapus pesan ini?")) {
         try {
             await deleteDoc(doc(db, 'chats', id));
-            showToast("Message deleted", "success");
+            showToast("Pesan dihapus", "success");
         } catch (e) {
             console.error(e);
-            showToast("Failed to delete", "error");
+            showToast("Gagal menghapus", "error");
         }
     }
 };
@@ -539,7 +558,7 @@ function setupChatListeners() {
                 text,
                 isEdited: true
             });
-            showToast("Message edited", "success");
+            showToast("Pesan diedit", "success");
             window.cancelAdminEdit();
             return;
         }

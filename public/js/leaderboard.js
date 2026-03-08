@@ -4,7 +4,9 @@ import {
     collection,
     query,
     where,
-    getDocs
+    getDocs,
+    orderBy,
+    limit
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 import { logout } from './auth.js';
@@ -31,41 +33,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadLeaderboard(currentUser) {
     try {
-        // Fetch current user acts to calculate their true score
-        const kindnessRef = collection(db, 'kindness');
-        const q = query(kindnessRef, where('userId', '==', currentUser.uid));
+        const usersRef = collection(db, 'users');
+        const q = query(usersRef, orderBy('totalPoints', 'desc'), limit(50));
         const querySnapshot = await getDocs(q);
 
-        let userScore = 0;
-        querySnapshot.forEach(doc => {
-            const data = doc.data();
-            userScore += (data.points || 0);
+        let leaderboardData = [];
+        let currentUserFound = false;
+
+        querySnapshot.forEach(docSnap => {
+            const data = docSnap.data();
+            const id = docSnap.id;
+            const isMe = id === currentUser.uid;
+            if (isMe) currentUserFound = true;
+
+            leaderboardData.push({
+                name: data.name || data.username || "Kind Stranger",
+                score: data.totalPoints || 0,
+                id: id,
+                isCurrentUser: isMe
+            });
         });
 
-        // Generate leaderboard data - currently just the logged in user
-        const currentUserName = currentUser.displayName || currentUser.email.split('@')[0] || "You";
-        const currentUserEntry = {
-            name: currentUserName,
-            score: userScore,
-            id: currentUser.uid,
-            isCurrentUser: true
-        };
-
-        const leaderboardData = [currentUserEntry].sort((a, b) => b.score - a.score);
+        // Ensure current user is shown if not in top 50
+        if (!currentUserFound) {
+            const myRef = query(usersRef, where('id', '==', currentUser.uid)); // uid search
+            // Actually querying by doc ID is better: doc(db, 'users', uid)
+            const myDoc = await getDocs(query(usersRef, where('__name__', '==', currentUser.uid)));
+            if (!myDoc.empty) {
+                const d = myDoc.docs[0].data();
+                leaderboardData.push({
+                    name: d.name || "Anda",
+                    score: d.totalPoints || 0,
+                    id: currentUser.uid,
+                    isCurrentUser: true,
+                    rank: "Belum Teranking"
+                });
+            }
+        }
 
         const listContainer = document.getElementById('leaderboard-list');
         listContainer.innerHTML = '';
 
         leaderboardData.forEach((player, index) => {
-            const rank = index + 1;
-            const rankClass = rank <= 3 ? `rank-${rank}` : '';
-            const highlightClass = player.isCurrentUser ? 'highlight' : '';
+            const isMe = player.isCurrentUser;
+            const rank = player.rank || (index + 1);
+            const rankClass = (typeof rank === 'number' && rank <= 3) ? `rank-${rank}` : '';
+            const highlightClass = isMe ? 'highlight' : '';
 
             const item = document.createElement('div');
             item.className = `leaderboard-item ${rankClass} ${highlightClass}`;
 
-            // Generate icon
-            let iconText = `#${rank}`;
+            let iconText = (typeof rank === 'number') ? `#${rank}` : rank;
             if (rank === 1) iconText = '<i class="fas fa-crown"></i>';
             else if (rank === 2) iconText = '<i class="fas fa-medal"></i>';
             else if (rank === 3) iconText = '<i class="fas fa-award"></i>';
@@ -74,14 +92,13 @@ async function loadLeaderboard(currentUser) {
                 <div class="rank-number">${iconText}</div>
                 <div class="leader-avatar">${player.name.charAt(0).toUpperCase()}</div>
                 <div class="leader-info">
-                    <div class="leader-name">${player.name}</div>
+                    <div class="leader-name">${player.name} ${isMe ? '<small>(Anda)</small>' : ''}</div>
                     <div class="leader-score-wrapper">
                         <i class="fas fa-star" style="color:var(--accent);"></i>
-                        <span class="leader-score">${player.score}</span> pts
+                        <span class="leader-score">${player.score}</span> poin
                     </div>
                 </div>
             `;
-
             listContainer.appendChild(item);
         });
 
@@ -89,7 +106,7 @@ async function loadLeaderboard(currentUser) {
         console.error("Error loading leaderboard:", error);
         document.getElementById('leaderboard-list').innerHTML = `
             <div style="padding: 2rem; text-align: center; color: var(--text-muted);">
-                Failed to load leaderboard. Please try again later.
+                Gagal memuat papan peringkat. Silakan coba lagi nanti.
             </div>
         `;
     }

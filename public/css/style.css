@@ -410,6 +410,62 @@ textarea {
     display: block;
 }
 
+/* ─── Toggle Switch ────────────────────────────────────────── */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e1;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: var(--primary);
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px var(--primary);
+}
+
+input:checked+.slider:before {
+    transform: translateX(24px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
 /* ─── Animations ─────────────────────────────────────────── */
 @keyframes fadeUp {
     from {
@@ -1375,16 +1431,29 @@ textarea {
 }
 
 .app-body {
-    padding: 2rem;
+    padding: 1.5rem 2rem;
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 80px);
+    /* Adjust based on header height */
+    overflow: hidden;
+}
+
+@media (max-width: 1200px) {
+    .app-body {
+        height: auto;
+        overflow: visible;
+    }
 }
 
 /* ─── Dashboard Components ───────────────────────────────── */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.25rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    flex-shrink: 0;
 }
 
 .stat-card {
@@ -1450,18 +1519,54 @@ textarea {
     color: #ef4444;
 }
 
+/* Dashbord Grid Refined for No-Scroll */
 .content-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1.8fr 1fr;
     gap: 1.5rem;
+    flex: 1;
+    min-height: 0;
+    /* Important for flex-child scrolling */
+}
+
+@media (max-width: 1200px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+}
+
+.dashboard-left-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-height: 0;
+}
+
+.dashboard-right-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.analytics-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.25rem;
+    flex-shrink: 0;
 }
 
 .content-card {
     background: var(--white);
     border: 1px solid var(--border-light);
     border-radius: var(--r-xl);
-    padding: 1.5rem;
+    padding: 1.25rem;
     box-shadow: var(--shadow-xs);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 .card-header {
@@ -1488,6 +1593,17 @@ textarea {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.activity-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.activity-list::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 10px;
 }
 
 .activity-item {
@@ -1535,54 +1651,115 @@ textarea {
     margin-top: 0.1rem;
 }
 
-/* AI Card */
+/* Futuristic AI Card */
 .ai-card {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
     color: white;
-    border: none;
+    border: 1px solid rgba(99, 102, 241, 0.2) !important;
+    box-shadow: 0 10px 30px -10px rgba(79, 70, 229, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.ai-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+    animation: pulseGlow 8s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    from {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0.6;
+        transform: scale(1.1);
+    }
 }
 
 .ai-card .card-title {
-    color: white;
+    color: #e0e7ff;
+    font-family: 'Mulish', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.75rem;
 }
 
 .ai-icon {
-    width: 36px;
-    height: 36px;
-    background: rgba(34, 197, 94, 0.2);
-    border-radius: var(--r-md);
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--primary);
-    font-size: 1rem;
+    color: white;
+    font-size: 1.1rem;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+    animation: floatIcon 3s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
 }
 
 .ai-text {
-    font-size: 0.9rem;
-    line-height: 1.65;
-    color: rgba(255, 255, 255, 0.7);
-    margin: 1rem 0 1.25rem;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #cbd5e1;
+    margin: 1.25rem 0;
+    font-weight: 500;
+    min-height: 80px;
+    position: relative;
+    z-index: 1;
+}
+
+.ai-text-loading {
+    color: rgba(255, 255, 255, 0.3);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.1) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
 }
 
 .ai-refresh-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: white;
-    border-radius: var(--r-full);
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #a5b4fc;
+    border-radius: 10px;
     font-size: 0.8rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s;
-    font-family: var(--font-body);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
 }
 
 .ai-refresh-btn:hover {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(99, 102, 241, 0.15);
+    color: white;
+    border-color: rgba(99, 102, 241, 0.4);
+    transform: translateY(-2px);
 }
 
 /* Daily Idea */
@@ -1599,6 +1776,31 @@ textarea {
     font-weight: 600;
     color: var(--primary-dark);
     line-height: 1.6;
+}
+
+/* Mayar Card */
+.mayar-card {
+    background: linear-gradient(135deg, var(--primary-soft) 0%, #ffffff 100%);
+    border: 1px solid var(--primary-soft);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s var(--ease);
+}
+
+.mayar-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(34, 197, 94, 0.1);
+    border-color: var(--primary);
+}
+
+.mayar-bg-icon {
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+    font-size: 5rem;
+    color: rgba(34, 197, 94, 0.08);
+    transform: rotate(-15deg);
+    z-index: 0;
 }
 
 /* Heatmap */
@@ -2200,4 +2402,61 @@ textarea {
 .modal-footer .btn {
     flex: 1;
     justify-content: center;
+}
+
+/* ─── Add Kindness Grid Layout ───────────────────────────── */
+.add-kindness-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.add-kindness-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+@media (min-width: 992px) {
+    .add-kindness-grid {
+        grid-template-columns: 1fr 1.25fr;
+        gap: 4rem;
+    }
+
+    .grid-left {
+        position: sticky;
+        top: 2rem;
+    }
+
+    .left-panel-content {
+        padding-right: 1rem;
+    }
+}
+
+.left-panel-content h2 {
+    font-size: 1.75rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+
+.left-panel-content p.subtitle {
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+    font-size: 0.95rem;
+}
+
+.right-panel .form-card {
+    margin-top: 0;
+    max-width: 100%;
+}
+
+.photo-upload-container {
+    transition: all 0.3s var(--ease);
+    background: var(--bg);
+}
+
+.photo-upload-container:hover {
+    border-color: var(--primary) !important;
+    background: var(--primary-soft);
 }

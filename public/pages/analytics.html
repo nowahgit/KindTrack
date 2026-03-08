@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analytics | KindTrack</title>
+    <title>Analisis | KindTrack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
@@ -46,28 +46,28 @@
                     style="height: 35px; width: auto; object-fit: contain;">
             </a>
             <nav class="sidebar-nav">
-                <p class="sidebar-section-label">Main</p>
+                <p class="sidebar-section-label">Utama</p>
                 <a href="dashboard.html" class="sidebar-item">
                     <i class="fas fa-house"></i> Dashboard
                 </a>
                 <a href="activity.html" class="sidebar-item">
-                    <i class="fas fa-list-check"></i> My Activities
+                    <i class="fas fa-list-check"></i> Aktivitas Saya
                 </a>
                 <a href="community.html" class="sidebar-item">
-                    <i class="fas fa-users"></i> Community Feed
+                    <i class="fas fa-users"></i> Beranda Komunitas
                 </a>
                 <a href="add-kindness.html" class="sidebar-item">
-                    <i class="fas fa-plus-circle"></i> Log Kindness
+                    <i class="fas fa-plus-circle"></i> Catat Kebaikan
                 </a>
-                <p class="sidebar-section-label" style="margin-top:1.5rem;">Insights</p>
+                <p class="sidebar-section-label" style="margin-top:1.5rem;">Wawasan</p>
                 <a href="analytics.html" class="sidebar-item active">
-                    <i class="fas fa-chart-line"></i> Analytics
+                    <i class="fas fa-chart-line"></i> Analisis
                 </a>
                 <a href="milestones.html" class="sidebar-item">
-                    <i class="fas fa-trophy"></i> Milestones
+                    <i class="fas fa-trophy"></i> Pencapaian
                 </a>
                 <a href="leaderboard.html" class="sidebar-item">
-                    <i class="fas fa-medal"></i> Leaderboard
+                    <i class="fas fa-medal"></i> Papan Peringkat
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -78,15 +78,15 @@
                         onmouseout="this.style.background='transparent'">
                         <div class="sidebar-avatar" id="sidebar-avatar">U</div>
                         <div class="sidebar-user-info">
-                            <div class="sidebar-user-name" id="sidebar-user-name">Loading...</div>
+                            <div class="sidebar-user-name" id="sidebar-user-name">Memuat...</div>
                             <div class="sidebar-user-role"
-                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profile <i
+                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profil <i
                                     class="fas fa-angle-right"></i></div>
                         </div>
                     </div>
                 </a>
                 <button class="sidebar-item" id="logout-btn" style="color:#ef4444;">
-                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Sign Out
+                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Keluar
                 </button>
             </div>
         </aside>
@@ -97,32 +97,33 @@
                 <div class="flex items-center gap-2">
                     <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
                     <div>
-                        <h1>Analytics</h1>
-                        <p>Deep dive into your kindness impact.</p>
+                        <h1>Analisis</h1>
+                        <p>Telusuri lebih dalam dampak kebaikan Anda.</p>
                     </div>
                 </div>
                 <a href="add-kindness.html" class="btn btn-primary" style="padding:0.6rem 1.25rem;font-size:0.875rem;">
-                    <i class="fas fa-plus"></i> Increase Impact
+                    <i class="fas fa-plus"></i> Tingkatkan Dampak
                 </a>
             </header>
 
             <div class="app-body">
                 <div class="content-card mb-4"
                     style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border: none;">
-                    <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem;"><i class="fas fa-sparkles"></i> You're making
-                        a difference!</h2>
-                    <p style="opacity: 0.9;">Based on your recent activities, you are most active on Weekends!</p>
+                    <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem;"><i class="fas fa-sparkles"></i> Anda membuat
+                        perubahan!</h2>
+                    <p style="opacity: 0.9;">Berdasarkan aktivitas terbaru Anda, Anda paling aktif di Akhir Pekan!</p>
                 </div>
 
                 <div class="analytics-grid">
                     <div class="chart-container">
-                        <h3 style="font-size: 1rem; color: var(--text); margin-bottom: 1rem;">Acts by Category</h3>
+                        <h3 style="font-size: 1rem; color: var(--text); margin-bottom: 1rem;">Aksi berdasarkan Kategori
+                        </h3>
                         <div style="position: relative; height: 250px; width: 100%;">
                             <canvas id="categoryChart"></canvas>
                         </div>
                     </div>
                     <div class="chart-container">
-                        <h3 style="font-size: 1rem; color: var(--text); margin-bottom: 1rem;">Weekly Activity Pattern
+                        <h3 style="font-size: 1rem; color: var(--text); margin-bottom: 1rem;">Pola Aktivitas Mingguan
                         </h3>
                         <div style="position: relative; height: 250px; width: 100%;">
                             <canvas id="weeklyChart"></canvas>
@@ -158,11 +159,11 @@
         <ul class="mobile-nav-list">
             <a href="dashboard.html" class="mobile-nav-item" id="mnav-dashboard">
                 <i class="fas fa-house"></i>
-                Home
+                Beranda
             </a>
             <a href="support.html" class="mobile-nav-item" id="mnav-messages">
                 <i class="fas fa-comments"></i>
-                Messages
+                Pesan
             </a>
             <a href="add-kindness.html" class="mobile-nav-item mobile-fab" id="mnav-add">
                 <i class="fas fa-plus"></i>
@@ -173,7 +174,7 @@
             </a>
             <a href="profile.html" class="mobile-nav-item" id="mnav-profile">
                 <i class="fas fa-user-circle"></i>
-                Profile
+                Profil
             </a>
         </ul>
     </nav>

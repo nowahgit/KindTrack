@@ -6,7 +6,11 @@ import {
     serverTimestamp,
     query,
     where,
-    getDocs
+    getDocs,
+    updateDoc,
+    doc,
+    increment,
+    setDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Common Utils
@@ -57,6 +61,26 @@ document.addEventListener('DOMContentLoaded', () => {
         dateInput.value = new Date().toISOString().split('T')[0];
     }
 
+    // Photo Preview
+    const photoInput = document.getElementById('kindness-photo');
+    const photoPreviewText = document.getElementById('photo-preview-text');
+    if (photoInput && photoPreviewText) {
+        photoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    // Update only the preview text area, NOT the parent which contains the input
+                    photoPreviewText.innerHTML = `
+                        <img src="${event.target.result}" style="max-height: 150px; border-radius: 8px; margin-bottom: 0.5rem; display: block; margin: 0 auto;">
+                        <p style="font-size:0.75rem; color:var(--primary); margin:0; font-weight:600;">Foto terpilih: ${file.name}</p>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
     // Character counter & Description warning
     const descInput = document.getElementById('kindness-desc');
     const descCounter = document.getElementById('desc-counter');
@@ -75,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
     // Form Submit
     const kindnessForm = document.getElementById('add-kindness-form');
     if (kindnessForm) {
@@ -83,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const user = auth.currentUser;
             if (!user) {
-                showAlert('add-kindness-form', 'Please sign in first.');
+                showAlert('add-kindness-form', 'Silakan masuk terlebih dahulu.');
                 window.location.href = 'login.html';
                 return;
             }
@@ -94,13 +119,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const description = document.getElementById('kindness-desc').value.trim();
             const date = document.getElementById('kindness-date').value;
             const photoInput = document.getElementById('kindness-photo');
+            const isPublic = document.getElementById('kindness-public')?.checked ?? true;
 
             // Specific Validation
             let isValid = true;
             clearFormErrors(kindnessForm);
 
-            if (!title) {
-                showFieldError('kindness-title', 'Please enter what you did.');
+            if (!title || title.length < 3) {
+                showFieldError('kindness-title', 'Judul minimal 3 karakter.');
                 isValid = false;
             }
             if (!category) {
@@ -108,12 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (feedback) feedback.style.display = 'block';
                 isValid = false;
             }
-            if (description && description.length < 20) {
-                showFieldError('kindness-desc', 'Description must be at least 20 characters.');
+            if (description && description.trim().length < 20) {
+                showFieldError('kindness-desc', 'Deskripsi minimal harus 20 karakter nyata.');
                 isValid = false;
             }
             if (!date) {
-                showFieldError('kindness-date', 'Please select a date.');
+                showFieldError('kindness-date', 'Harap pilih tanggal.');
                 isValid = false;
             }
 
@@ -123,28 +149,34 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const submitBtn = document.getElementById('submit-btn');
+            // FIX: Prevent double submission
+            if (submitBtn.disabled) return;
+
             const originalText = submitBtn.innerHTML;
 
             try {
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking limit...';
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
 
-                // ─── Rate Limiting (Max 5 points awarded per day) ───
+                // ─── Rate Limiting (Server side should be in rules, but client checks first) ───
                 const todayStr = new Date().toISOString().split('T')[0];
-                const q = query(collection(db, 'kindness'), where('userId', '==', user.uid), where('date', '==', todayStr));
+                const q = query(collection(db, 'kindness'),
+                    where('userId', '==', user.uid),
+                    where('date', '==', todayStr));
                 const snapshot = await getDocs(q);
 
                 let actsTodayCount = snapshot.size;
                 let pointsEarned = 0;
 
                 if (actsTodayCount >= 5) {
-                    showToast('Max points reached today, but your act is still logged ❤️', 'info');
+                    showToast('Batas poin harian tercapai, tapi aksi Anda tetap dicatat.', 'info');
                 } else {
                     pointsEarned = 10; // Base points
                     if (description.length >= 20) pointsEarned += 5; // Good description bonus
                 }
 
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
 
                 // ─── Photo Upload (Base64 Alternative) ───
                 let photoUrl = null;
@@ -152,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const file = photoInput.files[0];
                     if (actsTodayCount < 5) pointsEarned += 20; // Social proof bonus
 
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing photo...';
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses foto...';
 
                     // Convert to compressed Base64 using Canvas to avoid Storage pricing plan issues
                     photoUrl = await new Promise((resolve, reject) => {
@@ -163,8 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             img.src = event.target.result;
                             img.onload = () => {
                                 const canvas = document.createElement('canvas');
-                                const MAX_WIDTH = 600;
-                                const MAX_HEIGHT = 600;
+                                const MAX_WIDTH = 500;
+                                const MAX_HEIGHT = 500;
                                 let width = img.width;
                                 let height = img.height;
 
@@ -194,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 // ─── Save Document ───
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Committing...';
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
 
                 await addDoc(collection(db, 'kindness'), {
                     userId: user.uid,
@@ -205,18 +237,34 @@ document.addEventListener('DOMContentLoaded', () => {
                     date,
                     photoUrl: photoUrl,
                     points: pointsEarned,
+                    isPublic: isPublic,
                     timestamp: serverTimestamp()
                 });
 
+                // Update User Total Points for Global Leaderboard
                 if (pointsEarned > 0) {
-                    showToast(`Act logged! You earned ${pointsEarned} points.`, 'success');
+                    const userRef = doc(db, 'users', user.uid);
+                    await setDoc(userRef, {
+                        totalPoints: increment(pointsEarned),
+                        lastActivityDate: date
+                    }, { merge: true });
+                }
+
+                if (pointsEarned > 0) {
+                    showToast(`Aksi kebaikan dicatat! Anda mendapatkan ${pointsEarned} poin.`, 'success');
                 } else {
-                    showToast('Act logged! No points awarded due to daily limit.', 'success');
+                    showToast('Aktivitas disimpan! Tidak ada poin tambahan hari ini.', 'success');
                 }
 
                 kindnessForm.reset();
                 if (descCounter) descCounter.textContent = '0/500';
                 if (dateInput) dateInput.value = todayStr;
+                if (photoPreviewText) {
+                    photoPreviewText.innerHTML = `
+                        <i class="fas fa-camera" style="font-size: 1.5rem; color: var(--text-light); margin-bottom: 0.5rem;"></i>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Klik atau seret foto ke sini</p>
+                    `;
+                }
 
                 setTimeout(() => {
                     window.location.href = 'dashboard.html';
@@ -224,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             } catch (error) {
                 console.error('[Save Error]', error);
-                showAlert('add-kindness-form', 'Failed to save data. Please check your connection.');
+                showAlert('add-kindness-form', 'Gagal menyimpan data. Periksa koneksi Anda.');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalText;

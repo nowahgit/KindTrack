@@ -25,29 +25,29 @@
             </a>
 
             <nav class="sidebar-nav">
-                <p class="sidebar-section-label">Main</p>
+                <p class="sidebar-section-label">Utama</p>
                 <a href="dashboard.html" class="sidebar-item active">
                     <i class="fas fa-house"></i> Dashboard
                 </a>
                 <a href="activity.html" class="sidebar-item">
-                    <i class="fas fa-list-check"></i> My Activities
+                    <i class="fas fa-list-check"></i> Aktivitas Saya
                 </a>
                 <a href="community.html" class="sidebar-item">
-                    <i class="fas fa-users"></i> Community Feed
+                    <i class="fas fa-users"></i> Beranda Komunitas
                 </a>
                 <a href="add-kindness.html" class="sidebar-item">
-                    <i class="fas fa-plus-circle"></i> Log Kindness
+                    <i class="fas fa-plus-circle"></i> Catat Kebaikan
                 </a>
 
-                <p class="sidebar-section-label" style="margin-top:1.5rem;">Insights</p>
+                <p class="sidebar-section-label" style="margin-top:1.5rem;">Wawasan</p>
                 <a href="analytics.html" class="sidebar-item">
-                    <i class="fas fa-chart-line"></i> Analytics
+                    <i class="fas fa-chart-line"></i> Analisis
                 </a>
                 <a href="milestones.html" class="sidebar-item">
-                    <i class="fas fa-trophy"></i> Milestones
+                    <i class="fas fa-trophy"></i> Pencapaian
                 </a>
                 <a href="leaderboard.html" class="sidebar-item">
-                    <i class="fas fa-medal"></i> Leaderboard
+                    <i class="fas fa-medal"></i> Papan Peringkat
                 </a>
             </nav>
 
@@ -59,15 +59,15 @@
                         onmouseout="this.style.background='transparent'">
                         <div class="sidebar-avatar" id="sidebar-avatar">U</div>
                         <div class="sidebar-user-info">
-                            <div class="sidebar-user-name" id="sidebar-user-name">Loading...</div>
+                            <div class="sidebar-user-name" id="sidebar-user-name">Memuat...</div>
                             <div class="sidebar-user-role"
-                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profile <i
+                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profil <i
                                     class="fas fa-angle-right"></i></div>
                         </div>
                     </div>
                 </a>
                 <button class="sidebar-item" id="logout-btn" style="color:#ef4444;">
-                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Sign Out
+                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Keluar
                 </button>
             </div>
         </aside>
@@ -82,12 +82,12 @@
                         <span></span><span></span><span></span>
                     </button>
                     <div>
-                        <h1>Hello, <span id="user-name" style="color:var(--primary);">there</span> 👋</h1>
+                        <h1>Halo, <span id="user-name" style="color:var(--primary);">di sana</span> 👋</h1>
                         <p id="current-date"></p>
                     </div>
                 </div>
                 <a href="add-kindness.html" class="btn btn-primary" style="padding:0.6rem 1.25rem;font-size:0.875rem;">
-                    <i class="fas fa-plus"></i> Log Kindness
+                    <i class="fas fa-plus"></i> Catat Kebaikan
                 </a>
             </header>
 
@@ -100,9 +100,9 @@
                         <div class="stat-icon" style="background:var(--primary-soft);color:var(--primary);">
                             <i class="fas fa-heart"></i>
                         </div>
-                        <div class="stat-label">Total Acts</div>
+                        <div class="stat-label">Total Aksi</div>
                         <div class="stat-value" id="stat-total">—</div>
-                        <div class="stat-trend trend-up"><i class="fas fa-arrow-trend-up"></i> All time</div>
+                        <div class="stat-trend trend-up"><i class="fas fa-arrow-trend-up"></i> Semua waktu</div>
                     </div>
                     <div class="stat-card animate-fade-up stagger-2">
                         <div class="stat-icon" style="background:#fef3c7;color:#d97706;">
@@ -110,116 +110,117 @@
                         </div>
                         <div class="stat-label">Streak</div>
                         <div class="stat-value" id="stat-streak">—</div>
-                        <div class="stat-trend"><i class="fas fa-calendar-check"></i> Keep it up!</div>
+                        <div class="stat-trend"><i class="fas fa-calendar-check"></i> Pertahankan!</div>
                     </div>
                     <div class="stat-card animate-fade-up stagger-3">
                         <div class="stat-icon" style="background:#dbeafe;color:#2563eb;">
                             <i class="fas fa-users"></i>
                         </div>
-                        <div class="stat-label">People Impacted</div>
+                        <div class="stat-label">Dampak Sosial</div>
                         <div class="stat-value" id="stat-impact">—</div>
-                        <div class="stat-trend trend-up"><i class="fas fa-arrow-trend-up"></i> Estimated</div>
+                        <div class="stat-trend trend-up"><i class="fas fa-arrow-trend-up"></i> Estimasi</div>
                     </div>
                     <div class="stat-card animate-fade-up stagger-4">
                         <div class="stat-icon" style="background:#ede9fe;color:#7c3aed;">
                             <i class="fas fa-star"></i>
                         </div>
-                        <div class="stat-label">Kindness Score</div>
+                        <div class="stat-label">Skor Kebaikan</div>
                         <div class="stat-value" id="stat-score">—</div>
                         <div class="stat-trend trend-up"><i class="fas fa-arrow-trend-up"></i> Top 5%</div>
                     </div>
                 </div>
 
-                <!-- Main Grid -->
+                <!-- Main Grid Refined -->
                 <div class="content-grid">
 
-                    <!-- Left Column -->
-                    <div style="display:flex;flex-direction:column;gap:1.5rem;">
-
-                        <!-- Chart -->
-                        <div class="content-card">
-                            <div class="card-header">
-                                <div>
-                                    <div class="card-title">Kindness Over Time</div>
-                                    <div class="card-subtitle">Your monthly acts of kindness</div>
+                    <!-- Left Column: Analytics & Vitality -->
+                    <div class="dashboard-left-col">
+                        <div class="analytics-row">
+                            <!-- Chart -->
+                            <div class="content-card">
+                                <div class="card-header" style="margin-bottom:0.75rem;">
+                                    <div class="card-title">Kebaikan Seiring Waktu</div>
+                                    <span class="badge badge-green" style="font-size:0.6rem;">LIVE</span>
                                 </div>
-                                <span class="badge badge-green"><i class="fas fa-circle" style="font-size:0.5rem;"></i>
-                                    Live data</span>
-                            </div>
-                            <div style="position: relative; height: 250px; width: 100%;">
-                                <canvas id="impactChart"></canvas>
-                            </div>
-                        </div>
-
-                        <!-- Heatmap -->
-                        <div class="content-card">
-                            <div class="card-header">
-                                <div>
-                                    <div class="card-title">Activity Heatmap</div>
-                                    <div class="card-subtitle">Last 90 days</div>
+                                <div style="position: relative; flex: 1; min-height: 180px;">
+                                    <canvas id="impactChart"></canvas>
                                 </div>
+                            </div>
+
+                            <!-- Heatmap -->
+                            <div class="content-card">
+                                <div class="card-header" style="margin-bottom:1rem;">
+                                    <div class="card-title">Heatmap Aktivitas</div>
+                                </div>
+                                <div id="kindness-heatmap" class="heatmap" style="justify-content:center;"></div>
                                 <div
-                                    style="display:flex;align-items:center;gap:0.4rem;font-size:0.72rem;color:var(--text-muted);">
-                                    <span>Less</span>
-                                    <div style="width:10px;height:10px;border-radius:2px;background:#e2e8f0;"></div>
-                                    <div style="width:10px;height:10px;border-radius:2px;background:#86efac;"></div>
-                                    <div style="width:10px;height:10px;border-radius:2px;background:#22c55e;"></div>
-                                    <div style="width:10px;height:10px;border-radius:2px;background:#15803d;"></div>
-                                    <span>More</span>
+                                    style="margin-top:auto; font-size: 0.7rem; color: var(--text-muted); text-align: center; padding-top: 1rem;">
+                                    Aktivitas 90 hari terakhir
                                 </div>
                             </div>
-                            <div id="kindness-heatmap" class="heatmap"></div>
                         </div>
 
+                        <!-- Recent Activity (Full Width of Left Col) -->
+                        <div class="content-card" style="flex: 1;">
+                            <div class="card-header">
+                                <div class="card-title">Aksi Terbaru</div>
+                                <a href="activity.html"
+                                    style="font-size:0.8rem;color:var(--primary);font-weight:600;">Lihat Semua →</a>
+                            </div>
+                            <div class="activity-list" id="recent-activities">
+                                <p style="font-size:0.85rem;color:var(--text-muted);text-align:center;padding:2rem 0;">
+                                    Belum ada aktivitas. Mulailah menebar kebaikan!</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Right Column -->
-                    <div style="display:flex;flex-direction:column;gap:1.5rem;">
-
+                    <!-- Right Column: AI & Community Insights -->
+                    <div class="dashboard-right-col">
                         <!-- AI Card -->
                         <div class="content-card ai-card">
                             <div class="card-header" style="margin-bottom:0;">
-                                <div class="card-title" style="color:white;">
-                                    <i class="fas fa-wand-magic-sparkles"
-                                        style="color:var(--primary);margin-right:0.4rem;"></i>
-                                    AI Reflection
-                                </div>
+                                <div class="card-title" style="color:white; font-size: 0.75rem;">REFLEKSI NEURAL</div>
                                 <div class="ai-icon"><i class="fas fa-brain"></i></div>
                             </div>
-                            <p class="ai-text" id="ai-reflection-text">
-                                Start logging your acts of kindness to see personalized AI insights about your impact!
+                            <p class="ai-text" id="ai-reflection-text"
+                                style="font-size:0.88rem; margin: 1rem 0; line-height: 1.6;">
+                                Menginisialisasi sistem refleksi Anda...
                             </p>
                             <button class="ai-refresh-btn" id="refresh-ai">
-                                <i class="fas fa-rotate-right"></i> Refresh
+                                <i class="fas fa-rotate-right"></i> Perbarui Analisis
                             </button>
                         </div>
 
                         <!-- Daily Idea -->
                         <div class="content-card">
                             <div class="card-header">
-                                <div class="card-title">💡 Idea of the Day</div>
-                                <span class="badge badge-yellow">Daily</span>
+                                <div class="card-title">💡 Ide Hari Ini</div>
                             </div>
                             <div class="daily-idea-card">
-                                <p id="daily-idea-text">Loading your daily inspiration...</p>
+                                <p id="daily-idea-text" style="font-size: 0.9rem;">Memuat inspirasi harian...</p>
                             </div>
                         </div>
 
-                        <!-- Recent Activity -->
-                        <div class="content-card">
-                            <div class="card-header">
-                                <div class="card-title">Recent Acts</div>
-                                <a href="activity.html"
-                                    style="font-size:0.8rem;color:var(--primary);font-weight:600;">View all →</a>
+                        <!-- Mayar Support Card -->
+                        <div class="content-card mayar-card">
+                            <i class="fas fa-hand-holding-heart mayar-bg-icon"></i>
+                            <div class="card-header" style="position:relative; z-index:1;">
+                                <div class="card-title" style="color:var(--primary-dark);">Misi Kemanusiaan</div>
+                                <span class="badge"
+                                    style="background:var(--primary-soft); color:var(--primary-dark); font-size:0.65rem;">DARURAT</span>
                             </div>
-                            <div class="activity-list" id="recent-activities">
-                                <p
-                                    style="font-size:0.85rem;color:var(--text-muted);text-align:center;padding:1.5rem 0;">
-                                    No activities yet. Start spreading kindness!</p>
-                            </div>
+                            <p
+                                style="font-size:0.82rem; color:var(--text-muted); margin: 0.5rem 0 1rem; position:relative; z-index:1;">
+                                Salurkan bantuan ke panti asuhan & dana bencana.
+                            </p>
+                            <a href="https://suka-kreatif-digital.myr.id/pl/kindtrackdonation" target="_blank"
+                                class="btn btn-primary"
+                                style="width:100%; justify-content:center; border-radius:12px; font-size:0.85rem; position:relative; z-index:1;">
+                                Donasi Sekarang
+                            </a>
                         </div>
-
                     </div>
+
                 </div>
             </div>
         </div>
@@ -244,7 +245,7 @@
 
         // Current date
         document.getElementById('current-date').textContent =
-            new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     </script>
 
     <script type="module" src="../js/dashboard.js"></script>
@@ -255,7 +256,7 @@
         <ul class="mobile-nav-list">
             <a href="dashboard.html" class="mobile-nav-item" id="mnav-dashboard">
                 <i class="fas fa-house"></i>
-                Home
+                Beranda
             </a>
             <a href="community.html" class="mobile-nav-item" id="mnav-community">
                 <i class="fas fa-users"></i>
@@ -266,11 +267,11 @@
             </a>
             <a href="support.html" class="mobile-nav-item" id="mnav-messages">
                 <i class="fas fa-comments"></i>
-                Messages
+                Pesan
             </a>
             <a href="profile.html" class="mobile-nav-item" id="mnav-profile">
                 <i class="fas fa-user-circle"></i>
-                Profile
+                Profil
             </a>
         </ul>
     </nav>

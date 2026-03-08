@@ -101,7 +101,7 @@ function initChat() {
                         isEdited: true,
                         // DO NOT override serverTimestamp for updates
                     });
-                    showToast("Message edited", "success");
+                    showToast("Pesan diedit", "success");
                     cancelEdit();
                 } else {
                     // Sending new message
@@ -119,7 +119,7 @@ function initChat() {
                 }
             } catch (e) {
                 console.error(e);
-                showToast("Failed to process message", "error");
+                showToast("Gagal memproses pesan", "error");
             }
         });
     }
@@ -157,7 +157,7 @@ function renderContacts(filterText) {
         if (!filterText) {
             chatContactsContainer.innerHTML = `<div style="padding: 2rem 1rem; text-align: center; color: var(--text-muted); font-size: 0.95rem;">
                 <i class="fas fa-search" style="font-size:2rem; margin-bottom:1rem; opacity:0.5;"></i><br>
-                Explore other users by typing their exact username to start a chat.
+                Cari pengguna lain dengan mengetikkan username mereka untuk memulai obrolan.
             </div>`;
             return;
         }
@@ -168,7 +168,7 @@ function renderContacts(filterText) {
     }
 
     if (filtered.length === 0) {
-        chatContactsContainer.innerHTML = `<div style="padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">No contacts found.</div>`;
+        chatContactsContainer.innerHTML = `<div style="padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">Tidak ada kontak ditemukan.</div>`;
         return;
     }
 
@@ -192,8 +192,8 @@ function renderContacts(filterText) {
                 ${avatarContent}
             </div>
             <div style="flex:1;">
-                <div style="font-weight:700; color:var(--text); font-size:0.95rem;">${user.name || 'Unknown'} <span style="font-size:0.7rem; font-weight:normal; background:var(--bg-2); padding:0.1rem 0.4rem; border-radius:var(--r-full); color:var(--text-muted);">${user.role === 'admin' ? 'Admin' : 'User'}</span></div>
-                <div style="font-size:0.8rem; color:var(--text-muted);">Click to open chat</div>
+                <div style="font-weight:700; color:var(--text); font-size:0.95rem;">${user.name || 'Anonim'} <span style="font-size:0.7rem; font-weight:normal; background:var(--bg-2); padding:0.1rem 0.4rem; border-radius:var(--r-full); color:var(--text-muted);">${user.role === 'admin' ? 'Admin' : 'Pengguna'}</span></div>
+                <div style="font-size:0.8rem; color:var(--text-muted);">Klik untuk membuka chat</div>
             </div>
         `;
 
@@ -208,8 +208,8 @@ function openChat(user) {
     chatContactListView.style.display = 'none';
     chatActiveView.style.display = 'flex';
 
-    chatActiveName.textContent = user.name || 'Unknown User';
-    chatActiveRole.textContent = user.role === 'admin' ? 'Admin' : 'Community Member';
+    chatActiveName.textContent = user.name || 'Pengguna Tidak Dikenal';
+    chatActiveRole.textContent = user.role === 'admin' ? 'Admin' : 'Anggota Komunitas';
 
     if (user.avatarUrl) {
         chatActiveAvatar.innerHTML = `<img src="${user.avatarUrl}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
@@ -231,7 +231,7 @@ function loadMessages(targetUserId) {
         chatMessagesContainer.innerHTML = '';
 
         if (snapshot.empty) {
-            chatMessagesContainer.innerHTML = `<div style="text-align:center; color:var(--text-muted); font-size:0.85rem; margin-top:1rem;">Send a message to start chatting!</div>`;
+            chatMessagesContainer.innerHTML = `<div style="text-align:center; color:var(--text-muted); font-size:0.85rem; margin-top:1rem;">Kirim pesan untuk mulai mengobrol!</div>`;
             return;
         }
 
@@ -264,7 +264,7 @@ function loadMessages(targetUserId) {
             }
 
             // Edit flag
-            const editedTag = msg.isEdited ? `<span style="font-size:0.65rem; opacity:0.7; margin-left:5px;">(edited)</span>` : '';
+            const editedTag = msg.isEdited ? `<span style="font-size:0.65rem; opacity:0.7; margin-left:5px;">(diedit)</span>` : '';
 
             mDiv.innerHTML = `<div>${escapeHtml(msg.text)} ${editedTag}</div>`;
 
@@ -319,13 +319,13 @@ function cancelEdit() {
 }
 
 window.deleteMessage = async (id) => {
-    if (confirm("Delete this message?")) {
+    if (confirm("Hapus pesan ini?")) {
         try {
             await deleteDoc(doc(db, 'chats', id));
-            showToast("Message deleted", "success");
+            showToast("Pesan dihapus", "success");
         } catch (e) {
             console.error(e);
-            showToast("Failed to delete", "error");
+            showToast("Gagal menghapus", "error");
         }
     }
 };

@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
             newAvatarBase64 = await compressImageToBase64(file);
             avatarPreview.innerHTML = `<img src="${newAvatarBase64}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
         } catch (err) {
-            showToast("Failed to process image.", "error");
+            showToast("Gagal memproses gambar.", "error");
         }
     });
 
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const saveBtn = document.getElementById('save-btn');
         const originalText = saveBtn.innerHTML;
         saveBtn.disabled = true;
-        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
 
         try {
             const newUsername = usernameInput.value.trim().toLowerCase();
@@ -122,17 +122,17 @@ document.addEventListener('DOMContentLoaded', () => {
             clearFormErrors(profileForm);
 
             if (!newUsername || newUsername.length < 3 || !/^[a-z0-9_]+$/.test(newUsername)) {
-                showFieldError('profile-username', 'Username must be at least 3 chars (letters, numbers, underscore).');
+                showFieldError('profile-username', 'Username minimal 3 karakter (huruf, angka, garis bawah).');
                 isValid = false;
             }
 
             if (!newName || newName.length < 2) {
-                showFieldError('profile-name', 'Display name must be at least 2 characters.');
+                showFieldError('profile-name', 'Nama tampilan minimal harus 2 karakter.');
                 isValid = false;
             }
 
             if (newPassword && newPassword.length < 8) {
-                showFieldError('profile-password', 'New password must be at least 8 characters.');
+                showFieldError('profile-password', 'Kata sandi baru minimal harus 8 karakter.');
                 isValid = false;
             }
 
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // setDoc with merge:true will update existing fields or create doc if it doesn't exist
             await setDoc(userDocRef, updateData, { merge: true });
 
-            showToast("Profile updated successfully!", "success");
+            showToast("Profil berhasil diperbarui!", "success");
 
             // Re-render local displays
             greetingName.textContent = newName;
@@ -180,11 +180,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error(error);
-            showToast("Failed to save changes.", "error");
+            showToast("Gagal menyimpan perubahan.", "error");
             saveBtn.disabled = false;
             saveBtn.innerHTML = originalText;
         }
     });
+
+    // Handle Account Deletion (Danger Zone)
+    const deleteBtn = document.getElementById('delete-account-btn');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', async () => {
+            const confirmed = confirm("⚠ PERINGATAN FATAL: Apakah Anda yakin ingin menghapus akun secara permanen? Seluruh riwayat kebaikan dan poin Anda akan hilang selamanya.");
+            if (!confirmed) return;
+
+            const secondConfirm = confirm("PERINGATAN TERAKHIR: Tindakan ini tidak dapat dibatalkan. Semua data profil dan sejarah komunitas Anda akan dihapus. Lanjutkan?");
+            if (!secondConfirm) return;
+
+            deleteBtn.disabled = true;
+            deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menghapus...';
+
+            try {
+                // 1. Clean up Firestore (Mark as deleted)
+                await setDoc(doc(db, 'users', currentUser.uid), {
+                    status: 'deleted',
+                    deletedAt: new Date()
+                }, { merge: true });
+
+                // 2. Delete Auth Account
+                await currentUser.delete();
+
+                showToast("Akun Anda telah dihapus. Sampai jumpa.", "info");
+                setTimeout(() => window.location.href = 'login.html', 2000);
+            } catch (error) {
+                console.error(error);
+                if (error.code === 'auth/requires-recent-login') {
+                    showToast("Harap keluar dan masuk kembali sebelum menghapus akun demi alasan keamanan.", "error");
+                } else {
+                    showToast("Gagal menghapus akun sepenuhnya. Hubungi dukungan.", "error");
+                }
+                deleteBtn.disabled = false;
+                deleteBtn.innerHTML = '<i class="fas fa-user-slash"></i> Hapus Akun Saya Secara Permanen';
+            }
+        });
+    }
 });
 
 // Helper for Base64 Compression

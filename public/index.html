@@ -258,14 +258,72 @@
             .hero-wrapper,
             .grid-asym {
                 grid-template-columns: 1fr;
+                gap: 3rem;
             }
 
             .hero-title-v3 {
-                font-size: 3.5rem;
+                font-size: 3rem;
             }
 
             .visual-organic {
-                height: 400px;
+                height: 350px;
+                margin-top: 2rem;
+            }
+
+            .nav-links {
+                display: none !important;
+                /* Hide links on mobile for simplicity */
+            }
+
+            .logo img {
+                height: 30px !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section-refined {
+                padding: 4rem 0;
+            }
+
+            .hero-title-v3 {
+                font-size: 2.5rem;
+            }
+
+            .grid-asym {
+                padding: 0 1rem;
+            }
+
+            #donation .container>div {
+                grid-template-columns: 1fr !important;
+                padding: 2rem !important;
+                gap: 2rem !important;
+                border-radius: 2rem !important;
+            }
+
+            #donation h2 {
+                font-size: 2rem !important;
+            }
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            grid-template-rows: 300px 300px;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+                height: auto;
+            }
+
+            .gallery-grid>div {
+                height: 250px;
+                grid-row: auto !important;
+                grid-column: auto !important;
             }
         }
     </style>
@@ -281,9 +339,9 @@
             <div class="nav-links" style="gap: 3rem; display: flex; align-items: center;">
                 <a href="#vision" class="nav-link" style="font-weight: 700;">Visi</a>
                 <a href="#features" class="nav-link" style="font-weight: 700;">Infrastruktur</a>
-                <a href="pages/login.html" class="btn btn-outline"
+                <a href="pages/login.html" class="btn btn-outline" id="nav-login-btn"
                     style="border-radius: 12px; padding: 0.8rem 1.8rem;">Masuk</a>
-                <a href="pages/login.html" class="btn btn-primary"
+                <a href="pages/login.html" class="btn btn-primary" id="nav-cta-btn"
                     style="background: var(--primary); border-radius: 12px; padding: 0.8rem 1.8rem;">Coba KindTrack</a>
             </div>
         </div>
@@ -363,26 +421,31 @@
             <div class="grid-asym">
                 <div class="animate-fade-up">
                     <div
-                        style="width: 100%; height: 500px; background: var(--dark); border-radius: 4rem; overflow: hidden; position: relative;">
+                        style="width: 100%; height: 500px; background: var(--dark); border-radius: 4rem; overflow: hidden; position: relative; box-shadow: var(--shadow-premium);">
+                        <!-- Unsplash Photo: High Quality Science/Focus -->
+                        <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=1000"
+                            alt="Sains Empati"
+                            style="position: absolute; top:0; left:0; width: 100%; height: 100%; object-fit: cover;">
                         <div
-                            style="position: absolute; top:0; left:0; width: 100%; height: 100%; opacity: 0.4; background: radial-gradient(circle at 30% 30%, var(--primary), transparent 60%);">
+                            style="position: absolute; top:0; left:0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.9) 100%); z-index: 1;">
                         </div>
-                        <div style="padding: 4rem; position: relative; z-index: 2;">
+                        <div style="padding: 4rem; position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;">
                             <h2
-                                style="color: white; font-size: 3rem; font-weight: 900; line-height: 1.1; letter-spacing: -0.04em;">
+                                style="color: white; font-size: 3rem; font-weight: 900; line-height: 1.1; letter-spacing: -0.04em; margin-bottom: 1.5rem;">
                                 Sains di balik efek riak.</h2>
-                        </div>
-                        <div style="position: absolute; bottom: 4rem; left: 4rem; right: 4rem;">
-                            <p style="color: rgba(255,255,255,0.6); font-size: 1.1rem; line-height: 1.6;">KindTrack
-                                menggunakan AI untuk mengukur manfaat neurokimia dari altruisme, membantu Anda membangun
-                                pola pikir yang lebih sehat melalui tindakan nyata.</p>
+                            <p
+                                style="color: rgba(255,255,255,0.8); font-size: 1.1rem; line-height: 1.6; max-width: 500px;">
+                                KindTrack menggunakan AI untuk mengukur manfaat neurokimia dari altruisme, membantu Anda
+                                membangun pola pikir yang lebih sehat melalui tindakan nyata.
+                            </p>
                         </div>
                     </div>
                 </div>
                 <div class="animate-fade-up stagger-2">
                     <div style="display: flex; flex-direction: column; gap: 4rem;">
-                        <div class="f-box-large">
-                            <div class="f-icon-soft"><i class="fas fa-microscope"></i></div>
+                        <div class="f-box-large" style="padding: 2.5rem;">
+                            <div class="f-icon-soft" style="margin-bottom: 1.5rem;"><i class="fas fa-microscope"></i>
+                            </div>
                             <div>
                                 <h3 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 1rem;">Berbasis Bukti
                                 </h3>
@@ -391,8 +454,10 @@
                                     oksitosin yang nyata.</p>
                             </div>
                         </div>
-                        <div class="f-box-large" style="background: var(--primary-light); border: none;">
-                            <div class="f-icon-soft" style="background: white;"><i class="fas fa-globe-asia"></i></div>
+                        <div class="f-box-large"
+                            style="background: var(--primary-light); border: none; padding: 2.5rem;">
+                            <div class="f-icon-soft" style="background: white; margin-bottom: 1.5rem;"><i
+                                    class="fas fa-globe-asia"></i></div>
                             <div>
                                 <h3 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 1rem;">Integritas
                                     Jaringan</h3>
@@ -401,6 +466,63 @@
                                     dapat mengubah sentimen dunia.</p>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW SECTION: Impact Gallery -->
+    <section class="section-refined" style="background: white; padding-bottom: 8rem;">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 5rem;">
+                <span class="badge-pill" style="background: #fef3c7; color: #d97706;">Dampak Nyata</span>
+                <h2 style="font-size: 3.5rem; font-weight: 900; letter-spacing: -0.05em;">Langkah Kecil, Perubahan Besar
+                </h2>
+            </div>
+
+            <div class="gallery-grid">
+                <div class="animate-fade-up"
+                    style="grid-row: span 2; border-radius: 2rem; overflow: hidden; position: relative; box-shadow: var(--shadow-lg);">
+                    <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=1000"
+                        alt="Bantu Anak" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div style="position: absolute; bottom: 2rem; left: 2rem; color: white; z-index: 2;">
+                        <h4 style="font-size: 1.5rem; font-weight: 900;">Dukungan Panti</h4>
+                        <p style="opacity: 0.8;">Membangun masa depan yang lebih cerah.</p>
+                    </div>
+                    <div
+                        style="position: absolute; inset: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7));">
+                    </div>
+                </div>
+                <div class="animate-fade-up stagger-1"
+                    style="border-radius: 2rem; overflow: hidden; position: relative; box-shadow: var(--shadow-lg);">
+                    <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=600"
+                        alt="Helping Hands" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div
+                        style="position: absolute; inset: 0; background: rgba(34, 197, 94, 0.2); mix-blend-mode: multiply;">
+                    </div>
+                </div>
+                <div class="animate-fade-up stagger-2"
+                    style="border-radius: 2rem; overflow: hidden; position: relative; box-shadow: var(--shadow-lg);">
+                    <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=800"
+                        alt="Komunitas KindTrack" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div style="position: absolute; bottom: 1.5rem; left: 1.5rem; color: white; z-index: 2;">
+                        <h4 style="font-size: 1.1rem; font-weight: 900;">Solidaritas</h4>
+                    </div>
+                    <div
+                        style="position: absolute; inset: 0; background: linear-gradient(transparent, rgba(0,0,0,0.5));">
+                    </div>
+                </div>
+                <div class="animate-fade-up stagger-3"
+                    style="grid-column: span 2; border-radius: 2rem; overflow: hidden; position: relative; box-shadow: var(--shadow-lg);">
+                    <img src="https://images.unsplash.com/photo-1544027993-37dbfe43562a?auto=format&fit=crop&q=80&w=1000"
+                        alt="Smile" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div style="position: absolute; bottom: 2rem; left: 2rem; color: white; z-index: 2;">
+                        <h4 style="font-size: 1.5rem; font-weight: 900;">Kebaikan di Mana Saja</h4>
+                        <p style="opacity: 0.8;">Setiap senyum adalah kemenangan bagi kemanusiaan.</p>
+                    </div>
+                    <div
+                        style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,0.6), transparent);">
                     </div>
                 </div>
             </div>
@@ -439,6 +561,94 @@
                     <h3 style="font-size: 1.6rem; font-weight: 900; margin-bottom: 1.5rem;">Peta Riak</h3>
                     <p style="color: var(--slate); line-height: 1.6;">Visualisasikan koneksi tersembunyi. See bagaimana
                         satu tindakan Anda mendorong orang lain untuk melakukan hal yang sama.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="donation" class="section-refined" style="padding: 10rem 0; background: white; overflow: hidden;">
+        <div class="container">
+            <!-- Impact Card Wrapper -->
+            <div
+                style="position: relative; border-radius: 4rem; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.12); min-height: 650px; display: flex; align-items: center;">
+
+                <!-- Background Impact Image (Emotional Focus) -->
+                <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=2000"
+                    alt="Donasi Kemanusiaan"
+                    style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
+
+                <!-- Dark Overlay with Gradient for Text Readability -->
+                <div
+                    style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, transparent 100%); z-index: 2;">
+                </div>
+
+                <!-- Content Layer -->
+                <div style="position: relative; z-index: 5; padding: 6rem; max-width: 650px;">
+                    <div class="animate-fade-up">
+                        <div
+                            style="display: inline-flex; align-items: center; gap: 0.75rem; background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); padding: 0.6rem 1.2rem; border-radius: 100px; color: #4ade80; font-weight: 800; font-size: 0.75rem; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 0.1em;">
+                            <i class="fas fa-heart"></i> Misi Kemanusiaan KindTrack
+                        </div>
+
+                        <h2
+                            style="color: white; font-size: 4rem; font-weight: 900; line-height: 0.95; letter-spacing: -0.05em; margin-bottom: 2rem;">
+                            Jadilah pahlawan<br>dalam cerita mereka.
+                        </h2>
+
+                        <p
+                            style="color: rgba(255,255,255,0.7); font-size: 1.25rem; line-height: 1.6; margin-bottom: 3.5rem; font-weight: 500;">
+                            Satu donasi Anda bukan sekadar rupiah, tapi harapan bagi panti asuhan dan bantuan darurat
+                            bagi saudara kita yang tertimpa bencana.
+                        </p>
+
+                        <div style="display: flex; flex-direction: column; gap: 2rem;">
+                            <a href="https://suka-kreatif-digital.myr.id/pl/kindtrackdonation" target="_blank"
+                                class="btn-v3 btn-fill"
+                                style="background: var(--primary); padding: 1.5rem 3.5rem; border-radius: 100px; font-size: 1.15rem; width: fit-content; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                <i class="fas fa-hand-holding-heart" style="margin-right: 12px;"></i> Beri Bantuan
+                                Sekarang
+                            </a>
+
+                            <div
+                                style="display: flex; align-items: center; gap: 2.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div
+                                        style="width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #4ade80;">
+                                        <i class="fas fa-shield-check"></i>
+                                    </div>
+                                    <div>
+                                        <div style="color: white; font-weight: 800; font-size: 0.9rem;">100% Aman</div>
+                                        <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem;">Melalui Gerbang
+                                            Mayar</div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div
+                                        style="width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #4ade80;">
+                                        <i class="fas fa-handshake"></i>
+                                    </div>
+                                    <div>
+                                        <div style="color: white; font-weight: 800; font-size: 0.9rem;">Kemitraan Resmi
+                                        </div>
+                                        <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem;">Penyaluran
+                                            Terarah</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Impact Stats -->
+                <div class="animate-fade-up stagger-2"
+                    style="position: absolute; top: 10%; right: 10%; z-index: 10; display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div
+                        style="backdrop-filter: blur(20px); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 1.5rem; border-radius: 2rem; color: white; width: 220px; text-align: center;">
+                        <div
+                            style="font-size: 0.75rem; font-weight: 800; opacity: 0.6; margin-bottom: 0.5rem; text-transform: uppercase;">
+                            Sudah Terkumpul</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: #4ade80;">Rp 14.5M+</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -544,9 +754,21 @@
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                const loginBtn = document.getElementById('nav-login-btn');
+                const ctaBtn = document.getElementById('nav-cta-btn');
+
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (ctaBtn) {
+                    ctaBtn.href = 'pages/dashboard.html';
+                    ctaBtn.textContent = 'Buka Dashboard';
+                }
+
+                // Also update hero button if necessary
                 document.querySelectorAll('a[href="pages/login.html"]').forEach(link => {
-                    link.href = 'pages/dashboard.html';
-                    link.textContent = link.classList.contains('btn-primary') ? 'Buka Dashboard' : 'Dashboard';
+                    if (link !== loginBtn && link !== ctaBtn) {
+                        link.href = 'pages/dashboard.html';
+                        link.textContent = 'Buka Dashboard';
+                    }
                 });
             }
         });

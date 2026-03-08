@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | KindTrack</title>
+    <title>Dashboard Admin | KindTrack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
@@ -168,30 +168,30 @@
                 <img src="../assets/icons/logo-full-white.png" alt="KindTrack"
                     style="height: 35px; width: auto; object-fit: contain;">
                 <span
-                    style="font-size:0.7rem; display:block; color:var(--text-muted); margin-top:0.25rem; font-weight:normal;">ADMIN
-                    PORTAL</span>
+                    style="font-size:0.7rem; display:block; color:var(--text-muted); margin-top:0.25rem; font-weight:normal;">PORTAL
+                    ADMIN</span>
             </a>
             <nav class="sidebar-nav">
-                <p class="sidebar-section-label">Management</p>
+                <p class="sidebar-section-label">Manajemen</p>
                 <a href="#" class="sidebar-item admin-nav-item active" data-tab="users">
-                    <i class="fas fa-user-shield"></i> User Management
+                    <i class="fas fa-user-shield"></i> Manajemen Pengguna
                 </a>
                 <a href="#" class="sidebar-item admin-nav-item" data-tab="community">
-                    <i class="fas fa-users-viewfinder"></i> Community Feed
+                    <i class="fas fa-users-viewfinder"></i> Beranda Komunitas
                 </a>
                 <a href="#" class="sidebar-item admin-nav-item" data-tab="reports">
-                    <i class="fas fa-flag"></i> Reports <span id="report-count" class="badge"
+                    <i class="fas fa-flag"></i> Laporan <span id="report-count" class="badge"
                         style="background:#ef4444; color:white; display:none;">0</span>
                 </a>
                 <a href="#" class="sidebar-item admin-nav-item" data-tab="chat">
-                    <i class="fas fa-comment-dots"></i> Chat Support
+                    <i class="fas fa-comment-dots"></i> Dukungan Chat
                 </a>
                 <a href="#" class="sidebar-item admin-nav-item" data-tab="profile">
-                    <i class="fas fa-user-edit"></i> Edit Profile
+                    <i class="fas fa-user-edit"></i> Edit Profil
                 </a>
-                <p class="sidebar-section-label" style="margin-top:1.5rem;">System</p>
+                <p class="sidebar-section-label" style="margin-top:1.5rem;">Sistem</p>
                 <a href="dashboard.html" class="sidebar-item">
-                    <i class="fas fa-arrow-left"></i> Back to App
+                    <i class="fas fa-arrow-left"></i> Kembali ke Aplikasi
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -202,15 +202,15 @@
                         onmouseout="this.style.background='transparent'">
                         <div class="sidebar-avatar" id="admin-avatar">A</div>
                         <div class="sidebar-user-info">
-                            <div class="sidebar-user-name" id="admin-name" style="font-weight:700;">Loading...</div>
+                            <div class="sidebar-user-name" id="admin-name" style="font-weight:700;">Memuat...</div>
                             <div class="sidebar-user-role"
-                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profile <i
+                                style="color:var(--primary); font-weight:600; font-size:0.75rem;">Edit Profil <i
                                     class="fas fa-angle-right"></i></div>
                         </div>
                     </div>
                 </a>
                 <button class="sidebar-item" id="logout-btn" style="color:#ef4444;">
-                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Sign Out
+                    <i class="fas fa-right-from-bracket" style="color:#ef4444;"></i> Keluar
                 </button>
             </div>
         </aside>
@@ -224,8 +224,8 @@
                         <span></span><span></span><span></span>
                     </button>
                     <div>
-                        <h1 id="page-title">User Management</h1>
-                        <p id="page-subtitle">Monitor and manage all KindTrack registered users.</p>
+                        <h1 id="page-title">Manajemen Pengguna</h1>
+                        <p id="page-subtitle">Pantau dan kelola semua pengguna terdaftar KindTrack.</p>
                     </div>
                 </div>
             </header>
@@ -237,8 +237,8 @@
                     <div class="content-card">
                         <div
                             style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:1rem;">
-                            <h3 style="font-weight:800; font-size:1.2rem;">Active Users</h3>
-                            <input type="text" placeholder="Search users by name..." id="user-search"
+                            <h3 style="font-weight:800; font-size:1.2rem;">Pengguna Aktif</h3>
+                            <input type="text" placeholder="Cari pengguna berdasarkan nama..." id="user-search"
                                 style="padding:0.6rem 1rem; border:1px solid var(--border-light); border-radius:var(--r-md); width:250px; outline:none;"
                                 oninput="filterUsers(this.value)">
                         </div>
@@ -246,11 +246,11 @@
                             <table class="user-table">
                                 <thead>
                                     <tr>
-                                        <th>User</th>
+                                        <th>Pengguna</th>
                                         <th>Email</th>
-                                        <th>Joined</th>
+                                        <th>Bergabung</th>
                                         <th>Status</th>
-                                        <th>Actions</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="users-tbody">
@@ -264,7 +264,7 @@
                 <!-- Community Tab -->
                 <div id="tab-community" class="section-tab">
                     <div class="content-card">
-                        <h3 style="font-weight:800; font-size:1.2rem; margin-bottom:1rem;">Community Feed Monitoring
+                        <h3 style="font-weight:800; font-size:1.2rem; margin-bottom:1rem;">Pemantauan Beranda Komunitas
                         </h3>
                         <div id="admin-feed">
                             <!-- Global feed injected here -->
@@ -275,9 +275,10 @@
                 <!-- Reports Tab -->
                 <div id="tab-reports" class="section-tab">
                     <div class="content-card">
-                        <h3 style="font-weight:800; font-size:1.2rem; margin-bottom:0.5rem;">Content Reports</h3>
-                        <p style="color:var(--text-muted); margin-bottom:1.5rem; font-size:0.9rem;">Posts reported by
-                            users for review.</p>
+                        <h3 style="font-weight:800; font-size:1.2rem; margin-bottom:0.5rem;">Laporan Konten</h3>
+                        <p style="color:var(--text-muted); margin-bottom:1.5rem; font-size:0.9rem;">Postingan yang
+                            dilaporkan oleh
+                            pengguna untuk ditinjau.</p>
                         <div id="reports-list">
                             <!-- Reports injected here -->
                         </div>
@@ -293,13 +294,13 @@
                         <div class="chat-box">
                             <div id="chat-header"
                                 style="padding:1rem 1.5rem; border-bottom:1px solid var(--border-light); font-weight:700; background:#fff;">
-                                Select a user to start chatting
+                                Pilih pengguna untuk mulai mengobrol
                             </div>
                             <div class="chat-messages" id="chat-messages">
                                 <!-- Messages -->
                             </div>
                             <form class="chat-input" id="chat-form">
-                                <input type="text" id="chat-input-field" placeholder="Type a message..."
+                                <input type="text" id="chat-input-field" placeholder="Ketik pesan..."
                                     style="flex:1; padding:0.75rem 1rem; border:1px solid var(--border-light); border-radius:var(--r-full); outline:none;">
                                 <button type="submit" class="btn btn-primary"
                                     style="padding:0.5rem 1.5rem; border-radius:var(--r-full);">Send</button>
@@ -314,9 +315,9 @@
                         <h3 style="font-weight:800; font-size:1.2rem; margin-bottom:1.5rem;">Edit Admin Profile</h3>
                         <form id="admin-profile-form" novalidate>
                             <div class="form-group">
-                                <label class="form-label" for="admin-profile-name">Display Name</label>
+                                <label class="form-label" for="admin-profile-name">Nama Tampilan</label>
                                 <input type="text" id="admin-profile-name" class="form-control" required>
-                                <div class="invalid-feedback">Please enter your display name.</div>
+                                <div class="invalid-feedback">Silakan masukkan nama tampilan Anda.</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="admin-profile-avatar">Avatar Image URL (Optional)</label>
@@ -326,8 +327,7 @@
                             </div>
                             <div style="margin-top: 2rem;">
                                 <button type="submit" class="btn btn-primary" id="admin-profile-save"
-                                    style="padding: 0.8rem 2rem;">Save
-                                    Changes</button>
+                                    style="padding: 0.8rem 2rem;">Simpan Perubahan</button>
                             </div>
                         </form>
                     </div>
