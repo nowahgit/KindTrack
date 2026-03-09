@@ -95,8 +95,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary"
-                    style="width:100%;justify-content:center;margin-top:0.5rem;padding:0.875rem;" id="submit-btn"
-                    disabled>
+                    style="width:100%;justify-content:center;margin-top:0.5rem;padding:0.875rem;" id="submit-btn">
                     <span id="submit-text">Masuk</span>
                 </button>
             </form>
@@ -112,8 +111,7 @@
                 <div style="flex:1;height:1px;background:var(--border-light);"></div>
             </div>
 
-            <button class="btn btn-outline" id="google-btn" style="width:100%;justify-content:center;gap:0.75rem;"
-                disabled>
+            <button class="btn btn-outline" id="google-btn" style="width:100%;justify-content:center;gap:0.75rem;">
                 <img src="https://www.google.com/favicon.ico" width="16" height="16" alt="Google">
                 Lanjutkan dengan Google
             </button>
@@ -121,6 +119,35 @@
     </div>
 
     <script type="module" src="../js/auth.js"></script>
+
+    <!-- ─── Modal Lupa Kata Sandi ─── -->
+    <div id="forgot-modal"
+        style="display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(6px);"
+            id="forgot-overlay"></div>
+        <div
+            style="position:relative;background:white;border-radius:1.5rem;padding:2.5rem;width:min(420px,90vw);box-shadow:0 30px 60px rgba(0,0,0,0.15);z-index:1;">
+            <h3 style="font-weight:900;font-size:1.3rem;margin-bottom:0.5rem;">Lupa Kata Sandi?</h3>
+            <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1.5rem;line-height:1.6;">Masukkan email
+                Anda dan kami akan mengirimkan tautan untuk mengatur ulang kata sandi.</p>
+            <div class="form-group" style="margin-bottom:1.25rem;">
+                <label class="form-label" for="reset-email">Alamat Email</label>
+                <input type="email" id="reset-email" class="form-control" placeholder="nama@contoh.com"
+                    autocomplete="email">
+                <div id="reset-error" style="display:none;font-size:0.8rem;color:#ef4444;margin-top:0.35rem;"></div>
+            </div>
+            <div id="reset-success"
+                style="display:none;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:0.75rem;padding:1rem;margin-bottom:1rem;font-size:0.85rem;color:#166534;">
+            </div>
+            <div style="display:flex;gap:0.75rem;">
+                <button id="reset-cancel-btn" class="btn btn-outline"
+                    style="flex:1;justify-content:center;">Batal</button>
+                <button id="reset-send-btn" class="btn btn-primary" style="flex:1;justify-content:center;">Kirim
+                    Tautan</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Toggle password visibility
         document.getElementById('toggle-password')?.addEventListener('click', function () {
@@ -133,6 +160,77 @@
                 pwd.type = 'password';
                 icon.className = 'fas fa-eye';
             }
+        });
+    </script>
+
+    <script type="module">
+        import { auth } from '../js/firebase-init.js';
+        import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const forgotModal = document.getElementById('forgot-modal');
+        const forgotOverlay = document.getElementById('forgot-overlay');
+        const resetSendBtn = document.getElementById('reset-send-btn');
+        const resetCancelBtn = document.getElementById('reset-cancel-btn');
+        const resetEmailInput = document.getElementById('reset-email');
+        const resetError = document.getElementById('reset-error');
+        const resetSuccess = document.getElementById('reset-success');
+        const forgotLink = document.getElementById('forgot-link');
+
+        function openForgotModal() {
+            resetEmailInput.value = document.getElementById('auth-email')?.value || '';
+            resetError.style.display = 'none';
+            resetSuccess.style.display = 'none';
+            resetSendBtn.disabled = false;
+            resetSendBtn.textContent = 'Kirim Tautan';
+            forgotModal.style.display = 'flex';
+            setTimeout(() => resetEmailInput.focus(), 100);
+        }
+
+        function closeForgotModal() {
+            forgotModal.style.display = 'none';
+        }
+
+        forgotLink?.addEventListener('click', (e) => { e.preventDefault(); openForgotModal(); });
+        forgotOverlay?.addEventListener('click', closeForgotModal);
+        resetCancelBtn?.addEventListener('click', closeForgotModal);
+
+        resetSendBtn?.addEventListener('click', async () => {
+            const email = resetEmailInput.value.trim();
+            resetError.style.display = 'none';
+            resetSuccess.style.display = 'none';
+
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                resetError.textContent = 'Masukkan alamat email yang valid.';
+                resetError.style.display = 'block';
+                return;
+            }
+
+            resetSendBtn.disabled = true;
+            resetSendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+
+            try {
+                await sendPasswordResetEmail(auth, email);
+                resetSuccess.textContent = `Tautan reset kata sandi telah dikirim ke ${email}. Periksa kotak masuk (dan folder spam) Anda.`;
+                resetSuccess.style.display = 'block';
+                resetSendBtn.textContent = 'Terkirim!';
+                resetSendBtn.disabled = true;
+                setTimeout(closeForgotModal, 4000);
+            } catch (err) {
+                const msgs = {
+                    'auth/user-not-found': 'Email tidak terdaftar di sistem kami.',
+                    'auth/invalid-email': 'Format email tidak valid.',
+                    'auth/too-many-requests': 'Terlalu banyak permintaan. Coba lagi nanti.',
+                };
+                resetError.textContent = msgs[err.code] || 'Gagal mengirim email. Coba lagi.';
+                resetError.style.display = 'block';
+                resetSendBtn.disabled = false;
+                resetSendBtn.textContent = 'Kirim Tautan';
+            }
+        });
+
+        // Keyboard: ESC to close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !forgotModal.hidden) closeForgotModal();
         });
     </script>
 </body>

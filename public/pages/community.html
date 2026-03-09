@@ -14,10 +14,10 @@
     <style>
         .community-grid {
             display: flex;
-            gap: 2rem;
-            max-width: 1100px;
+            justify-content: center;
+            max-width: 1200px;
             margin: 0 auto;
-            align-items: flex-start;
+            padding: 0 1rem;
         }
 
         .feed-container {
@@ -29,21 +29,57 @@
             width: 100%;
         }
 
+        /* Floating Chat System */
         .desktop-chat-container {
-            width: 320px;
-            position: sticky;
-            top: 6rem;
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 1rem;
+        }
+
+        .chat-fab {
+            width: 64px;
+            height: 64px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4);
+            cursor: pointer;
+            transition: all 0.4s var(--ease-spring);
+            border: 4px solid white;
+        }
+
+        .chat-fab:hover {
+            transform: scale(1.1) rotate(10deg);
         }
 
         .chat-widget {
             background: white;
             border-radius: var(--r-xl);
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--shadow-premium);
             border: 1px solid var(--border-light);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             height: 550px;
+            width: 360px;
+            transform-origin: bottom right;
+            transition: all 0.6s cubic-bezier(0.85, 0, 0.15, 1);
+            opacity: 1;
+        }
+
+        .chat-widget.minimized {
+            transform: scale(0) translate(50px, 50px);
+            opacity: 0;
+            pointer-events: none;
         }
 
         .chat-widget-header {
@@ -327,12 +363,15 @@
 
                     <!-- Desktop Chat Widget -->
                     <div class="desktop-chat-container">
-                        <div class="chat-widget">
+                        <div class="chat-widget minimized">
 
                             <!-- View 1: Contact List -->
                             <div id="chat-contact-list-view" style="display:flex; flex-direction:column; height: 100%;">
-                                <div class="chat-widget-header">
-                                    <div style="font-size:1.1rem; width:100%; text-align:center;">Pesan</div>
+                                <div class="chat-widget-header" style="justify-content: space-between;">
+                                    <div style="font-size:1.1rem;">Pesan</div>
+                                    <button id="minimize-chat"
+                                        style="background: none; border: none; color: white; cursor: pointer; font-size: 1.25rem;"><i
+                                            class="fas fa-minus"></i></button>
                                 </div>
                                 <div style="padding: 1rem; border-bottom: 1px solid var(--border-light);">
                                     <input type="text" id="chat-search" placeholder="Cari pengguna..."
@@ -376,6 +415,11 @@
                             </div>
 
                         </div>
+
+                        <!-- FAB to Toggle -->
+                        <div class="chat-fab" id="chat-toggle-fab">
+                            <i class="fas fa-comments"></i>
+                        </div>
                     </div>
 
                 </div>
@@ -398,6 +442,25 @@
             sidebar.classList.remove('open');
             overlay.style.display = 'none';
         }
+
+        // Chat Toggle Logic
+        const chatWidget = document.querySelector('.chat-widget');
+        const chatFab = document.getElementById('chat-toggle-fab');
+        const minimizeBtn = document.getElementById('minimize-chat');
+
+        // Initial state: minimized on desktop
+        if (window.innerWidth > 1024) {
+            chatWidget.classList.add('minimized');
+        }
+
+        chatFab.addEventListener('click', () => {
+            chatWidget.classList.toggle('minimized');
+        });
+
+        minimizeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            chatWidget.classList.add('minimized');
+        });
     </script>
     <script type="module" src="../js/community.js?v=4"></script>
     <script type="module" src="../js/support.js?v=4"></script>

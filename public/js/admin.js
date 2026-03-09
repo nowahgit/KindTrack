@@ -16,7 +16,8 @@ import {
     limit,
     startAfter
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { showToast } from './utils.js';
+import { showToast, showConfirmModal } from './utils.js';
+import { logout } from './auth.js';
 
 let currentUser = null;
 let activeTab = 'users';
@@ -60,6 +61,10 @@ function initializeApp() {
     loadCommunity();
     setupChatListeners();
     setupProfileListener();
+
+    // Logout listener
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) logoutBtn.addEventListener('click', logout);
 }
 
 function showFieldError(fieldId, message) {
@@ -262,24 +267,45 @@ window.chatWithUser = (uid) => {
 };
 
 window.promoteUser = async (uid) => {
-    if (confirm('Promosikan pengguna ini menjadi Admin?')) {
-        await updateDoc(doc(db, 'users', uid), { role: 'admin' });
-        showToast('Pengguna dipromosikan menjadi admin', 'success');
-    }
+    showConfirmModal({
+        title: 'Promosikan Admin',
+        message: 'Apakah Anda yakin ingin memberikan hak akses Admin ke pengguna ini?',
+        confirmText: 'Promosikan Sekarang',
+        cancelText: 'Batal',
+        type: 'warning',
+        onConfirm: async () => {
+            await updateDoc(doc(db, 'users', uid), { role: 'admin' });
+            showToast('Pengguna dipromosikan menjadi admin', 'success');
+        }
+    });
 };
 
 window.demoteUser = async (uid) => {
-    if (confirm('Turunkan admin ini menjadi pengguna biasa?')) {
-        await updateDoc(doc(db, 'users', uid), { role: 'user' });
-        showToast('Admin diturunkan menjadi pengguna', 'success');
-    }
+    showConfirmModal({
+        title: 'Turunkan Hak Akses',
+        message: 'Apakah Anda yakin ingin mencabut hak akses Admin dari pengguna ini?',
+        confirmText: 'Turunkan Sekarang',
+        cancelText: 'Batal',
+        type: 'warning',
+        onConfirm: async () => {
+            await updateDoc(doc(db, 'users', uid), { role: 'user' });
+            showToast('Admin diturunkan menjadi pengguna', 'success');
+        }
+    });
 };
 
 window.deleteUser = async (uid) => {
-    if (confirm('Apakah Anda yakin ingin menghapus pengguna ini sepenuhnya?')) {
-        await deleteDoc(doc(db, 'users', uid));
-        showToast('Pengguna berhasil dihapus', 'success');
-    }
+    showConfirmModal({
+        title: 'Hapus Pengguna',
+        message: 'PERINGATAN: Tindakan ini akan menghapus akun pengguna secara permanen. Lanjutkan?',
+        confirmText: 'Hapus Selamanya',
+        cancelText: 'Batal',
+        type: 'danger',
+        onConfirm: async () => {
+            await deleteDoc(doc(db, 'users', uid));
+            showToast('Pengguna berhasil dihapus', 'success');
+        }
+    });
 };
 
 // ─── Reports ────────────────────────────────────────────────────────────────
@@ -338,30 +364,37 @@ window.dismissReport = async (rid) => {
 };
 
 window.takedownPost = async (pid, rid) => {
-    if (confirm('Apakah Anda yakin ingin menghapus postingan ini secara permanen? Ini juga akan menghapus semua suka dan komentar terkait.')) {
-        try {
-            // 1. Delete associated Likes
-            const likesQ = query(collection(db, 'likes'), where('postId', '==', pid));
-            const likesSnap = await getDocs(likesQ);
-            likesSnap.forEach(l => deleteDoc(doc(db, 'likes', l.id)));
+    showConfirmModal({
+        title: 'Hapus Postingan',
+        message: 'Apakah Anda yakin ingin menghapus postingan ini secara permanen? Ini juga akan menghapus semua suka dan komentar terkait.',
+        confirmText: 'Hapus Postingan',
+        cancelText: 'Batal',
+        type: 'danger',
+        onConfirm: async () => {
+            try {
+                // 1. Delete associated Likes
+                const likesQ = query(collection(db, 'likes'), where('postId', '==', pid));
+                const likesSnap = await getDocs(likesQ);
+                likesSnap.forEach(l => deleteDoc(doc(db, 'likes', l.id)));
 
-            // 2. Delete associated Comments
-            const commentsQ = query(collection(db, 'comments'), where('postId', '==', pid));
-            const commentsSnap = await getDocs(commentsQ);
-            commentsSnap.forEach(c => deleteDoc(doc(db, 'comments', c.id)));
+                // 2. Delete associated Comments
+                const commentsQ = query(collection(db, 'comments'), where('postId', '==', pid));
+                const commentsSnap = await getDocs(commentsQ);
+                commentsSnap.forEach(c => deleteDoc(doc(db, 'comments', c.id)));
 
-            // 3. Delete the post itself
-            await deleteDoc(doc(db, 'kindness', pid));
+                // 3. Delete the post itself
+                await deleteDoc(doc(db, 'kindness', pid));
 
-            // 4. Close the report if applicable
-            if (rid && rid !== 'bypass') await deleteDoc(doc(db, 'reports', rid));
+                // 4. Close the report if applicable
+                if (rid && rid !== 'bypass') await deleteDoc(doc(db, 'reports', rid));
 
-            showToast('Postingan dan semua metadata berhasil dihapus.', 'success');
-        } catch (err) {
-            console.error(err);
-            showToast('Kesalahan saat penghapusan bertahap.', 'error');
+                showToast('Postingan dan semua metadata berhasil dihapus.', 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('Kesalahan saat penghapusan bertahap.', 'error');
+            }
         }
-    }
+    });
 };
 
 // ─── Community Monitoring ────────────────────────────────────────────────────

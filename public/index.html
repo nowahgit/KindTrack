@@ -16,232 +16,286 @@
     <style>
         :root {
             --primary: #22C55E;
-            --primary-light: #dcfce7;
+            --primary-dark: #16a34a;
+            --primary-soft: #f0fdf4;
             --secondary: #3B82F6;
-            --dark: #0f172a;
-            --slate: #64748B;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --bg: #ffffff;
+            --bg-soft: #f8fafc;
+            --radius-lg: 2rem;
+            --radius-md: 1rem;
             --font-main: 'Mulish', sans-serif;
-            --bg-canvas: #fafbfd;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         body {
             font-family: var(--font-main);
-            background: var(--bg-canvas);
-            color: var(--dark);
+            background: var(--bg);
+            color: var(--text);
             margin: 0;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* ─── Navigation ─── */
         nav.nav-premium {
             padding: 1.5rem 0;
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1000;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: var(--transition);
         }
 
         nav.nav-premium.scrolled {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
             padding: 1rem 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        .hero-v3 {
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* ─── Hamburger ─── */
+        nav.nav-premium .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none !important;
+            border: none !important;
+            padding: 8px;
+            z-index: 1100;
+            position: relative;
+        }
+
+        nav.nav-premium .hamburger span {
+            display: block !important;
+            width: 26px;
+            height: 3px;
+            background: #0f172a !important;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        nav.nav-premium .hamburger.open span:nth-child(1) {
+            transform: translateY(7.5px) rotate(45deg);
+        }
+
+        nav.nav-premium .hamburger.open span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        nav.nav-premium .hamburger.open span:nth-child(3) {
+            transform: translateY(-7.5px) rotate(-45deg);
+        }
+
+        /* ─── Mobile Drawer ─── */
+        .mobile-drawer {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1050;
+            pointer-events: none;
+        }
+
+        .mobile-drawer.open {
+            pointer-events: all;
+        }
+
+        .drawer-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        .mobile-drawer.open .drawer-overlay {
+            opacity: 1;
+        }
+
+        .drawer-panel {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: min(320px, 85vw);
+            height: 100%;
+            background: white;
+            padding: 5rem 2rem 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: -20px 0 60px rgba(0, 0, 0, 0.12);
+        }
+
+        .mobile-drawer.open .drawer-panel {
+            transform: translateX(0);
+        }
+
+        .drawer-link {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid #f1f5f9;
+            transition: color 0.2s;
+        }
+
+        .drawer-link:hover {
+            color: var(--primary);
+        }
+
+        .drawer-actions {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .drawer-actions .btn-premium {
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .nav-link {
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        /* ─── Buttons ─── */
+        .btn-premium {
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-weight: 800;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #e2e8f0;
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 20px rgba(34, 197, 94, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(34, 197, 94, 0.3);
+        }
+
+        /* ─── Hero Section ─── */
+        .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
-            padding-top: 5rem;
+            padding: 8rem 0 4rem;
             position: relative;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(34, 197, 94, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 20%),
+                var(--bg);
         }
 
-        .hero-wrapper {
+        .hero-grid {
             display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .hero-title-v3 {
-            font-size: clamp(3.5rem, 7vw, 5.5rem);
-            font-weight: 900;
-            line-height: 1.05;
-            letter-spacing: -0.04em;
-            margin-bottom: 2rem;
-        }
-
-        .hero-title-v3 span {
-            color: var(--primary);
-            position: relative;
-            display: inline-block;
-        }
-
-        .hero-title-v3 span::after {
-            content: '';
-            position: absolute;
-            bottom: 8px;
-            left: 0;
-            width: 100%;
-            height: 12px;
-            background: var(--primary-light);
-            z-index: -1;
-        }
-
-        .hero-p-v3 {
-            font-size: 1.3rem;
-            color: var(--slate);
-            line-height: 1.6;
-            max-width: 540px;
-            margin-bottom: 3rem;
-        }
-
-        .visual-organic {
-            position: relative;
-            height: 600px;
-        }
-
-        .card-overlap {
-            position: absolute;
-            background: white;
-            padding: 2.5rem;
-            border-radius: 2rem;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.05);
-            width: 320px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            z-index: 5;
-            top: 10%;
-            right: 15%;
-            animation: float-y 6s ease-in-out infinite;
-        }
-
-        .blob-bg {
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: var(--primary-light);
-            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: -1;
-            animation: blob-morph 15s linear infinite;
-        }
-
-        .section-refined {
-            padding: 12rem 0;
-            background: white;
-        }
-
-        .grid-asym {
-            display: grid;
-            grid-template-columns: 0.8fr 1.2fr;
-            gap: 6rem;
-            align-items: center;
-        }
-
-        .f-box-large {
-            background: #fff;
-            padding: 4rem;
-            border-radius: 3rem;
-            border: 1px solid #f1f5f9;
-            transition: all 0.5s var(--ease);
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .f-box-large:hover {
-            border-color: var(--primary);
-            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.04);
-        }
-
-        .f-icon-soft {
-            width: 70px;
-            height: 70px;
-            background: var(--primary-light);
-            color: var(--primary);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-        }
-
-        .badge-pill {
-            display: inline-block;
-            padding: 0.5rem 1.2rem;
-            background: var(--primary-light);
-            color: var(--primary);
-            border-radius: 50px;
-            font-weight: 800;
-            font-size: 0.8rem;
-            margin-bottom: 2rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .partner-grid {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            grid-template-columns: 1fr 1fr;
             gap: 4rem;
-            flex-wrap: wrap;
-            margin-top: 4rem;
-            opacity: 0.7;
-        }
-
-        .partner-logo {
-            height: 60px;
-            width: auto;
-            object-fit: contain;
-            filter: grayscale(1);
-            transition: filter 0.3s ease;
-        }
-
-        .partner-logo:hover {
-            filter: grayscale(0);
-        }
-
-        .btn-v3 {
-            padding: 1.2rem 2.8rem;
-            border-radius: 1rem;
-            font-weight: 800;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            display: inline-flex;
             align-items: center;
-            gap: 12px;
         }
 
-        .btn-fill {
-            background: var(--primary);
-            color: white;
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -0.04em;
+            margin-bottom: 1.5rem;
         }
 
-        .btn-fill:hover {
-            transform: translateY(-4px);
-            background: #16a34a;
+        .hero-title span {
+            color: var(--primary);
         }
 
-        @keyframes blob-morph {
-
-            0%,
-            100% {
-                border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-            }
-
-            34% {
-                border-radius: 70% 30% 50% 50% / 30% 34% 60% 70%;
-            }
-
-            67% {
-                border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%;
-            }
+        .hero-desc {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            max-width: 540px;
         }
 
-        @keyframes float-y {
+        .hero-image-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image-main {
+            width: 100%;
+            max-width: 500px;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-card-floating {
+            position: absolute;
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            z-index: 3;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
 
             0%,
             100% {
@@ -249,82 +303,311 @@
             }
 
             50% {
-                transform: translateY(-20px);
+                transform: translateY(-15px);
             }
         }
 
+        /* ─── Sections ─── */
+        .section {
+            padding: 8rem 0;
+        }
+
+        .section-bg {
+            background: var(--bg-soft);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-tag {
+            color: var(--primary);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+        }
+
+        /* ─── Features Grid ─── */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 3rem 2.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid #f1f5f9;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .feat-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* ─── Donation Section Redesign ─── */
+        .donation-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: var(--text);
+            border-radius: 3rem;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.15);
+        }
+
+        .donation-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            min-height: 400px;
+        }
+
+        .donation-content {
+            padding: 5rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* ─── Responsive ─── */
         @media (max-width: 992px) {
 
-            .hero-wrapper,
-            .grid-asym {
+            .hero-grid,
+            .donation-card {
                 grid-template-columns: 1fr;
-                gap: 3rem;
             }
 
-            .hero-title-v3 {
-                font-size: 3rem;
+            .hero {
+                padding-top: 6rem;
+                text-align: center;
             }
 
-            .visual-organic {
-                height: 350px;
-                margin-top: 2rem;
+            .hero-desc {
+                margin-left: auto;
+                margin-right: auto;
             }
 
-            .nav-links {
-                display: none !important;
-                /* Hide links on mobile for simplicity */
+            .hero-grid {
+                gap: 2rem;
             }
 
-            .logo img {
-                height: 30px !important;
+            .donation-content {
+                padding: 3rem 2rem;
+            }
+
+            .section-title {
+                font-size: 2.25rem;
             }
         }
 
         @media (max-width: 768px) {
-            .section-refined {
+
+            /* Nav */
+            .nav-links {
+                display: none !important;
+            }
+
+            nav.nav-premium .hamburger {
+                display: flex !important;
+            }
+
+            .mobile-drawer {
+                display: block !important;
+            }
+
+            /* Mobile navbar always has background for contrast */
+            nav.nav-premium {
+                background: rgba(255, 255, 255, 0.95) !important;
+                backdrop-filter: blur(16px);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            }
+
+            /* Sections */
+            .section {
                 padding: 4rem 0;
             }
 
-            .hero-title-v3 {
-                font-size: 2.5rem;
+            .container {
+                padding: 0 1.25rem;
             }
 
-            .grid-asym {
-                padding: 0 1rem;
+            /* Hero */
+            .hero {
+                padding-top: 5rem;
+                padding-bottom: 3rem;
+                min-height: auto;
+                text-align: center;
             }
 
-            #donation .container>div {
-                grid-template-columns: 1fr !important;
-                padding: 2rem !important;
-                gap: 2rem !important;
-                border-radius: 2rem !important;
+            .hero-title {
+                font-size: clamp(1.9rem, 7vw, 2.5rem);
+                letter-spacing: -0.03em;
+                text-align: center;
             }
 
-            #donation h2 {
+            .hero-desc {
+                font-size: 1.05rem;
+                margin-bottom: 2rem;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+            }
+
+            /* Center the CTA button wrapper */
+            .hero .flex {
+                justify-content: center;
+            }
+
+            /* Hide floating cards on mobile — they overflow badly */
+            .hero-card-floating {
+                display: none;
+            }
+
+            /* Hero image smaller on mobile */
+            .hero-image-main {
+                max-width: 100%;
+                border-radius: 1.25rem;
+            }
+
+            .hero-image-wrapper {
+                justify-content: center;
+            }
+
+            /* Vision section: stack text above image */
+            #vision .hero-grid {
+                display: flex;
+                flex-direction: column-reverse;
+                gap: 2rem;
+            }
+
+            #vision .hero-grid>div:first-child img {
+                border-radius: 1.25rem;
+                max-height: 240px;
+                object-fit: cover;
+                width: 100%;
+            }
+
+            /* Features */
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .feature-card {
+                padding: 2rem 1.5rem;
+                border-radius: 1.25rem;
+            }
+
+            .section-header {
+                margin-bottom: 2.5rem;
+            }
+
+            /* Donation Card */
+            .donation-card {
+                border-radius: 1.5rem;
+                grid-template-columns: 1fr;
+            }
+
+            /* Hide donation photo on mobile, save space */
+            .donation-image {
+                display: none;
+            }
+
+            .donation-content {
+                padding: 2.5rem 1.75rem;
+                border-radius: 1.5rem;
+            }
+
+            .donation-content .section-title {
+                font-size: 1.75rem;
+                margin-bottom: 1rem;
+            }
+
+            /* CTA Section */
+            .section-title[style*="4rem"] {
                 font-size: 2rem !important;
             }
-        }
 
-        /* Gallery Grid */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr 1fr;
-            grid-template-rows: 300px 300px;
-            gap: 1.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .gallery-grid {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto;
-                height: auto;
+            /* Footer */
+            footer {
+                padding: 4rem 0 3rem !important;
             }
 
-            .gallery-grid>div {
-                height: 250px;
-                grid-row: auto !important;
-                grid-column: auto !important;
+            .footer-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 2rem !important;
+                padding-bottom: 3rem !important;
             }
+
+            .footer-brand {
+                grid-column: 1 / -1;
+            }
+
+            .footer-bottom {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 1rem !important;
+            }
+
+            .footer-bottom-links {
+                gap: 1.5rem !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.75rem;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
+
+            .btn-premium {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* ─── Animations ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -332,139 +615,105 @@
 <body>
 
     <nav class="nav-premium" id="navbar">
-        <div class="container flex items-center justify-between">
+        <div class="container nav-inner">
             <a href="index.html" class="logo">
-                <img src="assets/icons/logo-full-color.png" alt="KindTrack" style="height: 38px;">
+                <img src="assets/icons/logo-full-color.png" alt="KindTrack" style="height: 36px;">
             </a>
-            <div class="nav-links" style="gap: 3rem; display: flex; align-items: center;">
-                <a href="#vision" class="nav-link" style="font-weight: 700;">Visi</a>
-                <a href="#features" class="nav-link" style="font-weight: 700;">Infrastruktur</a>
-                <a href="pages/login.html" class="btn btn-outline" id="nav-login-btn"
-                    style="border-radius: 12px; padding: 0.8rem 1.8rem;">Masuk</a>
-                <a href="pages/login.html" class="btn btn-primary" id="nav-cta-btn"
-                    style="background: var(--primary); border-radius: 12px; padding: 0.8rem 1.8rem;">Coba KindTrack</a>
+            <div class="nav-links">
+                <a href="#vision" class="nav-link">Visi</a>
+                <a href="#features" class="nav-link">Infrastruktur</a>
+                <a href="pages/login.html" class="btn-premium btn-outline" id="nav-login-btn">Masuk</a>
+                <a href="pages/login.html" class="btn-premium btn-primary" id="nav-cta-btn">Coba KindTrack</a>
             </div>
+            <button class="hamburger" id="hamburger-btn" aria-label="Buka menu">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </nav>
 
-    <section class="hero-v3">
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <div class="drawer-overlay" id="drawer-overlay"></div>
+        <div class="drawer-panel">
+            <a href="#vision" class="drawer-link" id="drawer-vision">Visi</a>
+            <a href="#features" class="drawer-link" id="drawer-features">Infrastruktur</a>
+            <div class="drawer-actions">
+                <a href="pages/login.html" class="btn-premium btn-outline" id="drawer-login-btn">Masuk</a>
+                <a href="pages/login.html" class="btn-premium btn-primary" id="drawer-cta-btn">Coba KindTrack</a>
+            </div>
+        </div>
+    </div>
+
+    <section class="hero">
         <div class="container">
-            <div class="hero-wrapper">
-                <div class="animate-fade-up">
-                    <span class="badge-pill">Masa Depan Kesejahteraan</span>
-                    <h1 class="hero-title-v3">
-                        Lacak<br><span>empati Anda,</span><br>pulihkan jiwa.
+            <div class="hero-grid">
+                <div class="reveal">
+                    <span class="section-tag">Era Baru Kepedulian</span>
+                    <h1 class="hero-title">
+                        Jadikan <span>kebaikan</span> sebagai gaya hidup Anda.
                     </h1>
-                    <p class="hero-p-v3">
-                        Kami melangkah lebih jauh dari sekadar melacak langkah kaki. KindTrack adalah suaka digital
-                        pertama yang dirancang untuk mengukur dan melipatgandakan sains kebaikan manusia.
+                    <p class="hero-desc">
+                        KindTrack membantu Anda mencatat, merayakan, dan menyebarkan dampak positif ke seluruh dunia.
+                        Platform pertama yang menghubungkan empati dengan kesejahteraan digital.
                     </p>
-                    <div class="flex gap-2">
-                        <a href="pages/login.html" class="btn-v3 btn-fill">
-                            Mulai Gratis <i class="fas fa-arrow-right"></i>
+                    <div class="flex gap-4">
+                        <a href="pages/login.html" class="btn-premium btn-primary">
+                            Mulai Sekarang <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
+                <div class="hero-image-wrapper reveal">
+                    <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=1000"
+                        alt="Empati" class="hero-image-main">
 
-                <div class="visual-organic animate-fade-up stagger-2">
-                    <div class="blob-bg"></div>
-                    <div class="card-overlap">
-                        <div class="flex items-center gap-2" style="margin-bottom: 2rem;">
-                            <div style="width: 12px; height: 12px; background: #22C55E; border-radius: 50%;"></div>
-                            <span style="font-weight: 900; font-size: 0.9rem;">AKTIVITAS LANGSUNG</span>
-                        </div>
-                        <div style="font-size: 2.2rem; font-weight: 900; line-height: 1.2; margin-bottom: 0.5rem;">+14
-                            poin</div>
-                        <p style="color: var(--slate); font-size: 0.9rem; font-weight: 600;">Anda baru saja
-                            menginspirasi riak di Jakarta.</p>
-                        <div
-                            style="margin-top: 2.5rem; height: 6px; background: #f1f5f9; border-radius: 10px; position: relative;">
-                            <div
-                                style="position: absolute; width: 65%; height: 100%; background: var(--primary); border-radius: 10px;">
-                            </div>
-                        </div>
+                    <div class="hero-card-floating" style="top: -20px; right: 0;">
+                        <div style="font-size: 0.8rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;">
+                            AKTIVITAS GLOBAL</div>
+                        <div style="font-weight: 900; font-size: 1.25rem;">+250 Aksi Baru</div>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Baru saja dilakukan hari ini.
+                        </p>
                     </div>
-                    <div class="card-overlap"
-                        style="top: 55%; right: 40%; width: 280px; padding: 2rem; animation-delay: -3s;">
+
+                    <div class="hero-card-floating" style="bottom: 20px; left: -30px; animation-delay: -2s;">
                         <div class="flex gap-3">
                             <div
-                                style="width: 45px; height: 45px; border-radius: 12px; background: var(--primary-light); display: flex; align-items: center; justify-content: center; color: var(--primary);">
-                                <i class="fas fa-brain"></i>
+                                style="width: 40px; height: 40px; background: var(--secondary); color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-heart"></i>
                             </div>
                             <div>
-                                <div style="font-weight: 900; font-size: 0.95rem;">Skor Kesejahteraan</div>
-                                <div style="font-size: 0.8rem; color: var(--slate);">Meningkat stabil ↑</div>
+                                <div style="font-weight: 900; font-size: 1rem;">Skor Empati</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">Meningkat 15%</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="animate-fade-up" style="margin-top: 8rem; text-align: center;">
-                <p
-                    style="font-size: 0.8rem; font-weight: 800; letter-spacing: 0.2em; color: var(--slate); margin-bottom: 3rem;">
-                    KEMITRAAN RESMI</p>
-                <div class="partner-grid">
-                    <img src="https://cdn.kemenag.go.id/storage/archives/logo-kemenag-png-1png.png" alt="Kemenag"
-                        class="partner-logo">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Logo_of_the_Ministry_of_Social_Affairs_of_the_Republic_of_Indonesia.svg"
-                        alt="Kemensos" class="partner-logo">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Logo_Kementerian_Pemuda_dan_Olahraga_RI_%282025%29_%28cropped%29.png/330px-Logo_Kementerian_Pemuda_dan_Olahraga_RI_%282025%29_%28cropped%29.png"
-                        alt="Kemenpora" class="partner-logo">
-                </div>
-            </div>
         </div>
     </section>
 
-    <section id="vision" class="section-refined" style="background: #fdfdfd;">
+    <section id="vision" class="section section-bg">
         <div class="container">
-            <div class="grid-asym">
-                <div class="animate-fade-up">
-                    <div
-                        style="width: 100%; height: 500px; background: var(--dark); border-radius: 4rem; overflow: hidden; position: relative; box-shadow: var(--shadow-premium);">
-                        <!-- Unsplash Photo: High Quality Science/Focus -->
-                        <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=1000"
-                            alt="Sains Empati"
-                            style="position: absolute; top:0; left:0; width: 100%; height: 100%; object-fit: cover;">
-                        <div
-                            style="position: absolute; top:0; left:0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.9) 100%); z-index: 1;">
-                        </div>
-                        <div style="padding: 4rem; position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;">
-                            <h2
-                                style="color: white; font-size: 3rem; font-weight: 900; line-height: 1.1; letter-spacing: -0.04em; margin-bottom: 1.5rem;">
-                                Sains di balik efek riak.</h2>
-                            <p
-                                style="color: rgba(255,255,255,0.8); font-size: 1.1rem; line-height: 1.6; max-width: 500px;">
-                                KindTrack menggunakan AI untuk mengukur manfaat neurokimia dari altruisme, membantu Anda
-                                membangun pola pikir yang lebih sehat melalui tindakan nyata.
-                            </p>
-                        </div>
-                    </div>
+            <div class="hero-grid">
+                <div class="reveal">
+                    <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=1000"
+                        alt="Vision" style="width: 100%; border-radius: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
                 </div>
-                <div class="animate-fade-up stagger-2">
-                    <div style="display: flex; flex-direction: column; gap: 4rem;">
-                        <div class="f-box-large" style="padding: 2.5rem;">
-                            <div class="f-icon-soft" style="margin-bottom: 1.5rem;"><i class="fas fa-microscope"></i>
-                            </div>
-                            <div>
-                                <h3 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 1rem;">Berbasis Bukti
-                                </h3>
-                                <p style="color: var(--slate); line-height: 1.7;">Metrik kami dikembangkan bersama
-                                    psikolog perilaku untuk memastikan pelacakan menghasilkan pertumbuhan dopamin dan
-                                    oksitosin yang nyata.</p>
-                            </div>
+                <div class="reveal">
+                    <span class="section-tag">Visi Kami</span>
+                    <h2 class="section-title">Sains dibalik senyuman.</h2>
+                    <p class="hero-desc">
+                        Kami percaya bahwa kebaikan adalah obat terbaik. KindTrack menggunakan pendekatan berbasis data
+                        untuk menunjukkan bagaimana tindakan altruistik dapat meningkatkan kesehatan mental Anda secara
+                        signifikan.
+                    </p>
+                    <div style="display: grid; gap: 1.5rem;">
+                        <div style="display: flex; gap: 1rem;">
+                            <i class="fas fa-check-circle" style="color: var(--primary); margin-top: 3px;"></i>
+                            <p style="margin: 0; font-weight: 600;">Metrik kebahagiaan yang terukur.</p>
                         </div>
-                        <div class="f-box-large"
-                            style="background: var(--primary-light); border: none; padding: 2.5rem;">
-                            <div class="f-icon-soft" style="background: white; margin-bottom: 1.5rem;"><i
-                                    class="fas fa-globe-asia"></i></div>
-                            <div>
-                                <h3 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 1rem;">Integritas
-                                    Jaringan</h3>
-                                <p style="color: var(--slate); line-height: 1.7;">Setiap tindakan yang dicatat
-                                    berkontribusi pada peta kebaikan global, memvisualisasikan bagaimana empati kolektif
-                                    dapat mengubah sentimen dunia.</p>
-                            </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <i class="fas fa-check-circle" style="color: var(--primary); margin-top: 3px;"></i>
+                            <p style="margin: 0; font-weight: 600;">Komunitas yang saling menginspirasi.</p>
                         </div>
                     </div>
                 </div>
@@ -472,219 +721,89 @@
         </div>
     </section>
 
-    <!-- NEW SECTION: Impact Gallery -->
-    <section class="section-refined" style="background: white; padding-bottom: 8rem;">
+    <section id="features" class="section">
         <div class="container">
-            <div style="text-align: center; margin-bottom: 5rem;">
-                <span class="badge-pill" style="background: #fef3c7; color: #d97706;">Dampak Nyata</span>
-                <h2 style="font-size: 3.5rem; font-weight: 900; letter-spacing: -0.05em;">Langkah Kecil, Perubahan Besar
-                </h2>
+            <div class="section-header reveal">
+                <span class="section-tag">Kecanggihan</span>
+                <h2 class="section-title">Infrastruktur Kebaikan</h2>
             </div>
-
-            <div class="gallery-grid">
-                <div class="animate-fade-up"
-                    style="grid-row: span 2; border-radius: 2rem; overflow: hidden; position: relative; box-shadow: var(--shadow-lg);">
-                    <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=1000"
-                        alt="Bantu Anak" style="width: 100%; height: 100%; object-fit: cover;">
-                    <div style="position: absolute; bottom: 2rem; left: 2rem; color: white; z-index: 2;">
-                        <h4 style="font-size: 1.5rem; font-weight: 900;">Dukungan Panti</h4>
-                        <p style="opacity: 0.8;">Membangun masa depan yang lebih cerah.</p>
-                    </div>
-                    <div
-                        style="position: absolute; inset: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7));">
-                    </div>
+            <div class="features-grid">
+                <div class="feature-card reveal">
+                    <div class="feat-icon"><i class="fas fa-book-open"></i></div>
+                    <h3 style="font-weight: 900; margin-bottom: 1rem;">Buku Catatan</h3>
+                    <p style="color: var(--text-muted); line-height: 1.6;">Abadikan setiap langkah kecil kebaikan yang
+                        Anda lakukan dalam antarmuka yang tenang dan indah.</p>
                 </div>
-                <div class="animate-fade-up stagger-1"
-                    style="border-radius: 2rem; overflow: hidden; position: relative; box-shadow: var(--shadow-lg);">
-                    <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=600"
-                        alt="Helping Hands" style="width: 100%; height: 100%; object-fit: cover;">
-                    <div
-                        style="position: absolute; inset: 0; background: rgba(34, 197, 94, 0.2); mix-blend-mode: multiply;">
-                    </div>
+                <div class="feature-card reveal" style="transition-delay: 0.1s;">
+                    <div class="feat-icon" style="background: #e0e7ff; color: var(--secondary);"><i
+                            class="fas fa-brain"></i></div>
+                    <h3 style="font-weight: 900; margin-bottom: 1rem;">Refleksi AI</h3>
+                    <p style="color: var(--text-muted); line-height: 1.6;">Dapatkan wawasan mendalam tentang bagaimana
+                        tindakan Anda mempengaruhi suasana hati dan stres Anda.</p>
                 </div>
-                <div class="animate-fade-up stagger-2"
-                    style="border-radius: 2rem; overflow: hidden; position: relative; box-shadow: var(--shadow-lg);">
-                    <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=800"
-                        alt="Komunitas KindTrack" style="width: 100%; height: 100%; object-fit: cover;">
-                    <div style="position: absolute; bottom: 1.5rem; left: 1.5rem; color: white; z-index: 2;">
-                        <h4 style="font-size: 1.1rem; font-weight: 900;">Solidaritas</h4>
+                <div class="feature-card reveal" style="transition-delay: 0.2s;">
+                    <div class="feat-icon" style="background: #fef3c7; color: #d97706;"><i class="fas fa-globe"></i>
                     </div>
-                    <div
-                        style="position: absolute; inset: 0; background: linear-gradient(transparent, rgba(0,0,0,0.5));">
-                    </div>
-                </div>
-                <div class="animate-fade-up stagger-3"
-                    style="grid-column: span 2; border-radius: 2rem; overflow: hidden; position: relative; box-shadow: var(--shadow-lg);">
-                    <img src="https://images.unsplash.com/photo-1544027993-37dbfe43562a?auto=format&fit=crop&q=80&w=1000"
-                        alt="Smile" style="width: 100%; height: 100%; object-fit: cover;">
-                    <div style="position: absolute; bottom: 2rem; left: 2rem; color: white; z-index: 2;">
-                        <h4 style="font-size: 1.5rem; font-weight: 900;">Kebaikan di Mana Saja</h4>
-                        <p style="opacity: 0.8;">Setiap senyum adalah kemenangan bagi kemanusiaan.</p>
-                    </div>
-                    <div
-                        style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,0.6), transparent);">
-                    </div>
+                    <h3 style="font-weight: 900; margin-bottom: 1rem;">Dampak Kolektif</h3>
+                    <p style="color: var(--text-muted); line-height: 1.6;">Lihat bagaimana satu tindakan Anda memicu
+                        gelombang kebaikan di seluruh jaringan global.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="features" class="section-refined">
+    <section class="section section-bg">
         <div class="container">
-            <div style="margin-bottom: 8rem; text-align: center;">
-                <span class="badge-pill">Protokol Inti</span>
-                <h2 style="font-size: 4rem; font-weight: 900; letter-spacing: -0.05em; line-height: 0.9;">Infrastruktur
-                    untuk kemanusiaan.</h2>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem;">
-                <div class="animate-fade-up stagger-1">
-                    <div
-                        style="font-size: 4rem; font-weight: 900; color: #f1f5f9; line-height: 1; margin-bottom: 1.5rem;">
-                        01</div>
-                    <h3 style="font-size: 1.6rem; font-weight: 900; margin-bottom: 1.5rem;">Buku Catatan</h3>
-                    <p style="color: var(--slate); line-height: 1.6;">Buku harian yang indah dan mudah digunakan untuk
-                        mencatat kontribusi dan momen hubungan Anda.</p>
-                </div>
-                <div class="animate-fade-up stagger-2">
-                    <div
-                        style="font-size: 4rem; font-weight: 900; color: #f1f5f9; line-height: 1; margin-bottom: 1.5rem;">
-                        02</div>
-                    <h3 style="font-size: 1.6rem; font-weight: 900; margin-bottom: 1.5rem;">Refleksi AI</h3>
-                    <p style="color: var(--slate); line-height: 1.6;">Dapatkan wawasan mingguan tentang pola empati Anda
-                        dan bagaimana pengaruhnya terhadap tingkat stres Anda.</p>
-                </div>
-                <div class="animate-fade-up stagger-3">
-                    <div
-                        style="font-size: 4rem; font-weight: 900; color: #f1f5f9; line-height: 1; margin-bottom: 1.5rem;">
-                        03</div>
-                    <h3 style="font-size: 1.6rem; font-weight: 900; margin-bottom: 1.5rem;">Peta Riak</h3>
-                    <p style="color: var(--slate); line-height: 1.6;">Visualisasikan koneksi tersembunyi. See bagaimana
-                        satu tindakan Anda mendorong orang lain untuk melakukan hal yang sama.</p>
+            <div class="donation-card reveal">
+                <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=1000"
+                    alt="Donation" class="donation-image">
+                <div class="donation-content">
+                    <span class="section-tag" style="color: #4ade80;">Program Donasi</span>
+                    <h2 class="section-title" style="color: white; margin-bottom: 1.5rem;">Bantu sesama, pulihkan dunia.
+                    </h2>
+                    <p
+                        style="color: rgba(255,255,255,0.7); margin-bottom: 2.5rem; line-height: 1.6; font-size: 1.1rem;">
+                        Setiap donasi Anda disalurkan secara transparan ke panti asuhan dan bantuan bencana melalui
+                        mitra resmi kami.
+                    </p>
+                    <a href="https://suka-kreatif-digital.myr.id/pl/kindtrackdonation" target="_blank"
+                        class="btn-premium btn-primary" style="width: fit-content; padding: 1.2rem 3rem;">
+                        Beri Bantuan Sekarang
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="donation" class="section-refined" style="padding: 10rem 0; background: white; overflow: hidden;">
-        <div class="container">
-            <!-- Impact Card Wrapper -->
-            <div
-                style="position: relative; border-radius: 4rem; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.12); min-height: 650px; display: flex; align-items: center;">
-
-                <!-- Background Impact Image (Emotional Focus) -->
-                <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=2000"
-                    alt="Donasi Kemanusiaan"
-                    style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
-
-                <!-- Dark Overlay with Gradient for Text Readability -->
-                <div
-                    style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, transparent 100%); z-index: 2;">
-                </div>
-
-                <!-- Content Layer -->
-                <div style="position: relative; z-index: 5; padding: 6rem; max-width: 650px;">
-                    <div class="animate-fade-up">
-                        <div
-                            style="display: inline-flex; align-items: center; gap: 0.75rem; background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); padding: 0.6rem 1.2rem; border-radius: 100px; color: #4ade80; font-weight: 800; font-size: 0.75rem; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 0.1em;">
-                            <i class="fas fa-heart"></i> Misi Kemanusiaan KindTrack
-                        </div>
-
-                        <h2
-                            style="color: white; font-size: 4rem; font-weight: 900; line-height: 0.95; letter-spacing: -0.05em; margin-bottom: 2rem;">
-                            Jadilah pahlawan<br>dalam cerita mereka.
-                        </h2>
-
-                        <p
-                            style="color: rgba(255,255,255,0.7); font-size: 1.25rem; line-height: 1.6; margin-bottom: 3.5rem; font-weight: 500;">
-                            Satu donasi Anda bukan sekadar rupiah, tapi harapan bagi panti asuhan dan bantuan darurat
-                            bagi saudara kita yang tertimpa bencana.
-                        </p>
-
-                        <div style="display: flex; flex-direction: column; gap: 2rem;">
-                            <a href="https://suka-kreatif-digital.myr.id/pl/kindtrackdonation" target="_blank"
-                                class="btn-v3 btn-fill"
-                                style="background: var(--primary); padding: 1.5rem 3.5rem; border-radius: 100px; font-size: 1.15rem; width: fit-content; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                <i class="fas fa-hand-holding-heart" style="margin-right: 12px;"></i> Beri Bantuan
-                                Sekarang
-                            </a>
-
-                            <div
-                                style="display: flex; align-items: center; gap: 2.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div
-                                        style="width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #4ade80;">
-                                        <i class="fas fa-shield-check"></i>
-                                    </div>
-                                    <div>
-                                        <div style="color: white; font-weight: 800; font-size: 0.9rem;">100% Aman</div>
-                                        <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem;">Melalui Gerbang
-                                            Mayar</div>
-                                    </div>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div
-                                        style="width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #4ade80;">
-                                        <i class="fas fa-handshake"></i>
-                                    </div>
-                                    <div>
-                                        <div style="color: white; font-weight: 800; font-size: 0.9rem;">Kemitraan Resmi
-                                        </div>
-                                        <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem;">Penyaluran
-                                            Terarah</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Floating Impact Stats -->
-                <div class="animate-fade-up stagger-2"
-                    style="position: absolute; top: 10%; right: 10%; z-index: 10; display: flex; flex-direction: column; gap: 1.5rem;">
-                    <div
-                        style="backdrop-filter: blur(20px); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 1.5rem; border-radius: 2rem; color: white; width: 220px; text-align: center;">
-                        <div
-                            style="font-size: 0.75rem; font-weight: 800; opacity: 0.6; margin-bottom: 0.5rem; text-transform: uppercase;">
-                            Sudah Terkumpul</div>
-                        <div style="font-size: 1.8rem; font-weight: 900; color: #4ade80;">Rp 14.5M+</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section
-        style="padding: 8rem 0; background: var(--dark); border-radius: 4rem; margin: 4rem 2rem; overflow: hidden; position: relative; text-align: center;">
-        <div class="container animate-fade-up" style="position: relative; z-index: 5;">
-            <h2
-                style="color: white; font-size: 4.5rem; font-weight: 900; line-height: 0.95; letter-spacing: -0.05em; margin-bottom: 2.5rem;">
-                Siap melacak<br>kebaikan?</h2>
-            <p style="color: rgba(255,255,255,0.5); font-size: 1.3rem; max-width: 500px; margin: 0 auto 4rem;">Jadilah
-                bagian dari kelompok pelopor yang membangun dunia yang digerakkan oleh empati kolektif.</p>
-            <a href="pages/login.html" class="btn-v3 btn-fill"
-                style="padding: 1.5rem 4rem; font-size: 1.2rem; border-radius: 2rem;">
-                Buat Akun Anda
+    <section class="section" style="background: white;">
+        <div class="container reveal"
+            style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <h2 class="section-title" style="font-size: 4rem; margin-bottom: 2rem;">Siap memulai?</h2>
+            <p class="hero-desc" style="max-width: 540px; margin-bottom: 2.5rem;">Daftar sekarang dan jadilah bagian
+                dari perubahan besar.</p>
+            <a href="pages/login.html" class="btn-premium btn-primary" style="padding: 1.5rem 4rem; font-size: 1.2rem;">
+                Buat Akun Gratis
             </a>
         </div>
     </section>
 
-    <footer style="padding: 10rem 0 4rem; background: white;">
+    <footer style="padding: 8rem 0 4rem; background: white;">
         <div class="container">
-            <div
-                style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; padding-bottom: 8rem; border-bottom: 1px solid #f1f5f9;">
-                <div>
+            <div class="footer-grid"
+                style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; padding-bottom: 5rem; border-bottom: 1px solid #f1f5f9;">
+                <div class="footer-brand">
                     <img src="assets/icons/logo-full-color.png" style="height: 35px; margin-bottom: 2rem;">
-                    <p style="color: var(--slate); font-size: 1rem; line-height: 1.7; max-width: 320px;">KindTrack Labs
+                    <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.7; max-width: 320px;">KindTrack
+                        Labs
                         adalah kolektif riset yang digerakkan oleh misi, merancang teknologi untuk hubungan antar
                         manusia.</p>
                 </div>
                 <div>
                     <h5
-                        style="font-weight: 900; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark); margin-bottom: 2rem;">
+                        style="font-weight: 900; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text); margin-bottom: 1.5rem;">
                         Platform</h5>
                     <ul
-                        style="list-style: none; padding: 0; color: var(--slate); font-size: 0.95rem; line-height: 2.5; font-weight: 600;">
+                        style="list-style: none; padding: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 2.5; font-weight: 600;">
                         <li>Buku Catatan</li>
                         <li>Analisis AI</li>
                         <li>Statistik Jaringan</li>
@@ -692,10 +811,10 @@
                 </div>
                 <div>
                     <h5
-                        style="font-weight: 900; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark); margin-bottom: 2rem;">
+                        style="font-weight: 900; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text); margin-bottom: 1.5rem;">
                         Etika</h5>
                     <ul
-                        style="list-style: none; padding: 0; color: var(--slate); font-size: 0.95rem; line-height: 2.5; font-weight: 600;">
+                        style="list-style: none; padding: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 2.5; font-weight: 600;">
                         <li>Model Privasi</li>
                         <li>Kedaulatan Data</li>
                         <li>Riset</li>
@@ -703,19 +822,19 @@
                 </div>
                 <div>
                     <h5
-                        style="font-weight: 900; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark); margin-bottom: 2rem;">
+                        style="font-weight: 900; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text); margin-bottom: 1.5rem;">
                         Hubungi Kami</h5>
-                    <div style="display: flex; gap: 1.5rem; font-size: 1.4rem; color: var(--slate);">
+                    <div style="display: flex; gap: 1.5rem; font-size: 1.4rem; color: var(--text-muted);">
                         <i class="fab fa-twitter"></i>
                         <i class="fab fa-instagram"></i>
                         <i class="fab fa-linkedin-in"></i>
                     </div>
                 </div>
             </div>
-            <div
-                style="padding-top: 4rem; display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--slate); font-weight: 700;">
-                <p>© <span id="copyright-year"></span> ELNOARTC. HAK CIPTA DILINDUNGI.</p>
-                <div style="display: flex; gap: 4rem;">
+            <div class="footer-bottom"
+                style="padding-top: 3rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--text-muted); font-weight: 700;">
+                <p style="margin: 0;">© <span id="copyright-year"></span> ELNOARTC. HAK CIPTA DILINDUNGI.</p>
+                <div class="footer-bottom-links" style="display: flex; gap: 3rem;">
                     <span>GERBANG PRIVASI</span>
                     <span>KETENTUAN DAMPAK</span>
                 </div>
@@ -731,21 +850,37 @@
             navbar.classList.toggle('scrolled', window.scrollY > 50);
         });
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = "1";
-                    entry.target.style.transform = "translateY(0)";
-                }
-            });
-        }, { threshold: 0.1 });
+        // ─── Hamburger / Mobile Drawer ───
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileDrawer = document.getElementById('mobile-drawer');
+        const drawerOverlay = document.getElementById('drawer-overlay');
 
-        document.querySelectorAll('.animate-fade-up').forEach(el => {
-            el.style.opacity = "0";
-            el.style.transform = "translateY(40px)";
-            el.style.transition = "all 1s cubic-bezier(0.16, 1, 0.3, 1)";
-            observer.observe(el);
+        function toggleDrawer(open) {
+            hamburgerBtn.classList.toggle('open', open);
+            mobileDrawer.classList.toggle('open', open);
+            document.body.style.overflow = open ? 'hidden' : '';
+        }
+
+        hamburgerBtn.addEventListener('click', () => {
+            const isOpen = mobileDrawer.classList.contains('open');
+            toggleDrawer(!isOpen);
         });
+
+        drawerOverlay.addEventListener('click', () => toggleDrawer(false));
+
+        // Close drawer when a drawer link is clicked
+        document.querySelectorAll('.drawer-link, .drawer-actions a').forEach(link => {
+            link.addEventListener('click', () => toggleDrawer(false));
+        });
+
+        // ─── Reveal on Scroll ───
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.08 });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
     </script>
 
     <script type="module">
