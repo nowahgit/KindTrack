@@ -9,6 +9,18 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* Fix: hide the SVG error icon on the password field since there's an eye toggle */
+        #auth-password.is-invalid {
+            background-image: none !important;
+            padding-right: 3rem !important;
+        }
+
+        /* Ensure the eye toggle button stays above everything */
+        #toggle-password {
+            z-index: 5;
+        }
+    </style>
 </head>
 
 <body class="auth-page">

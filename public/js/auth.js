@@ -79,7 +79,10 @@ function validateAuthForm(email, password, name, isRegisterMode) {
         isValid = false;
     }
 
-    if (!isRegisterMode && (!password || password.length < 6)) {
+    if (!isRegisterMode && !password) {
+        showFieldError('auth-password', 'Kata sandi tidak boleh kosong.');
+        isValid = false;
+    } else if (!isRegisterMode && password.length < 6) {
         showFieldError('auth-password', 'Kata sandi minimal 6 karakter.');
         isValid = false;
     }
